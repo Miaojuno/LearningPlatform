@@ -1,0 +1,54 @@
+
+.searchdiv{
+    margin-bottom: 1rem!important;
+    margin-top: 1rem!important;
+}
+
+.searchdiv button{
+    margin-left: 1rem;
+}
+
+.control-label{
+    padding-top: 10px;
+}
+
+.row{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.buttons button{
+    margin-top: 8px!important;
+}
+
+.buttons{
+    margin-left: 3rem;
+}
+
+.main-contain{
+    max-width: 70rem;
+    margin:0rem auto;
+    background-color: white;
+    border-radius: 0.1rem;
+    padding: 1.5rem;
+    height: 100%;
+    -moz-box-shadow:2px 2px 8px #333333; -webkit-box-shadow:2px 2px 8px #333333; box-shadow:2px 2px 8px #333333;
+}
+
+.form-group{
+    min-width: 25rem;
+}
+
+#collapsibleNavbar .dropdown-menu{
+    background-color:#343a40 ;
+}
+
+#collapsibleNavbar .dropdown-menu a{
+    color: white;
+}
+
+#collapsibleNavbar .dropdown-item:hover {
+    color: #16181b!important;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}

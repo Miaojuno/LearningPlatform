@@ -1,0 +1,19 @@
+.searchdiv{
+    margin-bottom: 1rem!important;
+}
+
+.searchdiv button{
+    margin-left: 1rem;
+}
+
+.control-label{
+    padding-top: 10px;
+}
+
+.row{
+    margin-bottom: 0.5rem;
+}
+
+.buttons button{
+    margin-top: 8px!important;
+}
