@@ -21,7 +21,7 @@
 
         <div class="row buttons">
             <button id="data-query" class="btn btn-primary btn-sm">查询</button>
-            <button id="data-reset" class="btn btn-primary btn-sm">重置</button>
+            <#--<button id="data-reset" class="btn btn-primary btn-sm">重置</button>-->
         </div>
 
     </div>
@@ -62,6 +62,39 @@
                 <label class="control-label col-2 text-right" for="">角色</label>
                 <div class="col-8">
                     <@macros.roleSelect id="user-add-roleSelect" name="roleId"></@macros.roleSelect>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<#--modify遮罩层-->
+<div id="user-modify-div" style="display: none;">
+    <div class="modal-body">
+        <form id="user-modify-form">
+            <div class="row" hidden>
+                <label class="control-label col-2 text-right" for="">id</label>
+                <div class="col-8">
+                    <input type="text" name="userId" class="form-control userId"  autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">账户</label>
+                <div class="col-8">
+                    <input type="text" name="userAccount" class="form-control account" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">姓名</label>
+                <div class="col-8">
+                    <input type="text" name="userName" class="form-control name" placeholder="输入姓名..." autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">角色</label>
+                <div class="col-8">
+                    <@macros.roleSelect id="user-modify-roleSelect" name="roleId"></@macros.roleSelect>
                 </div>
             </div>
         </form>

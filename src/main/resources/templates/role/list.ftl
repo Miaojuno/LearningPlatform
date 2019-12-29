@@ -1,6 +1,6 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
-<#assign importJs=[]>
+<#assign importJs=["/js/role/role.js"]>
 <@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
@@ -19,59 +19,65 @@
     <div class="tablediv m-auto">
     <#--数据操作-->
         <div class="query-operation">
-            <button type="button" id="user-add" class="btn btn-outline-primary btn-sm">新增</button>
+            <button type="button" id="role-add" class="btn btn-outline-primary btn-sm">新增</button>
         </div>
 
         <table id="role-table"></table>
     </div>
 </div>
 
-<script>
-    $('#role-table').bootstrapTable({
-        url: '/role/pageList.json',
-        pagination: true,           //分页
-        // search: true,               //显示搜索框
-        sidePagination: "server",   //服务端处理分页
-        pageNumber: 1,              //初始化加载第一页，默认第一页
-        pageSize: 20,               //每页的记录行数（*）
-        pageList: [10, 20, 30, 50],        //可供选择的每页的行数（*）
-        uniqueId: "roleId",         //隐藏的id
-        // queryParamsType:'',
-        queryParams : function(params){
-            var temp={
-                pageNumber: (params.offset / params.limit) + 1,     //页数
-                pageSize: params.limit,                             //每页的记录行数
-            };
-            return temp;
-        },
-        responseHandler:function(res) {
-            return {
-                "total":res.total,//总条目数
-                "rows": res.data //数据
-            }
-        },
-        columns: [{
-            field: 'roleName',
-            title: '账户'
-        }, {
-            field: 'roleDesc',
-            title: '姓名'
-        }, {
-            field: 'action',
-            title: '操作',
-            formatter: actionFormatter
-        }, ]
-    });
+<#--add遮罩层-->
+<div id="role-add-div" style="display: none;">
+    <div class="modal-body">
+        <form id="role-add-form">
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">角色名</label>
+                <div class="col-8">
+                    <input type="text" name="roleName" class="form-control roleName"  placeholder="输入角色名..." autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">描述</label>
+                <div class="col-8">
+                    <input type="text" name="roleDesc" class="form-control roleDesc" placeholder="输入描述..." autocomplete="off">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-    //操作栏的格式化
-    function actionFormatter(value, row, index) {
-        var id = value;
-        var result = "";
-        result += "<a href='javascript:;'  title='查看'><span class=''>查看</span></a>&nbsp;&nbsp;&nbsp;";
-        result += "<a href='javascript:;'  title='编辑'><span class=''>编辑</span></a>&nbsp;&nbsp;&nbsp;";
-        result += "<a href='javascript:;'  title='删除'><span class=''>删除</span></a>";
+<#--modify遮罩层-->
+<div id="role-modify-div" style="display: none;">
+    <div class="modal-body">
+        <form id="role-modify-form">
+            <div class="row" hidden>
+                <label class="control-label col-2 text-right" for="">id</label>
+                <div class="col-8">
+                    <input type="text" name="roleId" class="form-control roleId"  autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">角色名</label>
+                <div class="col-8">
+                    <input type="text" name="roleName" class="form-control roleName"  placeholder="输入角色名..." autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">描述</label>
+                <div class="col-8">
+                    <input type="text" name="roleDesc" class="form-control roleDesc" placeholder="输入描述..." autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">激活状态</label>
+                <div class="col-8">
+                    <select id="modify-isActive" name="isActive" class="form-control">
+                        <option value="1" >激活</option>
+                        <option value="0" >冻结</option>
+                    </select>
+                </div>
+            </div>
 
-        return result;
-    }
-
-</script>
+        </form>
+    </div>
+</div>

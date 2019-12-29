@@ -35,4 +35,14 @@ public class RoleServiceImpl implements RoleService {
         return (int) roleDao.count();
     }
 
+    public boolean roleAdd(Role role){
+        if(roleDao.findByRoleName(role.getRoleName())==null){
+            role.setIsActive("1");
+            roleDao.save(role);
+            return true;
+        }
+        else return false;
+    }
+
+
 }

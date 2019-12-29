@@ -57,8 +57,8 @@ public class RoleController {
                                         HttpServletResponse response) {
         Map<String,Object> resultMap = new HashMap();
         PageList<RoleVo> pageList=new PageList<>();
-        //暂时不需要搜索框
         Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
+        //暂时没有搜索功能
         List<RoleVo> list=roleManager.pageFind(roleVo,pageable);
 //        List<RoleVo> resultList = pageList.getPageList(list,pageSize,pageNumber);
 
@@ -66,5 +66,26 @@ public class RoleController {
         resultMap.put("data",list);
         resultMap.put("total",total);
         return resultMap;
+    }
+
+
+    /**
+     * 新增角色
+     * @param roleVo
+     * @return
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public Map<String ,Object > roleAdd( RoleVo roleVo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(roleManager.roleAdd(roleVo)){
+            map.put("success",true);
+            return map;
+        }
+        else {
+            map.put("success",false);
+            map.put("msg","当前角色名已经存在");
+            return map;
+        }
     }
 }

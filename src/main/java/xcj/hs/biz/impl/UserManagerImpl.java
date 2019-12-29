@@ -70,4 +70,12 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo,User> implements Use
     public int getActiveUserNumber(){
         return userService.getActiveUserNumber();
     }
+
+    public void modify(UserVo userVo){
+        userService.modify(vo2po(userVo));
+    }
+
+    public UserVo findById(String userId){
+        return po2vo(userService.findById(userId));
+    }
 }

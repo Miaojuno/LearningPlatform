@@ -42,4 +42,8 @@ public interface UserService {
     void deleteUser(String userId);
 
     int getActiveUserNumber();
+
+    void modify(User user);
+
+    User findById(String userId);
 }

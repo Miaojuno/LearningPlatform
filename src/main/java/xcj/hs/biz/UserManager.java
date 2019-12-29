@@ -26,6 +26,8 @@ public interface UserManager extends BaseManager<UserVo,User> {
 
     void modifyRole(String userId,String roleId);
 
+    void modify(UserVo userVo);
+
     List<UserVo> findAllActiveUser();
 
     List<UserVo> pageFind(UserVo userVo,Pageable pageable);
@@ -43,4 +45,6 @@ public interface UserManager extends BaseManager<UserVo,User> {
     void deleteUser(String userId);
 
     int getActiveUserNumber();
+
+    UserVo findById(String userId);
 }

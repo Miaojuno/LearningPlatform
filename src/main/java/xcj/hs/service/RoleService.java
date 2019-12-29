@@ -24,4 +24,6 @@ public interface RoleService {
     List<Role> pageFind(RoleVo userVo,Pageable pageable);
 
     int getRoleNumber();
+
+    boolean roleAdd(Role role);
 }

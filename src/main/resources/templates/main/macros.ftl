@@ -4,7 +4,7 @@
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <title>index</title>
+        <title>Online Learning</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
         <script src="/webjars/popper.js/1.14.4/umd/popper.js"></script>
@@ -95,7 +95,7 @@
 
 <#--role选择组件-->
 <#macro roleSelect id name>
-    <select id="${id}" name="${name}" class="selectpicker form-control">
+    <select id="${id}" name="${name}" class=" form-control">
         <option value="" >---请选择---</option>
 
     </select>

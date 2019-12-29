@@ -26,7 +26,7 @@ $(function () {
         columns: [
         {
             checkbox: true,
-            visible: true                  //是否显示复选框
+            visible: true                  //显示复选框
         }, {
             field: 'userAccount',
             title: '账户'
@@ -49,21 +49,23 @@ $(function () {
         var result = "";
         result += "<a href='javascript:;'  class='re-pwd' title='密码重置'><span>密码重置</span></a>&nbsp;&nbsp;&nbsp;";
         result += "<a href='javascript:;'  class='edit-user' title='编辑'><span>编辑</span></a>&nbsp;&nbsp;&nbsp;";
-        result += "<a href='javascript:;'  class='edit-role' title='分配角色'><span>角色</span></a>&nbsp;&nbsp;&nbsp;";
+        // result += "<a href='javascript:;'  class='edit-role' title='分配角色'><span>角色</span></a>&nbsp;&nbsp;&nbsp;";
         result += "<a href='javascript:;'  class='del-user' title='删除'><span>删除</span></a>";
 
         return result;
     }
 
-
+    //查询按钮
     $("#data-query").on("click",function () {
         $('#user-table').bootstrapTable('refresh');
     })
 
+    //重置按钮
     $("#data-reset").on("click",function () {
         location.reload()
     })
 
+    //密码重置
     $(document).on("click",".re-pwd",function () {
         var userId=$(this).parent().parent().attr("data-uniqueid");
         layui.use('layer',function() {
@@ -90,6 +92,7 @@ $(function () {
         })
     })
 
+    //用户删除
     $(document).on("click",".del-user",function () {
         var userId=$(this).parent().parent().attr("data-uniqueid");
         layui.use('layer',function() {
@@ -105,6 +108,7 @@ $(function () {
                     success : function(result){
                         if (result.success==true){
                             layer.msg("用户已删除",{icon:1,time:2000});
+                            $("#user-table").bootstrapTable('refresh');
                         }else {
                             layer.msg(result.msg,{icon:2});
                         }
@@ -116,6 +120,7 @@ $(function () {
         })
     })
 
+    //新增用户
     $("#user-add").on("click",function (){
         layui.use('layer',function(){
             layer=layui.layer;
@@ -134,22 +139,22 @@ $(function () {
                     if($("#user-add-form .account").val()==""){
                         layer.msg("账户不能为空",{icon:2});
                     }
-                    else if(!regx.test($(".account").val())){
+                    else if(!regx.test($("#user-add-form .account").val())){
                         layer.msg("账户只能由数字和密码组成",{icon:2});
                     }
-                    else if($(".account").val().length<5 || $(".account").val().length>15){
+                    else if($("#user-add-form .account").val().length<5 || $("#user-add-form .account").val().length>15){
                         layer.msg("账户长度应为5-15位",{icon:2});
                     }
-                    else if($(".pwd1").val()==""){
+                    else if($("#user-add-form .pwd1").val()==""){
                         layer.msg("密码不能为空",{icon:2});
                     }
-                    else if($(".name").val()==""){
+                    else if($("#user-add-form .name").val()==""){
                         layer.msg("姓名不能为空",{icon:2});
                     }
-                    else if(!regx.test($(".pwd1").val())){
+                    else if(!regx.test($("#user-add-form .pwd1").val())){
                         layer.msg("密码只能由数字和密码组成",{icon:2});
                     }
-                    else if($(".pwd1").val().length<5 || $(".pwd1").val().length>15){
+                    else if($("#user-add-form .pwd1").val().length<5 || $("#user-add-form .pwd1").val().length>15){
                         layer.msg("密码长度应为5-15位",{icon:2});
                     }
                     else {
@@ -163,29 +168,110 @@ $(function () {
                                 if (result.success==true){
                                     layer.msg("新增成功",{icon:1});
                                     layer.close(index);
+                                    $("#user-table").bootstrapTable('refresh');
                                 }else {
                                     layer.msg(result.msg,{icon:2});
                                 }
+                                $("#user-add-form")[0].reset()
                             },
                             error : function(result){
+                                layer.msg("ERROR",{icon:2});
+                                $("#user-add-form")[0].reset()
                             }
                         })
                     }
                 },
                 btn2: function (index) {
                     layer.close(index);
+                    $("#user-add-form")[0].reset()
                 },
                 cancel: function(index){
                     layer.close(index);
+                    $("#user-add-form")[0].reset()
                 }
             })
         })
 
     });
+
+
+
+
+    //修改用户
+    $(document).on("click",".edit-user",function (){
+        var userId=$(this).parent().parent().attr("data-uniqueid");
+        $("#user-modify-form .userId").val(userId);
+        layui.use('layer',function(){
+            layer=layui.layer;
+            $.ajax({
+                url: "/user/findbyid",
+                data : {
+                    "userId":userId
+                },
+                dataType : "json",
+                type : "post",
+                success : function(result){
+                    console.log(result)
+                    if (result.success==true){
+                        $("#user-modify-form .name").val(result.data.userName);
+                        $("#user-modify-form .account").val(result.data.userAccount);
+                        $("#user-modify-roleSelect").val(result.data.roleId);
+                    }else {
+                        layer.msg(result.msg,{icon:2});
+                    }
+                },
+                error : function(result){
+                    layer.msg("ERROR",{icon:2});
+                }
+            })
+
+            layer.open({
+                type: 1,
+                zIndex:"1",
+                title: '修改用户',
+                area: ['800px'],
+                content: $('#user-modify-div'),
+                btn: ['确定','关闭'],
+                yes: function (index) {
+                    $.ajax({
+                        url: "/user/modify",
+                        data : $("#user-modify-form").serialize(),
+                        dataType : "json",
+                        type : "post",
+                        success : function(result){
+                            console.log(result)
+                            if (result.success==true){
+                                layer.msg("修改成功",{icon:1});
+                                layer.close(index);
+                                $("#user-table").bootstrapTable('refresh');
+                            }else {
+                                layer.msg(result.msg,{icon:2});
+                            }
+                            $("#user-modify-form")[0].reset()
+                        },
+                        error : function(result){
+                            layer.msg("ERROR",{icon:2});
+                            $("#user-modify-form")[0].reset()
+                        }
+                    })
+
+                },
+                btn2: function (index) {
+                    layer.close(index);
+                    $("#user-modify-form")[0].reset()
+                },
+                cancel: function(index){
+                    layer.close(index);
+                    $("#user-modify-form")[0].reset()
+                }
+            })
+        })
+
+    });
+
+
+
 })
 
 
-function checkUserInfo() {
-    
-}
 

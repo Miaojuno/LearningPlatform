@@ -110,6 +110,45 @@ public class UserController {
     }
 
     /**
+     * 修改操作
+     * @param userVo
+     * @return
+     */
+    @PostMapping("/user/modify")
+    @ResponseBody
+    public Map<String ,Object > modify( UserVo userVo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        try{
+            userManager.modify( userVo);
+        }
+        catch (Exception e){
+            map.put("success",false);
+            map.put("msg",e.getMessage());
+            return map;
+        }
+        map.put("success",true);
+        return map;
+    }
+
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    @PostMapping("/user/findbyid")
+    @ResponseBody
+    public Map<String ,Object > findbyid( String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        UserVo userVo=userManager.findById(userId);
+
+        map.put("success",true);
+        map.put("data",userVo);
+        return map;
+    }
+
+
+    /**
      *  修改角色
      * @param userId
      * @param roleId

@@ -34,4 +34,8 @@ public class RoleManagerImpl extends BaseManagerImpl<RoleVo,Role> implements Rol
     public int getRoleNumber(){
         return roleService.getRoleNumber();
     }
+
+    public boolean roleAdd(RoleVo roleVo){
+        return roleService.roleAdd(vo2po(roleVo));
+    }
 }

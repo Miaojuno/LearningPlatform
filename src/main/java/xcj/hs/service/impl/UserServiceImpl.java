@@ -58,4 +58,12 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String userId){
         userDao.modifyIsActiveById("0",userId);
     }
+
+    public void modify(User user){
+        userDao.modifyUserNameAndRoleIdById(user.getUserName(),user.getRoleId(),user.getUserId());
+    }
+
+    public User findById(String userId){
+        return userDao.findById(userId).get();
+    }
 }

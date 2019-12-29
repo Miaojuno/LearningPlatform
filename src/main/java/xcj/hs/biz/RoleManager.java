@@ -17,4 +17,6 @@ public interface RoleManager extends BaseManager<RoleVo,Role>{
     List<RoleVo> pageFind(RoleVo userVo,Pageable pageable);
 
     int getRoleNumber();
+
+    boolean roleAdd(RoleVo roleVo);
 }
