@@ -1,8 +1,11 @@
 package xcj.hs.interceptor;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.ServletException;
@@ -11,8 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
+@PropertySource(value = { "classpath:application.properties" })
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
+    @Value("server.port")
+    String sss;
     public AuthInterceptor() {
     }
 
@@ -20,19 +26,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     public final boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException, IOException {
         String loginUserAccount = (String) request.getSession().getAttribute("loginUserAccount");
         String servletPath = request.getServletPath();
-        log.info("拦截器拦验证URL："+servletPath);
         if(StringUtils.isBlank(loginUserAccount)){
             response.sendRedirect("/gologin");
             return false;
         }
-        log.info("当前登陆用户：-"+loginUserAccount);
+//        log.info("当前登陆用户：-"+loginUserAccount);
         //验证权限
         if(checkAuth(loginUserAccount,servletPath)){
-            log.info("拦截器通过URL："+servletPath);
+            log.info("当前登陆用户：-"+loginUserAccount+"-------------------"+"拦截器通过URL："+servletPath);
             return true;
         }
         else {
-            log.error("拦截器拦截URL："+servletPath);
+            log.error("当前登陆用户：-"+loginUserAccount+"-------------------"+"拦截器拦截URL："+servletPath);
             handleNotAuthorized( request,  response,  handler);
             return false;
         }
@@ -42,7 +47,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     }
 
     protected void handleNotAuthorized(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException, IOException {
-        response.sendError(403);
+//        response.sendError(403);
+        response.sendRedirect("/nopermission");
     }
 
     private boolean checkAuth(String loginUserAccount,String servletPath){

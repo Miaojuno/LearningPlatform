@@ -1,6 +1,7 @@
 package xcj.hs.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.RoleDao;
@@ -27,8 +28,8 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.findByRoleId(roleId);
     }
 
-    public List<Role> pageFind(RoleVo roleVo, Pageable pageable){
-        return roleDao.pageFind(pageable).getContent();
+    public Page<Role> pageFind(RoleVo roleVo, Pageable pageable){
+        return roleDao.pageFind(pageable);
     }
 
     public int getRoleNumber(){
@@ -42,6 +43,10 @@ public class RoleServiceImpl implements RoleService {
             return true;
         }
         else return false;
+    }
+
+    public void roleModify(Role role){
+        roleDao.modifyRoleDescAndIsActivebyId(role.getRoleDesc(),role.getIsActive(),role.getRoleId());
     }
 
 

@@ -1,5 +1,6 @@
 package xcj.hs.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import xcj.hs.entity.Role;
 import xcj.hs.vo.RoleVo;
@@ -21,9 +22,11 @@ public interface RoleService {
     public Role findRoleByRoleId(String roleId);
 
 
-    List<Role> pageFind(RoleVo userVo,Pageable pageable);
+    Page<Role> pageFind(RoleVo userVo, Pageable pageable);
 
     int getRoleNumber();
 
     boolean roleAdd(Role role);
+
+    void roleModify(Role role);
 }

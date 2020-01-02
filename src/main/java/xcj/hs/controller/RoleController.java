@@ -1,6 +1,7 @@
 package xcj.hs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -56,15 +57,13 @@ public class RoleController {
     public Map<String,Object>  listRole(RoleVo roleVo , Integer pageSize, Integer pageNumber, String searchText, HttpServletRequest request,
                                         HttpServletResponse response) {
         Map<String,Object> resultMap = new HashMap();
-        PageList<RoleVo> pageList=new PageList<>();
         Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
         //暂时没有搜索功能
-        List<RoleVo> list=roleManager.pageFind(roleVo,pageable);
-//        List<RoleVo> resultList = pageList.getPageList(list,pageSize,pageNumber);
+        Page<RoleVo> pages=roleManager.pageFind(roleVo,pageable);
 
         int total = roleManager.getRoleNumber();
-        resultMap.put("data",list);
-        resultMap.put("total",total);
+        resultMap.put("data",pages.getContent());
+        resultMap.put("total",pages.getTotalElements());
         return resultMap;
     }
 
@@ -87,5 +86,19 @@ public class RoleController {
             map.put("msg","当前角色名已经存在");
             return map;
         }
+    }
+
+    /**
+     * 修改角色
+     * @param roleVo
+     * @return
+     */
+    @PostMapping("/modify")
+    @ResponseBody
+    public Map<String ,Object > modifyAdd( RoleVo roleVo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        roleManager.roleModify(roleVo);
+        map.put("success",true);
+        return map;
     }
 }

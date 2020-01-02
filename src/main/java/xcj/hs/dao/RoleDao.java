@@ -22,4 +22,8 @@ public interface RoleDao extends JpaRepository<Role,String> {
 
     Role findByRoleName(String roleName);
 
+    @Modifying
+    @Query(value = "update role set ROLE_DESC = :roleDesc , IS_ACTIVE = :isActive where ROLE_ID = :roleId",nativeQuery = true)
+    void modifyRoleDescAndIsActivebyId(@Param("roleDesc") String roleDesc, @Param("isActive") String isActive , @Param("roleId") String roleId);
+
 }

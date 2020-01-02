@@ -2,6 +2,7 @@ package xcj.hs.controller;
 
 import org.neo4j.driver.v1.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -27,25 +28,11 @@ import static org.neo4j.driver.v1.Values.parameters;
 
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     UserManager userManager;
 
-
-    /**
-     * 登陆界面
-     * @param model
-     * @return
-     */
-    @GetMapping("/")
-    public String loginPage(Model model) {
-        return "user/login";
-    }
-
-    @GetMapping("/gologin")
-    public String gologin(Model model) {
-        return "main/autoRedirect";
-    }
 
     /**
      * 登陆操作 (成功后跳转至index)
@@ -54,7 +41,7 @@ public class UserController {
      * @param userVo
      * @return
      */
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public String login(HttpServletRequest request,Model model, UserVo userVo) {
         if(userManager.loginCheck(userVo.getUserAccount(),userVo.getUserPwd())){
             request.getSession().setAttribute("loginUserAccount",userVo.getUserAccount());
@@ -72,7 +59,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @RequestMapping("/user/logout")
+    @RequestMapping("/logout")
     public String logout(HttpServletRequest request,Model model) {
         request.getSession().removeAttribute("loginUserAccount");
         return "redirect:/";
@@ -85,7 +72,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @GetMapping("/user/register")
+    @GetMapping("/register")
     public String registerPage(Model model) {
         return "user/register";
     }
@@ -95,7 +82,7 @@ public class UserController {
      * @param userVo
      * @return
      */
-    @PostMapping("/user/register")
+    @PostMapping("/register")
     @ResponseBody
     public Map<String ,Object > register( UserVo userVo) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -114,7 +101,7 @@ public class UserController {
      * @param userVo
      * @return
      */
-    @PostMapping("/user/modify")
+    @PostMapping("/modify")
     @ResponseBody
     public Map<String ,Object > modify( UserVo userVo) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -136,7 +123,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("/user/findbyid")
+    @PostMapping("/findbyid")
     @ResponseBody
     public Map<String ,Object > findbyid( String userId) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -154,7 +141,7 @@ public class UserController {
      * @param roleId
      * @return
      */
-    @PostMapping("/user/modifyRole")
+    @PostMapping("/modifyRole")
     @ResponseBody
     public Map<String ,Object > modifyRole( String userId,String roleId) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -168,7 +155,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("/user/rePwd")
+    @PostMapping("/rePwd")
     @ResponseBody
     public Map<String ,Object > rePwd( String userId) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -182,7 +169,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("/user/delete")
+    @PostMapping("/delete")
     @ResponseBody
     public Map<String ,Object > deleteUser( String userId) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -197,26 +184,23 @@ public class UserController {
      * @param model
      * @return
      */
-    @GetMapping("/user/list")
+    @GetMapping("/list")
     public String list(Model model) {
         return "user/list";
     }
 
 
 
-    @RequestMapping("/user/pageList.json")
+    @RequestMapping("/pageList.json")
     @ResponseBody
     public Map<String,Object>  listUser(UserVo userVo , Integer pageSize, Integer pageNumber, String searchText, HttpServletRequest request,
             HttpServletResponse response) {
         Map<String,Object> resultMap = new HashMap();
-        PageList<UserVo> pageList=new PageList<>();
         Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
-        List<UserVo> list=userManager.pageFind(userVo,pageable);
-//        List<UserVo> resultList = pageList.getPageList(list,pageSize,pageNumber);
+        Page<UserVo> pages=userManager.pageFind(userVo,pageable);
 
-        int total = userManager.getActiveUserNumber();
-        resultMap.put("data",list);
-        resultMap.put("total",total);
+        resultMap.put("data",pages.getContent());
+        resultMap.put("total",pages.getTotalElements());
         return resultMap;
     }
 }

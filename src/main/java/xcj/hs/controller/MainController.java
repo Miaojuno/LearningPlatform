@@ -1,23 +1,40 @@
 package xcj.hs.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import xcj.hs.biz.UserManager;
 import xcj.hs.dao.NeoDaoImpl;
-import xcj.hs.util.PageList;
-import xcj.hs.vo.UserVo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 @Controller
 public class MainController {
+
+
+    /**
+     * 登陆界面
+     * @param model
+     * @return
+     */
+    @GetMapping("/")
+    public String loginPage(Model model) {
+        return "user/login";
+    }
+
+    @GetMapping("/gologin")
+    public String gologin(Model model) {
+        return "main/autoRedirect";
+    }
+
+    @RequestMapping("/nopermission")
+    public String nopermission(Model model) {
+        return "main/nopermission";
+    }
+
+
     /**
      * 首页
      * @param model
@@ -31,7 +48,7 @@ public class MainController {
 
     @GetMapping("/page1")
     public String page1(Model model) {
-        return "main/page1";
+        return "nopermission";
     }
 
     @GetMapping("/wqinput")

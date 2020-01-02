@@ -1,6 +1,7 @@
 package xcj.hs.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,8 @@ public class UserServiceImpl implements UserService {
         return userDao.countByIsActiveEquals("1");
     }
 
-    public List<User> pageFind(UserVo userVo,Pageable pageable){
-        return userDao.findByIsActiveAndUserAccountContainingAndRoleIdContaining("1",userVo.getUserName(),userVo.getRoleId(),pageable).getContent();
+    public Page<User> pageFind(UserVo userVo, Pageable pageable){
+        return userDao.findByIsActiveAndUserAccountContainingAndRoleIdContaining("1",userVo.getUserName(),userVo.getRoleId(),pageable);
     }
 
     public void rePwd(String userId){

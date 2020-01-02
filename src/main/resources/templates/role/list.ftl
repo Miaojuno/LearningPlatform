@@ -59,7 +59,7 @@
             <div class="row">
                 <label class="control-label col-2 text-right" for="">角色名</label>
                 <div class="col-8">
-                    <input type="text" name="roleName" class="form-control roleName"  placeholder="输入角色名..." autocomplete="off">
+                    <input type="text" name="roleName" class="form-control roleName"  disabled autocomplete="off">
                 </div>
             </div>
             <div class="row">

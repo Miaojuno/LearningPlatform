@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import xcj.hs.biz.BaseManager;
@@ -62,6 +64,15 @@ public class BaseManagerImpl<VO,PO> implements BaseManager<VO,PO> {
         for(PO po:pos){
             vos.add(po2vo(po));
         }
+        return vos;
+    }
+
+    public Page<VO> po2vo(Page<PO> pos){
+        List<VO> voContents=new ArrayList<>();
+        for(PO po:pos.getContent()){
+            voContents.add(po2vo(po));
+        }
+        Page<VO> vos=new PageImpl<>(voContents,pos.getPageable(),pos.getTotalElements());
         return vos;
     }
 

@@ -49,4 +49,6 @@ public interface UserDao extends JpaRepository<User,String> {
 
     Page<User> findByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId, Pageable pageable);
 
+    int countByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId);
+
 }

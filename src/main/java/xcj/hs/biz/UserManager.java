@@ -1,5 +1,6 @@
 package xcj.hs.biz;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import xcj.hs.entity.User;
 import xcj.hs.vo.UserVo;
@@ -30,7 +31,7 @@ public interface UserManager extends BaseManager<UserVo,User> {
 
     List<UserVo> findAllActiveUser();
 
-    List<UserVo> pageFind(UserVo userVo,Pageable pageable);
+    Page<UserVo> pageFind(UserVo userVo, Pageable pageable);
 
     /**
      * 密码重置为“123456”

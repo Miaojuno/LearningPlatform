@@ -2,6 +2,7 @@ package xcj.hs.biz.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import xcj.hs.biz.BaseManager;
@@ -27,7 +28,7 @@ public class RoleManagerImpl extends BaseManagerImpl<RoleVo,Role> implements Rol
     }
 
 
-    public List<RoleVo> pageFind(RoleVo roleVo, Pageable pageable){
+    public Page<RoleVo> pageFind(RoleVo roleVo, Pageable pageable){
         return po2vo(roleService.pageFind(roleVo,pageable));
     }
 
@@ -37,5 +38,9 @@ public class RoleManagerImpl extends BaseManagerImpl<RoleVo,Role> implements Rol
 
     public boolean roleAdd(RoleVo roleVo){
         return roleService.roleAdd(vo2po(roleVo));
+    }
+
+    public void roleModify(RoleVo roleVo){
+        roleService.roleModify(vo2po(roleVo));
     }
 }
