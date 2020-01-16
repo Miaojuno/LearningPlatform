@@ -1,6 +1,6 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
-<#assign importJs=["/js/user/user.js"]>
+<#assign importJs=["/js/user/user.js","/js/user/superior.js"]>
 <@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
@@ -98,5 +98,29 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<#--配置上级遮罩层-->
+<div id="user-superior-div" style="display: none;">
+    <div class="modal-body">
+        <form id="superior-modify-form">
+            <div class="row" hidden>
+                <label class="control-label col-2 text-right" for="">id</label>
+                <div class="col-8">
+                    <input type="text" name="userId" id="subordinateId" class="form-control userId"  autocomplete="off">
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-2 text-right" for="">搜索姓名</label>
+                <div class="col-8">
+                    <input type="text" name="userName" id='superiorName'  class="form-control">
+                </div>
+            </div>
+        </form>
+        <div class="tablediv m-auto">
+        <#--内容表格-->
+            <table id="superior-table"></table>
+        </div>
     </div>
 </div>

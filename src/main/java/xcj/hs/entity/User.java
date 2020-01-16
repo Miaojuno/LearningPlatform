@@ -32,4 +32,9 @@ public class User {
     @Column( name = "IS_ACTIVE")
     private String isActive;
 
+    @Column( name = "SUPERIOR_ID")
+    private String superiorId;
+
+    @Column( name = "USER_DESC")
+    private String userDesc;
 }

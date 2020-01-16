@@ -22,5 +22,8 @@ public class UserVo implements Serializable {
 
     private String isActive;
 
+    private String superiorId;
+
+    private String userDesc;
 }
 

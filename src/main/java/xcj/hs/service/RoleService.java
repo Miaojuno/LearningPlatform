@@ -12,14 +12,16 @@ public interface RoleService {
      * 获取所有可用的role
      * @return
      */
-    public List<Role> getAllActiveRole();
+    List<Role> getAllActiveRole();
 
     /**
      *通过roleid获取role
      * @param roleId
      * @return
      */
-    public Role findRoleByRoleId(String roleId);
+    Role findRoleByRoleId(String roleId);
+
+    Role findRoleByRoleName(String roleName);
 
 
     Page<Role> pageFind(RoleVo userVo, Pageable pageable);

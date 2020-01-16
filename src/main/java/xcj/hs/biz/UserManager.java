@@ -33,6 +33,8 @@ public interface UserManager extends BaseManager<UserVo,User> {
 
     Page<UserVo> pageFind(UserVo userVo, Pageable pageable);
 
+    Page<UserVo> superiorPageFind(UserVo userVo,String subordinateId, Pageable pageable);
+
     /**
      * 密码重置为“123456”
      * @param userId

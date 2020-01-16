@@ -1,5 +1,6 @@
 package xcj.hs.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.neo4j.driver.v1.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -190,7 +191,16 @@ public class UserController {
     }
 
 
-
+    /**
+     * 分页查询
+     * @param userVo
+     * @param pageSize
+     * @param pageNumber
+     * @param searchText
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/pageList.json")
     @ResponseBody
     public Map<String,Object>  listUser(UserVo userVo , Integer pageSize, Integer pageNumber, String searchText, HttpServletRequest request,
@@ -203,4 +213,29 @@ public class UserController {
         resultMap.put("total",pages.getTotalElements());
         return resultMap;
     }
+
+    /**
+     * 上级模块分页查询，根据所选角色返回结果
+     * @param userVo
+     * @param pageSize
+     * @param pageNumber
+     * @param subordinateId
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/superiorPageList.json")
+    @ResponseBody
+    public Map<String,Object>  superiorPageList(UserVo userVo , Integer pageSize, Integer pageNumber, String subordinateId, HttpServletRequest request,
+                                        HttpServletResponse response) {
+        Map<String,Object> resultMap = new HashMap();
+        Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
+        if(StringUtils.isNotBlank(subordinateId)){
+            Page<UserVo> pages=userManager.superiorPageFind(userVo,subordinateId,pageable);
+            resultMap.put("data",pages.getContent());
+            resultMap.put("total",pages.getTotalElements());
+        }
+        return resultMap;
+    }
+
 }

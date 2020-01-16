@@ -43,20 +43,28 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo,User> implements Use
     }
 
     @Override
-    public List<UserVo> po2vo(List<User> users){
-        List<UserVo> resultList= super.po2vo(users);
-
+    public UserVo po2vo(User user){
         //添加roleName字段
-        for(UserVo userVo:resultList){
-            String roleName=roleService.findRoleByRoleId(userVo.getRoleId()).getRoleName();
-            if(StringUtils.isNotBlank(roleName)){
-                userVo.setRoleName(roleName);
-            }
+        UserVo userVo=super.po2vo(user);
+        String roleName=roleService.findRoleByRoleId(user.getRoleId()).getRoleName();
+        if(StringUtils.isNotBlank(roleName)) {
+            userVo.setRoleName(roleName);
         }
-        return resultList;
+        return userVo;
     }
 
     public Page<UserVo> pageFind(UserVo userVo, Pageable pageable){
+        return po2vo(userService.pageFind(userVo, pageable));
+    }
+
+    public Page<UserVo> superiorPageFind(UserVo userVo,String subordinateId, Pageable pageable){
+        String roleName=findById(subordinateId).getRoleName();
+        if ("学生".equals(roleName)){
+            userVo.setRoleId(roleService.findRoleByRoleName("教师").getRoleId());
+        }
+        else if ("教师".equals(roleName) || "领导".equals(roleName)){
+            userVo.setRoleId(roleService.findRoleByRoleName("领导").getRoleId());
+        }
         return po2vo(userService.pageFind(userVo, pageable));
     }
 

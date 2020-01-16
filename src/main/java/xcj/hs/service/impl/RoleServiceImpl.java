@@ -28,6 +28,10 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.findByRoleId(roleId);
     }
 
+    public Role findRoleByRoleName(String roleName){
+        return roleDao.findByRoleName(roleName);
+    }
+
     public Page<Role> pageFind(RoleVo roleVo, Pageable pageable){
         return roleDao.pageFind(pageable);
     }

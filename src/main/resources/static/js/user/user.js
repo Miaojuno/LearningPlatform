@@ -1,4 +1,5 @@
 $(function () {
+    //表格
     $('#user-table').bootstrapTable({
         url: '/user/pageList.json',
         pagination: true,           //分页
@@ -49,6 +50,7 @@ $(function () {
         var result = "";
         result += "<a href='javascript:;'  class='re-pwd' title='密码重置'><span>密码重置</span></a>&nbsp;&nbsp;&nbsp;";
         result += "<a href='javascript:;'  class='edit-user' title='编辑'><span>编辑</span></a>&nbsp;&nbsp;&nbsp;";
+        result += "<a href='javascript:;'  class='edit-superior' title='设置上级'><span>设置上级</span></a>&nbsp;&nbsp;&nbsp;";
         // result += "<a href='javascript:;'  class='edit-role' title='分配角色'><span>角色</span></a>&nbsp;&nbsp;&nbsp;";
         result += "<a href='javascript:;'  class='del-user' title='删除'><span>删除</span></a>";
 
