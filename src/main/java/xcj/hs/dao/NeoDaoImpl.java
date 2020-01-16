@@ -33,11 +33,13 @@ public class NeoDaoImpl {
     }
 
     public static String excelUpload(MultipartFile file) throws Exception {
-        Workbook workbook = new XSSFWorkbook(file.getInputStream());
-        // 获取第一张表(知识点表)
-        Sheet sheet = workbook.getSheetAt(0);
 
         Session session = driver.session();
+
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+
+        // 获取第一张表(知识点表)
+        Sheet sheet = workbook.getSheetAt(0);
         String resultMsg="";
 
         log.info("开始导入知识点");
@@ -58,13 +60,13 @@ public class NeoDaoImpl {
                                 "grade: {grade}," +
                                 "distribution: {distribution}, " +
                                 "frequency: {frequency}})",
-                        parameters( "pointId",row.getCell(1)==null ? "" : row.getCell(1).getStringCellValue(),
-                                "pointDetail",row.getCell(0)==null ? "" : row.getCell(0).getStringCellValue(),
-                                "chapter",row.getCell(3)==null ? "" : row.getCell(3).getStringCellValue(),
-                                "isbn",row.getCell(4)==null ? "" : row.getCell(4).getStringCellValue(),
-                                "grade",row.getCell(5)==null ? "" : row.getCell(5).getStringCellValue(),
-                                "distribution",row.getCell(6)==null ? "" : row.getCell(6).getStringCellValue(),
-                                "frequency",row.getCell(7)==null ? "" : row.getCell(7).getStringCellValue() ) );
+                        parameters( "pointId", getString(row.getCell(1)),
+                                "pointDetail", getString(row.getCell(0)),
+                                "chapter", getString(row.getCell(3)),
+                                "isbn", getString(row.getCell(4)),
+                                "grade", getString(row.getCell(5)),
+                                "distribution", getString(row.getCell(6)),
+                                "frequency", getString(row.getCell(7)) ) );
 
             }
         }catch (Exception e){
@@ -99,8 +101,8 @@ public class NeoDaoImpl {
 
                 StatementResult result = session.run( "MATCH (a:Point{pointId:{pointId1}}),(b:Point{pointId:{pointId2}}),r=(a)-[]-(b)" +
                                                         "return count(r)",
-                                                parameters( "pointId1",row.getCell(2).getStringCellValue(),
-                                                    "pointId2",row.getCell(1).getStringCellValue()) );
+                                                parameters( "pointId1", getString(row.getCell(2)),
+                                                    "pointId2", getString(row.getCell(1))) );
                 Record record = result.next();
 
                 //两个知识点之间不存在关系
@@ -108,11 +110,11 @@ public class NeoDaoImpl {
                     session.run( "MATCH (a:Point),(b:Point)" +
                                     "WHERE a.pointId = {pointId1} AND b.pointId = {pointId2}" +
                                     "CREATE (a)-[r:子知识点] -> (b)",
-                            parameters( "pointId1",row.getCell(2).getStringCellValue(),
-                                    "pointId2",row.getCell(1).getStringCellValue()) );
+                            parameters( "pointId1", getString(row.getCell(2)),
+                                    "pointId2", getString(row.getCell(1))) );
                 }
                 else{
-                    throw new Exception("知识点关系重复");
+                    flag2=false;
                 }
             }
         }catch (Exception e){
@@ -125,22 +127,112 @@ public class NeoDaoImpl {
             }
         }
 
+        // 获取第二张表(题目表)
+        sheet = workbook.getSheetAt(1);
+
+        log.info("开始导入题目");
+        boolean flag3=true;
+        try{
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                for (Cell cell : row) {
+                    //读取数据前设置单元格类型
+                    cell.setCellType(CellType.STRING);
+                }
+
+                session.run( "CREATE (a:Question {" +
+                                "questionId: {questionId}, " +
+                                "questionDetail: {questionDetail}, " +
+                                "solution: {solution}, " +
+                                "score: {score}, " +
+                                "typeDistribution: {typeDistribution}, " +
+                                "difficultyDistribution: {difficultyDistribution}})",
+                        parameters( "questionId", getString(row.getCell(0)),
+                                "questionDetail", getString(row.getCell(1)),
+                                "solution", getString(row.getCell(2)),
+                                "score", getString(row.getCell(3)),
+                                "typeDistribution", getString(row.getCell(4)),
+                                "difficultyDistribution", getString(row.getCell(5))
+                                )
+                );
+
+            }
+        }catch (Exception e){
+            resultMsg+="题目导入失败：题目id重复---------\n";
+            flag3=false;
+        }
+        finally {
+            if(flag3){
+                resultMsg+="题目导入成功---------\n";
+            }
+        }
 
 
+        // 获取第三张表(题目知识点对应表)
+        sheet = workbook.getSheetAt(2);
 
+        log.info("开始导入题目和知识点的关系");
+        boolean flag4=true;
+        try{
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                for (Cell cell : row) {
+                    //读取数据前设置单元格类型
+                    cell.setCellType(CellType.STRING);
+                }
 
+                StatementResult result = session.run( "MATCH (a:Question{questionId:{questionId}}),(b:Point{pointId:{pointId}}),r=(a)-[]-(b)" +
+                                "return count(r)",
+                        parameters( "questionId", getString(row.getCell(0)),
+                                "pointId", getString(row.getCell(1))) );
+                Record record = result.next();
 
+                //知识点和题目之间不存在关系
+                if("0".equals(record.get("count(r)").toString())){
+                    session.run( "MATCH (a:Question),(b:Point)" +
+                                    "WHERE a.questionId = {questionId} AND b.pointId = {pointId}" +
+                                    "CREATE (a)-[r:属于] -> (b)",
+                            parameters( "questionId", getString(row.getCell(0)),
+                                    "pointId", getString(row.getCell(1))) );
+                }
+                else{
+                    flag4=false;
+                }
+
+            }
+        }catch (Exception e){
+            resultMsg+="题目和知识点的关系导入失败：题目id重复---------\n";
+            flag4=false;
+        }
+        finally {
+            if(flag4){
+                resultMsg+="题目和知识点的关系导入成功---------\n";
+            }
+        }
 
 
 
         session.close();
-        if(flag1 && flag2){
+        if(flag1 && flag2 && flag3 && flag4){
             return resultMsg;
         }
         else{
             throw new Exception(resultMsg);
         }
     }
+
+
+    private static String getString(Cell cell){
+        return cell==null ? "" : cell.getStringCellValue();
+    }
+
+
+    public static String questionUpload(MultipartFile file) throws Exception {
+
+        log.info("开始导入题目");
+        return "ok";
+    }
+
 
     public static void batchImport(){
 //        File file = new File("C:\\Users\\lenovo\\Desktop\\xiaoyuantest\\小猿搜题_错题本_20191103160747_json.txt");
@@ -198,3 +290,4 @@ public class NeoDaoImpl {
 
 //绑定主键代码
 //    CREATE CONSTRAINT ON (point:Point) ASSERT point.pointId IS UNIQUE
+//    CREATE CONSTRAINT ON (question:Question) ASSERT question.questionId IS UNIQUE

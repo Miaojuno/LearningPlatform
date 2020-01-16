@@ -46,18 +46,18 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/user/list">用户管理</a>
                             <a class="dropdown-item" href="/role/list">角色管理</a>
-                            <a class="dropdown-item" href="/wqinput">错题导入</a>
+                            <a class="dropdown-item" href="/excelupload">数据导入</a>
                         </div>
                     </li>
                     <#--<li class="nav-item">-->
                         <#--<a class="nav-link" href="/user/list">用户管理 </a>-->
                     <#--</li>-->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">界面2</a>
+                        <a class="nav-link" href="/questionupload">题目导入</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">界面3</a>
-                    </li>
+                    <#--<li class="nav-item">-->
+                        <#--<a class="nav-link" href="#">界面3</a>-->
+                    <#--</li>-->
                     <li class="nav-item">
                         <a class="nav-link" href="/user/logout">注销</a>
                     </li>

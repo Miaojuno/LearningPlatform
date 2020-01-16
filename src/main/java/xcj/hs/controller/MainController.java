@@ -51,9 +51,15 @@ public class MainController {
         return "nopermission";
     }
 
-    @GetMapping("/wqinput")
-    public String wqinput(Model model) {
-        return "main/wqinput";
+
+    /**
+     * 导入（知识点 题目 关系）
+     * @param model
+     * @return
+     */
+    @GetMapping("/excelupload")
+    public String excelupload(Model model) {
+        return "main/excelupload";
     }
 
     @PostMapping("/excelupload")
@@ -75,4 +81,32 @@ public class MainController {
     }
 
 
+    /**
+     * 导入题目
+     * @param model
+     * @return
+     */
+    @GetMapping("/questionupload")
+    public String questionupload(Model model) {
+        return "main/questionupload";
+    }
+
+
+    @PostMapping("/questionupload")
+    @ResponseBody
+    public Map<String,Object> questionupload(@RequestParam("file")MultipartFile file, Model model) throws Exception {
+        Map<String,Object> resultMap = new HashMap();
+        String msg;
+        try{
+            msg=NeoDaoImpl.questionUpload(file);
+        }
+        catch (Exception e){
+            resultMap.put("success",false);
+            resultMap.put("msg",e.getMessage());
+            return resultMap;
+        }
+        resultMap.put("success",true);
+        resultMap.put("msg",msg);
+        return resultMap;
+    }
 }
