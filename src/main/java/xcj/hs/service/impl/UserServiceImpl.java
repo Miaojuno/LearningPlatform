@@ -1,5 +1,6 @@
 package xcj.hs.service.impl;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +14,7 @@ import xcj.hs.vo.UserVo;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
     @Autowired
     UserDao userDao;
 
@@ -52,6 +53,18 @@ public class UserServiceImpl implements UserService {
         return userDao.findByIsActiveAndUserAccountContainingAndRoleIdContaining("1",userVo.getUserName(),userVo.getRoleId(),pageable);
     }
 
+    public boolean updateSuperior(String subordinateId,String superiorId){
+        User user=findById(subordinateId);
+        if(user!=null){
+            user.setSuperiorId(superiorId);
+            userDao.save(user);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public void rePwd(String userId){
         userDao.modifyUserPwdById("123456",userId);
     }
@@ -60,11 +73,14 @@ public class UserServiceImpl implements UserService {
         userDao.modifyIsActiveById("0",userId);
     }
 
-    public void modify(User user){
-        userDao.modifyUserNameAndRoleIdById(user.getUserName(),user.getRoleId(),user.getUserId());
+    public void update(User user){
+        userDao.save(getNewEntity(findById(user.getUserId()),user));
     }
 
     public User findById(String userId){
-        return userDao.findById(userId).get();
+        if(userDao.findById(userId).isPresent()){
+            return userDao.findById(userId).get();
+        }
+        return null;
     }
 }

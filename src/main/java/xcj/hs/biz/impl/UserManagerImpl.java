@@ -46,11 +46,24 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo,User> implements Use
     public UserVo po2vo(User user){
         //添加roleName字段
         UserVo userVo=super.po2vo(user);
-        String roleName=roleService.findRoleByRoleId(user.getRoleId()).getRoleName();
-        if(StringUtils.isNotBlank(roleName)) {
-            userVo.setRoleName(roleName);
+        if(StringUtils.isNotBlank(user.getRoleId())){
+            String roleName=roleService.findRoleByRoleId(user.getRoleId()).getRoleName();
+            if(StringUtils.isNotBlank(roleName)) {
+                userVo.setRoleName(roleName);
+            }
+        }
+        //添加superiorName字段
+        if(StringUtils.isNotBlank(user.getSuperiorId())){
+            String superiorName=userService.findById(user.getSuperiorId()).getUserName();
+            if(StringUtils.isNotBlank(superiorName)) {
+                userVo.setSuperiorName(superiorName);
+            }
         }
         return userVo;
+    }
+
+    public boolean updateSuperior(String subordinateId,String superiorId){
+        return userService.updateSuperior( subordinateId, superiorId);
     }
 
     public Page<UserVo> pageFind(UserVo userVo, Pageable pageable){
@@ -81,7 +94,7 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo,User> implements Use
     }
 
     public void modify(UserVo userVo){
-        userService.modify(vo2po(userVo));
+        userService.update(vo2po(userVo));
     }
 
     public UserVo findById(String userId){

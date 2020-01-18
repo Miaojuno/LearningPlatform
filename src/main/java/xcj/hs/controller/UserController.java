@@ -152,6 +152,25 @@ public class UserController {
     }
 
     /**
+     *  修改上级
+     * @param request
+     * @param subordinateId
+     * @param superiorId
+     * @return
+     */
+    @PostMapping("/updateSuperior")
+    @ResponseBody
+    public Map<String ,Object > updateSuperior(String subordinateId, String superiorId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(userManager.updateSuperior(subordinateId,superiorId)){
+            map.put("success",true);
+            return map;
+        }
+        map.put("success",false);
+        return map;
+    }
+
+    /**
      * 重置密码
      * @param userId
      * @return

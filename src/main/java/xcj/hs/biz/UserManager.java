@@ -7,7 +7,7 @@ import xcj.hs.vo.UserVo;
 
 import java.util.List;
 
-public interface UserManager extends BaseManager<UserVo,User> {
+public interface UserManager {
     /**
      * 登陆验证
      * @param account
@@ -26,6 +26,8 @@ public interface UserManager extends BaseManager<UserVo,User> {
 
 
     void modifyRole(String userId,String roleId);
+
+    boolean updateSuperior(String subordinateId,String superiorId);
 
     void modify(UserVo userVo);
 

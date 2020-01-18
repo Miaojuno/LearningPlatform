@@ -38,9 +38,9 @@ public interface UserDao extends JpaRepository<User,String> {
     @Query(value = "update user set IS_ACTIVE = :isActive where USER_ID = :userId",nativeQuery = true)
     void modifyIsActiveById(@Param("isActive") String isActive, @Param("userId") String userId);
 
-    @Modifying
-    @Query(value = "update user set USER_NAME = :userName , ROLE_ID = :roleId where USER_ID = :userId",nativeQuery = true)
-    void modifyUserNameAndRoleIdById(@Param("userName") String userName, @Param("roleId") String roleId , @Param("userId") String userId);
+//    @Modifying
+//    @Query(value = "update user set USER_NAME = :userName , ROLE_ID = :roleId , USER_DESC = : userDesc where USER_ID = :userId",nativeQuery = true)
+//    void modifyById(@Param("userName") String userName, @Param("roleId") String roleId , @Param("userDesc") String userDesc , @Param("userId") String userId);
 
 
     List<User> findByIsActiveEquals(String isActive);

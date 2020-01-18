@@ -13,7 +13,7 @@ $(function () {
             var temp={
                 pageNumber: (params.offset / params.limit) + 1,     //页数
                 pageSize: params.limit,                             //每页的记录行数
-                userName : $("#superiorName").val(),
+                userName : $("#searchSuperiorName").val(),
                 subordinateId : $("#subordinateId").val()
             };
             return temp;
@@ -29,14 +29,11 @@ $(function () {
             checkbox: true,
             visible: true                  //显示复选框
         }, {
-            field: 'userAccount',
-            title: '账户'
-        }, {
             field: 'userName',
             title: '姓名'
         }, {
-            field: 'roleName',
-            title: '角色' ,
+            field: 'userDesc',
+            title: '介绍'
         }, {
             field: 'action',
             title: '操作',
@@ -52,6 +49,8 @@ $(function () {
         return result;
     }
 
+    var layerSuperior;
+
     //打开上级设置遮罩层
     $(document).on("click",".edit-superior",function (){
         var userId=$(this).parent().parent().attr("data-uniqueid");
@@ -60,21 +59,21 @@ $(function () {
         layui.use('layer',function(){
             layer=layui.layer;
 
-            layer.open({
+            layerSuperior = layer.open({
                 type: 1,
                 zIndex:"1",
                 title: '配置上级',
-                area: ['800px'],
+                // area: ['800px'],
                 content: $('#user-superior-div'),
-                btn: ['确定','关闭'],
-                yes: function (index) {
-                    layer.close(index);
-                    $("#superior-modify-form")[0].reset()
-                },
-                btn2: function (index) {
-                    layer.close(index);
-                    $("#superior-modify-form")[0].reset()
-                },
+                // btn: ['确定','关闭'],
+                // yes: function (index) {
+                //     layer.close(index);
+                //     $("#superior-modify-form")[0].reset()
+                // },
+                // btn2: function (index) {
+                //     layer.close(index);
+                //     $("#superior-modify-form")[0].reset()
+                // },
                 cancel: function(index){
                     layer.close(index);
                     $("#superior-modify-form")[0].reset()
@@ -84,10 +83,32 @@ $(function () {
     })
 
     $(document).on("click",".changeSuperior",function (){
-        console.log(1)
+        var superiorId=$(this).parent().parent().attr("data-uniqueid");
+        $.ajax({
+            url: "/user/updateSuperior",
+            data : {
+                "subordinateId": $("#subordinateId").val(),
+                "superiorId": superiorId
+            },
+            dataType : "json",
+            type : "post",
+            success : function(result){
+                if (result.success==true){
+                    layer.msg("上级设置成功",{icon:1,time:2000});
+                    layer.close(layerSuperior)
+                    $("#user-table").bootstrapTable('refresh');
+                }else {
+                    layer.msg(result.msg,{icon:2});
+                }
+            },
+            error : function(result){
+            }
+        })
     })
 
-
+    $(document).on("input","#searchSuperiorName",function () {
+        $("#superior-table").bootstrapTable('refresh');
+    })
 })
 
 

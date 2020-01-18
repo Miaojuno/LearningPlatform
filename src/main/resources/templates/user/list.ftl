@@ -37,31 +37,37 @@
 </div>
 
 <#--add遮罩层-->
-<div id="user-add-div" style="display: none;">
+<div id="user-add-div" class="maskLayer" style="display: none;">
     <div class="modal-body">
         <form id="user-add-form">
             <div class="row">
-                <label class="control-label col-2 text-right" for="">账户</label>
+                <label class="control-label col-3 text-right" for="">账户</label>
                 <div class="col-8">
                     <input type="text" name="userAccount" class="form-control account" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" placeholder="输入账户..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">密码</label>
+                <label class="control-label col-3 text-right" for="">密码</label>
                 <div class="col-8">
                     <input type="text" name="userPwd" class="form-control pwd1" placeholder="输入密码..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">姓名</label>
+                <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
                     <input type="text" name="userName" class="form-control name" placeholder="输入姓名..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">角色</label>
+                <label class="control-label col-3 text-right" for="">角色</label>
                 <div class="col-8">
                     <@macros.roleSelect id="user-add-roleSelect" name="roleId"></@macros.roleSelect>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-3 text-right" for="">简介</label>
+                <div class="col-8">
+                    <textarea rows="3" name="userDesc" class="form-control desc"  autocomplete="off"></textarea>
                 </div>
             </div>
         </form>
@@ -70,29 +76,35 @@
 
 
 <#--modify遮罩层-->
-<div id="user-modify-div" style="display: none;">
+<div id="user-modify-div" class="maskLayer" style="display: none;">
     <div class="modal-body">
         <form id="user-modify-form">
             <div class="row" hidden>
-                <label class="control-label col-2 text-right" for="">id</label>
+                <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
                     <input type="text" name="userId" class="form-control userId"  autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">账户</label>
+                <label class="control-label col-3 text-right" for="">账户</label>
                 <div class="col-8">
                     <input type="text" name="userAccount" class="form-control account" disabled>
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">姓名</label>
+                <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
                     <input type="text" name="userName" class="form-control name" placeholder="输入姓名..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">角色</label>
+                <label class="control-label col-3 text-right" for="">简介</label>
+                <div class="col-8">
+                    <textarea rows="3" name="userDesc" class="form-control desc"  autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-3 text-right" for="">角色</label>
                 <div class="col-8">
                     <@macros.roleSelect id="user-modify-roleSelect" name="roleId"></@macros.roleSelect>
                 </div>
@@ -102,19 +114,19 @@
 </div>
 
 <#--配置上级遮罩层-->
-<div id="user-superior-div" style="display: none;">
+<div id="user-superior-div" class="maskLayer" style="display: none;">
     <div class="modal-body">
         <form id="superior-modify-form">
             <div class="row" hidden>
-                <label class="control-label col-2 text-right" for="">id</label>
+                <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
                     <input type="text" name="userId" id="subordinateId" class="form-control userId"  autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">搜索姓名</label>
+                <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
-                    <input type="text" name="userName" id='superiorName'  class="form-control">
+                    <input type="text" name="userName" id='searchSuperiorName'  class="form-control">
                 </div>
             </div>
         </form>

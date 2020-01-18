@@ -36,7 +36,13 @@ $(function () {
             title: '姓名'
         }, {
             field: 'roleName',
-            title: '角色' ,
+            title: '角色'
+        }, {
+            field: 'userDesc',
+            title: '介绍'
+        }, {
+            field: 'superiorName',
+            title: '上级'
         }, {
             field: 'action',
             title: '操作',
@@ -48,10 +54,10 @@ $(function () {
     function actionFormatter(value, row, index) {
         var id = value;
         var result = "";
-        result += "<a href='javascript:;'  class='re-pwd' title='密码重置'><span>密码重置</span></a>&nbsp;&nbsp;&nbsp;";
-        result += "<a href='javascript:;'  class='edit-user' title='编辑'><span>编辑</span></a>&nbsp;&nbsp;&nbsp;";
-        result += "<a href='javascript:;'  class='edit-superior' title='设置上级'><span>设置上级</span></a>&nbsp;&nbsp;&nbsp;";
-        // result += "<a href='javascript:;'  class='edit-role' title='分配角色'><span>角色</span></a>&nbsp;&nbsp;&nbsp;";
+        result += "<a href='javascript:;'  class='re-pwd' title='密码重置'><span>密码重置</span></a>&nbsp;";
+        result += "<a href='javascript:;'  class='edit-user' title='编辑'><span>编辑</span></a>&nbsp;";
+        result += "<a href='javascript:;'  class='edit-superior' title='设置上级'><span>上级</span></a>&nbsp;";
+        // result += "<a href='javascript:;'  class='edit-role' title='分配角色'><span>角色</span></a>&nbsp;";
         result += "<a href='javascript:;'  class='del-user' title='删除'><span>删除</span></a>";
 
         return result;
@@ -131,7 +137,7 @@ $(function () {
                 type: 1,
                 zIndex:"1",
                 title: '新增用户',
-                area: ['800px'],
+                // area: ['800px'],
                 content: $('#user-add-div'),
                 btn: ['确定','关闭'],
                 yes: function (index) {
@@ -217,6 +223,7 @@ $(function () {
                     if (result.success==true){
                         $("#user-modify-form .name").val(result.data.userName);
                         $("#user-modify-form .account").val(result.data.userAccount);
+                        $("#user-modify-form .desc").val(result.data.userDesc);
                         $("#user-modify-roleSelect").val(result.data.roleId);
                     }else {
                         layer.msg(result.msg,{icon:2});
@@ -231,7 +238,7 @@ $(function () {
                 type: 1,
                 zIndex:"1",
                 title: '修改用户',
-                area: ['800px'],
+                // area: ['800px'],
                 content: $('#user-modify-div'),
                 btn: ['确定','关闭'],
                 yes: function (index) {

@@ -70,7 +70,7 @@ $(function () {
                 type: 1,
                 zIndex:"1",
                 title: '新增角色',
-                area: ['800px'],
+                // area: ['800px'],
                 content: $('#role-add-div'),
                 btn: ['确定','关闭'],
                 yes: function (index) {
@@ -130,7 +130,7 @@ $(function () {
                 type: 1,
                 zIndex:"1",
                 title: '修改用户',
-                area: ['800px'],
+                // area: ['800px'],
                 content: $('#role-modify-div'),
                 btn: ['确定','关闭'],
                 yes: function (index) {

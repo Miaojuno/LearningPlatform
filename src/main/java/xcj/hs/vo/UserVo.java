@@ -24,6 +24,8 @@ public class UserVo implements Serializable {
 
     private String superiorId;
 
+    private String superiorName;
+
     private String userDesc;
 }
 

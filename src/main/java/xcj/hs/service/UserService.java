@@ -29,6 +29,8 @@ public interface UserService {
 
     Page<User> pageFind(UserVo userVo, Pageable pageable);
 
+    boolean updateSuperior(String subordinateId,String superiorId);
+
     /**
      * 密码重置为“123456”
      * @param userId
@@ -44,7 +46,7 @@ public interface UserService {
 
     int getActiveUserNumber();
 
-    void modify(User user);
+    void update(User user);
 
     User findById(String userId);
 }

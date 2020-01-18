@@ -27,17 +27,17 @@
 </div>
 
 <#--add遮罩层-->
-<div id="role-add-div" style="display: none;">
+<div id="role-add-div" class="maskLayer" style="display: none;">
     <div class="modal-body">
         <form id="role-add-form">
             <div class="row">
-                <label class="control-label col-2 text-right" for="">角色名</label>
+                <label class="control-label col-3 text-right" for="">角色名</label>
                 <div class="col-8">
                     <input type="text" name="roleName" class="form-control roleName"  placeholder="输入角色名..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">描述</label>
+                <label class="control-label col-3 text-right" for="">描述</label>
                 <div class="col-8">
                     <input type="text" name="roleDesc" class="form-control roleDesc" placeholder="输入描述..." autocomplete="off">
                 </div>
@@ -47,29 +47,29 @@
 </div>
 
 <#--modify遮罩层-->
-<div id="role-modify-div" style="display: none;">
+<div id="role-modify-div" class="maskLayer" style="display: none;">
     <div class="modal-body">
         <form id="role-modify-form">
             <div class="row" hidden>
-                <label class="control-label col-2 text-right" for="">id</label>
+                <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
                     <input type="text" name="roleId" class="form-control roleId"  autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">角色名</label>
+                <label class="control-label col-3 text-right" for="">角色名</label>
                 <div class="col-8">
                     <input type="text" name="roleName" class="form-control roleName"  disabled autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">描述</label>
+                <label class="control-label col-3 text-right" for="">描述</label>
                 <div class="col-8">
                     <input type="text" name="roleDesc" class="form-control roleDesc" placeholder="输入描述..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
-                <label class="control-label col-2 text-right" for="">激活状态</label>
+                <label class="control-label col-3 text-right" for="">激活状态</label>
                 <div class="col-8">
                     <select id="modify-isActive" name="isActive" class="form-control">
                         <option value="1" >激活</option>
