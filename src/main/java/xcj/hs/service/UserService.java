@@ -49,4 +49,6 @@ public interface UserService {
     void update(User user);
 
     User findById(String userId);
+
+    User findByUserAccount(String userAccount);
 }

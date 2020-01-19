@@ -33,7 +33,7 @@ public class RoleController {
      * 获取所有激活状态role
      * @return
      */
-    @PostMapping("/list")
+    @PostMapping("/listActive")
     @ResponseBody
     public List<RoleVo> list() {
         return roleManager.getAllActiveRole();

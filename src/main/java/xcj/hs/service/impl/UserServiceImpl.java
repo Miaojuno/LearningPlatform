@@ -83,4 +83,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         }
         return null;
     }
+
+    public User findByUserAccount(String userAccount){
+        return userDao.findByUserAccount(userAccount);
+    }
+
 }

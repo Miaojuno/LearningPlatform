@@ -3,6 +3,8 @@ package xcj.hs.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.neo4j.driver.v1.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -83,6 +85,7 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @CacheEvict(value = "userPageListCache" , allEntries = true)
     @PostMapping("/register")
     @ResponseBody
     public Map<String ,Object > register( UserVo userVo) {
@@ -102,6 +105,7 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @CacheEvict(value = "userPageListCache" , allEntries = true)
     @PostMapping("/modify")
     @ResponseBody
     public Map<String ,Object > modify( UserVo userVo) {
@@ -136,28 +140,29 @@ public class UserController {
     }
 
 
-    /**
-     *  修改角色
-     * @param userId
-     * @param roleId
-     * @return
-     */
-    @PostMapping("/modifyRole")
-    @ResponseBody
-    public Map<String ,Object > modifyRole( String userId,String roleId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        userManager.modifyRole(userId,roleId);
-        map.put("success",true);
-        return map;
-    }
+//    /**
+//     *  修改角色
+//     * @param userId
+//     * @param roleId
+//     * @return
+//     */
+//    @CacheEvict(value = "userPageListCache")
+//    @PostMapping("/modifyRole")
+//    @ResponseBody
+//    public Map<String ,Object > modifyRole( String userId,String roleId) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        userManager.modifyRole(userId,roleId);
+//        map.put("success",true);
+//        return map;
+//    }
 
     /**
      *  修改上级
-     * @param request
      * @param subordinateId
      * @param superiorId
      * @return
      */
+    @CacheEvict(value = "userPageListCache" , allEntries = true)
     @PostMapping("/updateSuperior")
     @ResponseBody
     public Map<String ,Object > updateSuperior(String subordinateId, String superiorId) {
@@ -189,6 +194,7 @@ public class UserController {
      * @param userId
      * @return
      */
+    @CacheEvict(value = "userPageListCache" , allEntries = true)
     @PostMapping("/delete")
     @ResponseBody
     public Map<String ,Object > deleteUser( String userId) {
@@ -215,15 +221,12 @@ public class UserController {
      * @param userVo
      * @param pageSize
      * @param pageNumber
-     * @param searchText
-     * @param request
-     * @param response
      * @return
      */
+    @Cacheable(value="userPageListCache")
     @RequestMapping("/pageList.json")
     @ResponseBody
-    public Map<String,Object>  listUser(UserVo userVo , Integer pageSize, Integer pageNumber, String searchText, HttpServletRequest request,
-            HttpServletResponse response) {
+    public Map<String,Object>  listUser(UserVo userVo , Integer pageSize, Integer pageNumber) {
         Map<String,Object> resultMap = new HashMap();
         Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
         Page<UserVo> pages=userManager.pageFind(userVo,pageable);
@@ -239,14 +242,11 @@ public class UserController {
      * @param pageSize
      * @param pageNumber
      * @param subordinateId
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping("/superiorPageList.json")
     @ResponseBody
-    public Map<String,Object>  superiorPageList(UserVo userVo , Integer pageSize, Integer pageNumber, String subordinateId, HttpServletRequest request,
-                                        HttpServletResponse response) {
+    public Map<String,Object>  superiorPageList(UserVo userVo , Integer pageSize, Integer pageNumber, String subordinateId) {
         Map<String,Object> resultMap = new HashMap();
         Pageable pageable = PageRequest.of(pageNumber-1,pageSize);
         if(StringUtils.isNotBlank(subordinateId)){

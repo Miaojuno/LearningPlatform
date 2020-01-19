@@ -2,6 +2,7 @@ package xcj.hs.biz.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -99,5 +100,9 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo,User> implements Use
 
     public UserVo findById(String userId){
         return po2vo(userService.findById(userId));
+    }
+
+    public String getRoleName(String userAccount){
+        return roleService.findRoleByRoleId(userService.findByUserAccount(userAccount).getRoleId()).getRoleName();
     }
 }

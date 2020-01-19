@@ -5,4 +5,6 @@
 
 <section>
     index hello
+    loginUserAccount:
+    ${Session ["loginUserAccount"]}
 </section>

@@ -52,4 +52,11 @@ public interface UserManager {
     int getActiveUserNumber();
 
     UserVo findById(String userId);
+
+    /**
+     * 根据用户账号获得角色名
+     * @param userAccount
+     * @return
+     */
+    String getRoleName(String userAccount);
 }

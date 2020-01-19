@@ -102,7 +102,7 @@
 
     <script>
         $.ajax({
-            url: "/role/list",
+            url: "/role/listActive",
             dataType : "json",
             type : "post",
             success : function(result){
