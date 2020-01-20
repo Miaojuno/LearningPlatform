@@ -22,7 +22,6 @@ $('#btn-register').on('click', function () {
             layer.msg("账户只能由数字和密码组成",{icon:2});
             return;
         }
-        console.log($(".account").val().length)
         if($(".account").val().length<5 || $(".account").val().length>15){
             layer.msg("账户长度应为5-15位",{icon:2});
             return;

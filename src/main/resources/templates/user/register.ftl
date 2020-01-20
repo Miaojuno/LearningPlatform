@@ -1,13 +1,14 @@
+<#import "/main/macros.ftl" as macros>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>RegisterPage</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="/webjars/layui/2.5.5/layui.js"></script>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/css/user/login.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/user/login.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -19,7 +20,8 @@
         <div class="row">
             <label class="control-label col-2 text-right" for="">账户</label>
             <div class="col-10">
-                <input type="text" name="userAccount" class="form-control account" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" placeholder="输入你的账户...">
+                <input type="text" name="userAccount" class="form-control account"
+                       onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" placeholder="输入你的账户...">
             </div>
         </div>
         <div class="row">
@@ -40,6 +42,12 @@
                 <input type="text" name="userName" class="form-control name" placeholder="输入你的姓名...">
             </div>
         </div>
+        <#--<div class="row">-->
+            <#--<label class="control-label col-2 text-right" for="">角色</label>-->
+            <#--<div class="col-10">-->
+                    <#--<@macros.roleSelect id="user-register-roleSelect" name="roleId"></@macros.roleSelect>-->
+            <#--</div>-->
+        <#--</div>-->
         <div class="row">
             <span style="font-size: 15px;color: red;">${(msg)!}</span>
         </div>

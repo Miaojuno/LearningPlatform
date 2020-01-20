@@ -23,7 +23,7 @@ public interface UserService {
      */
     boolean create(User newUser);
 
-    void modifyRole(String userId,String roleId);
+    void modifyRole(String userAccount,String roleId);
 
     List<User> findAllActiveUser();
 

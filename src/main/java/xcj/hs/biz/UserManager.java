@@ -25,7 +25,7 @@ public interface UserManager {
     boolean register(UserVo userVo);
 
 
-    void modifyRole(String userId,String roleId);
+    void modifyRole(String userAccount,String roleId);
 
     boolean updateSuperior(String subordinateId,String superiorId);
 

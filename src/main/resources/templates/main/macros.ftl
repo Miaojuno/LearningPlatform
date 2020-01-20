@@ -47,6 +47,7 @@
                             <a class="dropdown-item" href="/user/list">用户管理</a>
                             <a class="dropdown-item" href="/role/list">角色管理</a>
                             <a class="dropdown-item" href="/excelupload">数据导入</a>
+                            <a class="dropdown-item" id="roleModifyApplyBtn">角色变更申请</a>
                         </div>
                     </li>
                     <#--<li class="nav-item">-->
@@ -66,8 +67,34 @@
         </nav>
     </div>
 
-
+    <#--当前登录用户账户及角色-->
+    <input id="loginUserAccount" value="${Session ["loginUserAccount"]}" hidden>
+    <input id="loginUserRole" value="${Session ["loginUserRole"]}" hidden>
     </body>
+
+
+    <#--角色修改申请遮罩层-->
+    <#--add遮罩层-->
+    <div id="role-modify-apply-div" class="maskLayer" style="display: none;">
+        <div class="modal-body">
+            <form id="role-modify-apply-form">
+                <div class="row">
+                    <label class="control-label col-3 text-right" for="">角色</label>
+                    <div class="col-8">
+                        <select id="role-modify-apply-select" name="roleId" class=" form-control">
+                            <option value="" >---请选择---</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-3 text-right" for="">备注</label>
+                    <div class="col-8">
+                        <textarea rows="3" name="reason" class="form-control reason" autocomplete="off"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <style>
         .navbar-dark .navbar-nav .nav-link {
@@ -84,10 +111,8 @@
         }
     </style>
     </html>
+    <script src="/js/main/main.js"></script>
 </#macro>
-
-
-
 
 
 
@@ -97,7 +122,6 @@
 <#macro roleSelect id name>
     <select id="${id}" name="${name}" class=" form-control">
         <option value="" >---请选择---</option>
-
     </select>
 
     <script>
@@ -115,3 +139,8 @@
         })
     </script>
 </#macro>
+
+
+
+
+

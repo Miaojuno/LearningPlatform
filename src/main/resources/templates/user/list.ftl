@@ -12,28 +12,41 @@
             </div>
         </div>
 
-        <div class="row form-group col-5">
-            <label class="control-label col-4 text-right" for="">角色:</label>
-            <div class="col-8">
-                <@macros.roleSelect id="roleSelect" ></@macros.roleSelect>
+        <#if Session["loginUserRole"] == "管理员">
+            <div class="row form-group col-5">
+                <label class="control-label col-4 text-right" for="">角色:</label>
+                <div class="col-8">
+                    <@macros.roleSelect id="roleSelect" ></@macros.roleSelect>
+                </div>
             </div>
-        </div>
+        <#else>
+            <div class="row form-group col-5" hidden>
+                <label class="control-label col-4 text-right" for="">上级:</label>
+                <div class="col-8">
+                    <input id="superiorId">
+                </div>
+            </div>
+        </#if>
+
 
         <div class="row buttons">
             <button id="data-query" class="btn btn-primary btn-sm">查询</button>
-            <#--<button id="data-reset" class="btn btn-primary btn-sm">重置</button>-->
+        <#--<button id="data-reset" class="btn btn-primary btn-sm">重置</button>-->
         </div>
 
     </div>
     <div class="tablediv m-auto">
-        <#--数据操作-->
+    <#--数据操作-->
         <div class="query-operation">
-            <button type="button" id="user-add" class="btn btn-outline-primary btn-sm">新增</button>
+            <#if Session["loginUserRole"] == "管理员">
+                <button type="button" id="user-add" class="btn btn-outline-primary btn-sm">新增</button>
+            </#if>
         </div>
 
-        <#--内容表格-->
+    <#--内容表格-->
         <table id="user-table"></table>
     </div>
+
 </div>
 
 <#--add遮罩层-->
@@ -43,19 +56,22 @@
             <div class="row">
                 <label class="control-label col-3 text-right" for="">账户</label>
                 <div class="col-8">
-                    <input type="text" name="userAccount" class="form-control account" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" placeholder="输入账户..." autocomplete="off">
+                    <input type="text" name="userAccount" class="form-control account"
+                           onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" placeholder="输入账户..." autocomplete="off">
                 </div>
             </div>
             <div class="row">
                 <label class="control-label col-3 text-right" for="">密码</label>
                 <div class="col-8">
-                    <input type="text" name="userPwd" class="form-control pwd1" placeholder="输入密码..." autocomplete="off">
+                    <input type="text" name="userPwd" class="form-control pwd1" placeholder="输入密码..."
+                           autocomplete="off">
                 </div>
             </div>
             <div class="row">
                 <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
-                    <input type="text" name="userName" class="form-control name" placeholder="输入姓名..." autocomplete="off">
+                    <input type="text" name="userName" class="form-control name" placeholder="输入姓名..."
+                           autocomplete="off">
                 </div>
             </div>
             <div class="row">
@@ -67,7 +83,7 @@
             <div class="row">
                 <label class="control-label col-3 text-right" for="">简介</label>
                 <div class="col-8">
-                    <textarea rows="3" name="userDesc" class="form-control desc"  autocomplete="off"></textarea>
+                    <textarea rows="3" name="userDesc" class="form-control desc" autocomplete="off"></textarea>
                 </div>
             </div>
         </form>
@@ -82,7 +98,7 @@
             <div class="row" hidden>
                 <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
-                    <input type="text" name="userId" class="form-control userId"  autocomplete="off">
+                    <input type="text" name="userId" class="form-control userId" autocomplete="off">
                 </div>
             </div>
             <div class="row">
@@ -94,21 +110,24 @@
             <div class="row">
                 <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
-                    <input type="text" name="userName" class="form-control name" placeholder="输入姓名..." autocomplete="off">
+                    <input type="text" name="userName" class="form-control name" placeholder="输入姓名..."
+                           autocomplete="off">
                 </div>
             </div>
             <div class="row">
                 <label class="control-label col-3 text-right" for="">简介</label>
                 <div class="col-8">
-                    <textarea rows="3" name="userDesc" class="form-control desc"  autocomplete="off"></textarea>
+                    <textarea rows="3" name="userDesc" class="form-control desc" autocomplete="off"></textarea>
                 </div>
             </div>
+            <#if Session["loginUserRole"] == "管理员">
             <div class="row">
                 <label class="control-label col-3 text-right" for="">角色</label>
                 <div class="col-8">
                     <@macros.roleSelect id="user-modify-roleSelect" name="roleId"></@macros.roleSelect>
                 </div>
             </div>
+            </#if>
         </form>
     </div>
 </div>
@@ -120,13 +139,13 @@
             <div class="row" hidden>
                 <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
-                    <input type="text" name="userId" id="subordinateId" class="form-control userId"  autocomplete="off">
+                    <input type="text" name="userId" id="subordinateId" class="form-control userId" autocomplete="off">
                 </div>
             </div>
             <div class="row">
                 <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
-                    <input type="text" name="userName" id='searchSuperiorName'  class="form-control">
+                    <input type="text" name="userName" id='searchSuperiorName' class="form-control">
                 </div>
             </div>
         </form>

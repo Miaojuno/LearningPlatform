@@ -88,13 +88,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
       HttpServletRequest request, HttpServletResponse response, Object handler)
       throws ServletException, IOException {
     String loginUserAccount = (String) request.getSession().getAttribute("loginUserAccount");
+    String loginUserRole = (String) request.getSession().getAttribute("loginUserRole");
     String servletPath = request.getServletPath();
     if (StringUtils.isBlank(loginUserAccount)) {
       response.sendRedirect("/gologin");
       return false;
     }
     // 验证权限
-    if (checkAuth(loginUserAccount, servletPath)) {
+    if (checkAuth(loginUserAccount, loginUserRole, servletPath)) {
       log.info("当前登陆用户：-" + loginUserAccount + "-------------------" + "拦截器通过URL：" + servletPath);
       return true;
     } else {
@@ -111,19 +112,20 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     response.sendRedirect("/nopermission");
   }
 
-  private boolean checkAuth(String loginUserAccount, String servletPath) {
-    String roleName = userManager.getRoleName(loginUserAccount);
+  private boolean checkAuth(String loginUserAccount, String loginUserRole, String servletPath) {
     // 系统管理员有权访问所有页面
     if ("superadmin".equals(loginUserAccount)) {
       return true;
     }
 
     List<String> permissionUrls =
-        "学生".equals(roleName)
+        "学生".equals(loginUserRole)
             ? studentUrls
-            : "教师".equals(roleName)
+            : "教师".equals(loginUserRole)
                 ? teacherUrls
-                : "领导".equals(roleName) ? leaderUrls : "管理员".equals(roleName) ? adminUrls : null;
+                : "领导".equals(loginUserRole)
+                    ? leaderUrls
+                    : "管理员".equals(loginUserRole) ? adminUrls : null;
 
     if (!permissionUrls.contains(servletPath) && allUrls.contains(servletPath)) {
       return false;

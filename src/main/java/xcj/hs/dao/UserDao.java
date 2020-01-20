@@ -18,11 +18,11 @@ public interface UserDao extends JpaRepository<User,String> {
     /**
      * 修改角色id
      * @param roleId
-     * @param userId
+     * @param userAccount
      */
     @Modifying
-    @Query(value = "update user set roleId = :roleId where userId = :userId",nativeQuery = true)
-    void modifyRoleIdById(@Param("roleId") String roleId, @Param("userId") String userId);
+    @Query(value = "update user set ROLE_ID = :roleId where USER_ACCOUNT = :userAccount",nativeQuery = true)
+    void modifyRoleIdByUserAccount(@Param("roleId") String roleId, @Param("userAccount") String userAccount);
 
     /**
      * 修改密码
@@ -48,6 +48,8 @@ public interface UserDao extends JpaRepository<User,String> {
     int countByIsActiveEquals(String isActive);
 
     Page<User> findByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId, Pageable pageable);
+
+    Page<User> findByIsActiveAndUserAccountContainingAndSuperiorIdInAndRoleIdContaining(String isActive, String userName, List<Object> superiorIds,String roleId, Pageable pageable);
 
     int countByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId);
 
