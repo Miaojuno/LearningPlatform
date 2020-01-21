@@ -43,6 +43,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             管理
                         </a>
+
                         <div class="dropdown-menu">
                             <#if Session["loginUserRole"] != "学生">
                                 <a class="dropdown-item" href="/user/list">用户管理</a>
@@ -50,13 +51,35 @@
                             <#if Session["loginUserRole"] == "管理员">
                                 <a class="dropdown-item" href="/role/list">角色管理</a>
                             </#if>
-                            <#if Session["loginUserRole"] != "管理员">
-                                <a class="dropdown-item" id="roleModifyApplyBtn">角色变更申请</a>
-                                <a class="dropdown-item" id="supeiorModifyApplyBtn">上级变更申请</a>
-                            </#if>
+                        </div>
 
+                    </li>
+
+                    <#if Session["loginUserRole"] != "管理员">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            申请
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" id="roleModifyApplyBtn">角色变更申请</a>
+                            <a class="dropdown-item" href="#" id="supeiorModifyApplyBtn">上级变更申请</a>
                         </div>
                     </li>
+                    </#if>
+
+                    <#if Session["loginUserRole"] != "管理员" && Session["loginUserRole"] != "学生">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            审核
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/apply/superiorApplyReview">角色变更申请</a>
+                        </div>
+                    </li>
+                    </#if>
+
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="/excelupload">数据导入</a>
                     </li>
@@ -203,6 +226,18 @@
             }
         })
     </script>
+</#macro>
+
+
+
+<#--状态选择组件-->
+<#macro statusSelect id name>
+    <select id="${id}" name="${name}" class=" form-control">
+        <option value="" >---请选择---</option>
+        <option value="申请中" >申请中</option>
+        <option value="通过" >通过</option>
+        <option value="拒绝" >拒绝</option>
+    </select>
 </#macro>
 
 

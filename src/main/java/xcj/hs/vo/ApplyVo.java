@@ -15,14 +15,22 @@ public class ApplyVo implements Serializable {
 
     private String userId;
 
+    private String userName;
+
     private String userAccount;
 
     private String oldId;
 
+    private String oldName;
+
     private String newId;
+
+    private String newName;
 
     //  申请中 通过 拒绝
     private String status;
+
+    private String reviewContent;
 
     private String reason;
 }

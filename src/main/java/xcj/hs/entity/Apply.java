@@ -35,4 +35,7 @@ public class Apply {
 
   @Column(name = "REASON")
   private String reason;
+
+  @Column(name = "REVIEW_CONTENT")
+  private String reviewContent;
 }
