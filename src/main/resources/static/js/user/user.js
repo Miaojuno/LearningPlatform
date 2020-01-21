@@ -185,7 +185,6 @@ $(function () {
                             dataType: "json",
                             type: "post",
                             success: function (result) {
-                                console.log(result)
                                 if (result.success == true) {
                                     layer.msg("新增成功", {icon: 1});
                                     layer.close(index);
@@ -230,7 +229,6 @@ $(function () {
                 dataType: "json",
                 type: "post",
                 success: function (result) {
-                    console.log(result)
                     if (result.success == true) {
                         $("#user-modify-form .name").val(result.data.userName);
                         $("#user-modify-form .account").val(result.data.userAccount);

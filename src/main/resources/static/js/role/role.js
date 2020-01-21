@@ -81,7 +81,6 @@ $(function () {
                         dataType : "json",
                         type : "post",
                         success : function(result){
-                            console.log(result)
                             if (result.success==true){
                                 layer.msg("新增成功",{icon:1});
                                 layer.close(index);
@@ -140,7 +139,6 @@ $(function () {
                         dataType : "json",
                         type : "post",
                         success : function(result){
-                            console.log(result)
                             if (result.success==true){
                                 layer.msg("修改成功",{icon:1});
                                 layer.close(index);

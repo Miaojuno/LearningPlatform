@@ -128,21 +128,22 @@ public class UserController {
     return map;
   }
 
-      /**
-       *  修改角色
-       * @param userId
-       * @param roleId
-       * @return
-       */
-      @CacheEvict(value = "userPageListCache")
-      @PostMapping("/modifyRole")
-      @ResponseBody
-      public Map<String ,Object > modifyRole( String userAccount,String roleId) {
-          Map<String, Object> map = new HashMap<String, Object>();
-          userManager.modifyRole(userAccount,roleId);
-          map.put("success",true);
-          return map;
-      }
+  /**
+   * 修改角色
+   *
+   * @param userId
+   * @param roleId
+   * @return
+   */
+  @CacheEvict(value = "userPageListCache")
+  @PostMapping("/modifyRole")
+  @ResponseBody
+  public Map<String, Object> modifyRole(String userAccount, String roleId) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    userManager.modifyRole(userAccount, roleId);
+    map.put("success", true);
+    return map;
+  }
 
   /**
    * 修改上级
@@ -239,13 +240,25 @@ public class UserController {
   @RequestMapping("/superiorPageList.json")
   @ResponseBody
   public Map<String, Object> superiorPageList(
-      UserVo userVo, Integer pageSize, Integer pageNumber, String subordinateId) {
+      UserVo userVo,
+      Integer pageSize,
+      Integer pageNumber,
+      String subordinateId,
+      String subordinateAccount) {
     Map<String, Object> resultMap = new HashMap();
     Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-    if (StringUtils.isNotBlank(subordinateId)) {
-      Page<UserVo> pages = userManager.superiorPageFind(userVo, subordinateId, pageable);
-      resultMap.put("data", pages.getContent());
-      resultMap.put("total", pages.getTotalElements());
+    if (StringUtils.isNotBlank(subordinateId) || StringUtils.isNotBlank(subordinateAccount)) {
+      Page<UserVo> pages =
+          userManager.superiorPageFind(userVo, subordinateId, subordinateAccount, pageable);
+      if (pages==null){
+          resultMap.put("data", null);
+          resultMap.put("total", 0);
+      }
+      else {
+          resultMap.put("data", pages.getContent());
+          resultMap.put("total", pages.getTotalElements());
+      }
+
     }
     return resultMap;
   }

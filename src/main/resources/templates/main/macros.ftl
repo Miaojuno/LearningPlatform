@@ -44,15 +44,22 @@
                             管理
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/user/list">用户管理</a>
-                            <a class="dropdown-item" href="/role/list">角色管理</a>
-                            <a class="dropdown-item" href="/excelupload">数据导入</a>
-                            <a class="dropdown-item" id="roleModifyApplyBtn">角色变更申请</a>
+                            <#if Session["loginUserRole"] != "学生">
+                                <a class="dropdown-item" href="/user/list">用户管理</a>
+                            </#if>
+                            <#if Session["loginUserRole"] == "管理员">
+                                <a class="dropdown-item" href="/role/list">角色管理</a>
+                            </#if>
+                            <#if Session["loginUserRole"] != "管理员">
+                                <a class="dropdown-item" id="roleModifyApplyBtn">角色变更申请</a>
+                                <a class="dropdown-item" id="supeiorModifyApplyBtn">上级变更申请</a>
+                            </#if>
+
                         </div>
                     </li>
-                    <#--<li class="nav-item">-->
-                        <#--<a class="nav-link" href="/user/list">用户管理 </a>-->
-                    <#--</li>-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/excelupload">数据导入</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/questionupload">题目导入</a>
                     </li>
@@ -73,17 +80,39 @@
     </body>
 
 
-    <#--角色修改申请遮罩层-->
-    <#--add遮罩层-->
-    <div id="role-modify-apply-div" class="maskLayer" style="display: none;">
-        <div class="modal-body">
-            <form id="role-modify-apply-form">
+    <#if Session["loginUserRole"] != "管理员">
+        <#--角色修改申请遮罩层-->
+        <div id="role-modify-apply-div" class="maskLayer" style="display: none;">
+            <div class="modal-body">
+                <form id="role-modify-apply-form">
+                    <div class="row">
+                        <label class="control-label col-3 text-right" for="">角色</label>
+                        <div class="col-8">
+                            <select id="role-modify-apply-select" name="roleId" class=" form-control">
+                                <option value="" >---请选择---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-3 text-right" for="">备注</label>
+                        <div class="col-8">
+                            <textarea rows="3" name="reason" class="form-control reason" autocomplete="off"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <#--上级修改申请遮罩层-->
+        <div id="superior-modify-apply-div" class="maskLayer" style="display: none;">
+            <div class="modal-body">
                 <div class="row">
-                    <label class="control-label col-3 text-right" for="">角色</label>
+                    <label class="control-label col-3 text-right" for="">上级</label>
+                    <div class="col-8" hidden>
+                        <input name="newId" class="form-control newId" autocomplete="off">
+                    </div>
                     <div class="col-8">
-                        <select id="role-modify-apply-select" name="roleId" class=" form-control">
-                            <option value="" >---请选择---</option>
-                        </select>
+                        <input name="newId" class="form-control newName" autocomplete="off">
                     </div>
                 </div>
                 <div class="row">
@@ -92,9 +121,33 @@
                         <textarea rows="3" name="reason" class="form-control reason" autocomplete="off"></textarea>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <#--上级选择遮罩层-->
+        <div id="choose-superior-div" class="maskLayer" style="display: none;">
+            <div class="modal-body">
+                <form id="choose-superior-form">
+                    <div class="row" hidden>
+                        <label class="control-label col-3 text-right" for="">id</label>
+                        <div class="col-8">
+                            <input type="text" name="userId"  class="subordinateId form-control userId" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-3 text-right" for="">姓名</label>
+                        <div class="col-8">
+                            <input type="text" name="userName"  class="searchSuperiorName form-control">
+                        </div>
+                    </div>
+                </form>
+                <div class="tablediv m-auto">
+                <#--内容表格-->
+                    <table id="choose-superior-table"></table>
+                </div>
+            </div>
+        </div>
+    </#if>
 
     <style>
         .navbar-dark .navbar-nav .nav-link {
@@ -113,6 +166,18 @@
     </html>
     <script src="/js/main/main.js"></script>
 </#macro>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

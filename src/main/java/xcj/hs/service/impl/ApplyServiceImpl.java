@@ -22,8 +22,19 @@ public class ApplyServiceImpl extends BaseServiceImpl<Apply> implements ApplySer
     Apply apply=new Apply();
     BeanUtils.copyProperties(applyVo,apply);
     apply.setStatus("申请中");
-    apply.setType("角色改变");
+    apply.setType("角色变更");
     apply.setOldId(user.getRoleId());
+    apply.setUserId(user.getUserId());
+    applyDao.save(apply);
+  }
+
+  public void modifySupeiorApply(ApplyVo applyVo){
+    User user=userService.findByUserAccount(applyVo.getUserAccount());
+    Apply apply=new Apply();
+    BeanUtils.copyProperties(applyVo,apply);
+    apply.setStatus("申请中");
+    apply.setType("上级变更");
+    apply.setOldId(user.getSuperiorId());
     apply.setUserId(user.getUserId());
     applyDao.save(apply);
   }

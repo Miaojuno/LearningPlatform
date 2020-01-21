@@ -1,5 +1,6 @@
 package xcj.hs.biz.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import xcj.hs.vo.UserVo;
 import java.util.List;
 
 @Component
+@Slf4j
 public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements UserManager {
   @Autowired UserService userService;
 
@@ -71,12 +73,21 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
     return po2vo(userService.pageFind(userVo, pageable));
   }
 
-  public Page<UserVo> superiorPageFind(UserVo userVo, String subordinateId, Pageable pageable) {
-    String roleName = findById(subordinateId).getRoleName();
+  public Page<UserVo> superiorPageFind(
+      UserVo userVo, String subordinateId, String subordinateAccount, Pageable pageable) {
+    String roleName;
+    if (StringUtils.isNotBlank(subordinateId)) {
+      roleName = findById(subordinateId).getRoleName();
+    } else {
+      roleName = po2vo(userService.findByUserAccount(subordinateAccount)).getRoleName();
+    }
     if ("学生".equals(roleName)) {
       userVo.setRoleId(roleService.findRoleByRoleName("教师").getRoleId());
     } else if ("教师".equals(roleName) || "领导".equals(roleName)) {
       userVo.setRoleId(roleService.findRoleByRoleName("领导").getRoleId());
+    }
+    if(StringUtils.isBlank(userVo.getRoleId())){
+        return null;
     }
     return po2vo(userService.pageFind(userVo, pageable));
   }
@@ -94,6 +105,7 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
   }
 
   public void modify(UserVo userVo) {
+
     userService.update(vo2po(userVo));
   }
 

@@ -2,61 +2,64 @@ package xcj.hs.biz;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import xcj.hs.entity.User;
 import xcj.hs.vo.UserVo;
 
 import java.util.List;
 
 public interface UserManager {
-    /**
-     * 登陆验证
-     * @param account
-     * @param pwd
-     * @return
-     */
-    boolean loginCheck(String account,String pwd);
+  /**
+   * 登陆验证
+   *
+   * @param account
+   * @param pwd
+   * @return
+   */
+  boolean loginCheck(String account, String pwd);
 
+  /**
+   * 注册（当前账户名存在时返回false）
+   *
+   * @param userVo
+   * @return
+   */
+  boolean register(UserVo userVo);
 
-    /**
-     * 注册（当前账户名存在时返回false）
-     * @param userVo
-     * @return
-     */
-    boolean register(UserVo userVo);
+  void modifyRole(String userAccount, String roleId);
 
+  boolean updateSuperior(String subordinateId, String superiorId);
 
-    void modifyRole(String userAccount,String roleId);
+  void modify(UserVo userVo);
 
-    boolean updateSuperior(String subordinateId,String superiorId);
+  List<UserVo> findAllActiveUser();
 
-    void modify(UserVo userVo);
+  Page<UserVo> pageFind(UserVo userVo, Pageable pageable);
 
-    List<UserVo> findAllActiveUser();
+  Page<UserVo> superiorPageFind(
+      UserVo userVo, String subordinateId, String subordinateAccount, Pageable pageable);
 
-    Page<UserVo> pageFind(UserVo userVo, Pageable pageable);
+  /**
+   * 密码重置为“123456”
+   *
+   * @param userId
+   */
+  void rePwd(String userId);
 
-    Page<UserVo> superiorPageFind(UserVo userVo,String subordinateId, Pageable pageable);
+  /**
+   * 删除用户（isActive置0）
+   *
+   * @param userId
+   */
+  void deleteUser(String userId);
 
-    /**
-     * 密码重置为“123456”
-     * @param userId
-     */
-    void rePwd(String userId);
+  int getActiveUserNumber();
 
-    /**
-     * 删除用户（isActive置0）
-     * @param userId
-     */
-    void deleteUser(String userId);
+  UserVo findById(String userId);
 
-    int getActiveUserNumber();
-
-    UserVo findById(String userId);
-
-    /**
-     * 根据用户账号获得角色名
-     * @param userAccount
-     * @return
-     */
-    String getRoleName(String userAccount);
+  /**
+   * 根据用户账号获得角色名
+   *
+   * @param userAccount
+   * @return
+   */
+  String getRoleName(String userAccount);
 }

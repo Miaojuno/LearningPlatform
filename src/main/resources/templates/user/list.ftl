@@ -139,13 +139,13 @@
             <div class="row" hidden>
                 <label class="control-label col-3 text-right" for="">id</label>
                 <div class="col-8">
-                    <input type="text" name="userId" id="subordinateId" class="form-control userId" autocomplete="off">
+                    <input type="text" name="userId"  class="subordinateId form-control userId" autocomplete="off">
                 </div>
             </div>
             <div class="row">
                 <label class="control-label col-3 text-right" for="">姓名</label>
                 <div class="col-8">
-                    <input type="text" name="userName" id='searchSuperiorName' class="form-control">
+                    <input type="text" name="userName"  class="searchSuperiorName form-control">
                 </div>
             </div>
         </form>

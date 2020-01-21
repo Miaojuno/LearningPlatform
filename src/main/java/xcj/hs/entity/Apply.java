@@ -19,7 +19,7 @@ public class Apply {
   @Column(name = "USER_ID")
   private String userId;
 
-  // 0:角色改变申请 1:上级改变申请
+  // 0:角色变更申请 1:上级变更申请
   @Column(name = "TYPE")
   private String type;
 

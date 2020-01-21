@@ -47,9 +47,9 @@ public interface UserDao extends JpaRepository<User,String> {
 
     int countByIsActiveEquals(String isActive);
 
-    Page<User> findByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId, Pageable pageable);
+    Page<User> findByIsActiveAndUserNameContainingAndRoleIdContaining(String isActive, String userName, String roleId, Pageable pageable);
 
-    Page<User> findByIsActiveAndUserAccountContainingAndSuperiorIdInAndRoleIdContaining(String isActive, String userName, List<Object> superiorIds,String roleId, Pageable pageable);
+    Page<User> findByIsActiveAndUserNameContainingAndSuperiorIdInAndRoleIdContaining(String isActive, String userName, List<Object> superiorIds,String roleId, Pageable pageable);
 
     int countByIsActiveAndUserAccountContainingAndRoleIdContaining(String isActive, String userName, String roleId);
 

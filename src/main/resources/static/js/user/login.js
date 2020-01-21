@@ -52,7 +52,6 @@ $('#btn-register').on('click', function () {
             dataType : "json",
             type : "post",
             success : function(result){
-                console.log(result)
                 if (result.success==true){
                     layer.msg("注册成功，跳转中。。。",{icon:1});
                     setTimeout(function () {

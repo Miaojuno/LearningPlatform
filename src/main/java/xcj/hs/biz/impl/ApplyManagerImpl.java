@@ -17,4 +17,8 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
   public void modifyRoleApply(ApplyVo applyVo) {
     applyService.modifyRoleApply( applyVo);
   }
+
+  public void modifySupeiorApply(ApplyVo applyVo) {
+    applyService.modifySupeiorApply( applyVo);
+  }
 }

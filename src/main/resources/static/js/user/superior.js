@@ -13,8 +13,8 @@ $(function () {
             var temp={
                 pageNumber: (params.offset / params.limit) + 1,     //页数
                 pageSize: params.limit,                             //每页的记录行数
-                userName : $("#searchSuperiorName").val(),
-                subordinateId : $("#subordinateId").val()
+                userName : $("#user-superior-div .searchSuperiorName").val(),
+                subordinateId : $("#user-superior-div .subordinateId").val()
             };
             return temp;
         },
@@ -54,7 +54,7 @@ $(function () {
     //打开上级设置遮罩层
     $(document).on("click",".edit-superior",function (){
         var userId=$(this).parent().parent().attr("data-uniqueid");
-        $("#subordinateId").val(userId);
+        $("#user-superior-div .subordinateId").val(userId);
         $("#superior-table").bootstrapTable('refresh');
         layui.use('layer',function(){
             layer=layui.layer;
@@ -87,7 +87,7 @@ $(function () {
         $.ajax({
             url: "/user/updateSuperior",
             data : {
-                "subordinateId": $("#subordinateId").val(),
+                "subordinateId": $("#user-superior-div .subordinateId").val(),
                 "superiorId": superiorId
             },
             dataType : "json",
@@ -106,7 +106,7 @@ $(function () {
         })
     })
 
-    $(document).on("input","#searchSuperiorName",function () {
+    $(document).on("input","#user-superior-div .searchSuperiorName",function () {
         $("#superior-table").bootstrapTable('refresh');
     })
 })
