@@ -37,4 +37,7 @@ public class User {
 
     @Column( name = "USER_DESC")
     private String userDesc;
+
+    @Column( name = "GRADE")
+    private String grade;
 }

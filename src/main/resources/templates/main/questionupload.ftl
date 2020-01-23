@@ -16,7 +16,7 @@
 
 <script>
     if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
-        $(".main-contain").css("height",$(window).height()*0.9)
+        // $(".main-contain").css("height",$(window).height()*0.9)
         $(".main-contain").css("width","90%")
     }
 
@@ -37,7 +37,7 @@
         layui.use('layer',function(){
             layer=layui.layer;
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
-            var url =  "/questionupload"; // 接收上传文件的后台地址
+            var url =  "/neo/questionupload"; // 接收上传文件的后台地址
             var form = new FormData(); // FormData 对象
             form.append("file", fileObj); // 文件对象
 

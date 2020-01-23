@@ -1,4 +1,11 @@
 $(function () {
+    if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
+        // $(".main-contain").css("height",$(window).height()*0.9)
+        $(".main-contain").css("margin-top","0")
+    }
+    else {
+        $(".main-contain").css("margin-top","0.5rem")
+    }
 
 
     $.ajax({

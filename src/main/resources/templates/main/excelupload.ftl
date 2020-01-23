@@ -21,7 +21,7 @@
     // });
     if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
         $(".main-contain").css("height",$(window).height()*0.9)
-        $(".main-contain").css("width","90%")
+        // $(".main-contain").css("width","90%")
     }
 
     $('#submitUpload').on('click', function () {
@@ -41,7 +41,7 @@
         layui.use('layer',function(){
             layer=layui.layer;
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
-            var url =  "/excelupload"; // 接收上传文件的后台地址
+            var url =  "/neo/excelupload"; // 接收上传文件的后台地址
             var form = new FormData(); // FormData 对象
             form.append("file", fileObj); // 文件对象
 
@@ -59,16 +59,12 @@
                     processData: false,
                     contentType:false,
                     success: function (res) {
-                        if ( !res.success ) {
-                            layer.confirm("导入失败:"+res.msg,{icon:2}, function (index) {
-                                layer.close(index);
-                            });
-                            $("#file").val("");
-                            $("#fileInput").val("");
-                        }
-                        else {
-                            layer.msg("导入成功",{icon:1});
-                        }
+                        layer.confirm(res.msg, function (index) {
+                            layer.close(index);
+                        });
+                        $("#file").val("");
+                        $("#fileInput").val("");
+
                     },
                     error: function (err) {
                         layer.msg("导入失败",{icon:2});

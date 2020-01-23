@@ -33,4 +33,13 @@ public class Msg {
 
   @Column(name = "MSG_CREATER")
   private String msgCreater;
+
+  @Column(name = "MSG_STATUS")
+  private String msgStatus;
+
+  @Column(name = "MSG_TYPE")
+  private String msgType;
+
+  @Column(name = "MSG_PIC")
+  private String msgPic;
 }

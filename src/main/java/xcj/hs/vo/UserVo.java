@@ -29,5 +29,7 @@ public class UserVo implements Serializable {
     private String superiorAccount;
 
     private String userDesc;
+
+    private String grade;
 }
 

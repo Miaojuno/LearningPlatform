@@ -79,12 +79,14 @@
                     </#if>
 
 
-
                     <li class="nav-item">
-                        <a class="nav-link" href="/excelupload">数据导入</a>
+                        <a class="nav-link" href="/neo/doQuestion">去做题</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/questionupload">题目导入</a>
+                        <a class="nav-link" href="/neo/excelupload">数据导入</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/neo/questionupload">题目导入</a>
                     </li>
                     <#--<li class="nav-item">-->
                         <#--<a class="nav-link" href="#">界面3</a>-->
