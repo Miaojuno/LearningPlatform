@@ -1,0 +1,74 @@
+用户表 USER （区别于病人信息表）
+user_id
+user_name
+user_account
+user_pwd
+role_id 用户所属角色
+is_active
+superior_id
+user_desc
+grade 年级
+
+
+角色表 ROLE
+role_id
+role_name
+role_desc 角色描述
+is_active 是否可用（角色只能软删）
+
+
+申请表 APPLY
+apply_id
+user_id
+type   0:角色改变申请 1:上级改变申请
+old_id
+new_id
+reason
+status   0:申请中 1:通过 2:拒绝
+review_content 审核人意见
+
+
+留言表 MSG
+msg_id
+msg_date
+msg_title
+msg_detail
+msg_role_id 可以查看该消息的角色
+msg_user_id 可以查看该消息的用户
+msg_creater 发布者user_id
+MSG_STATUS    0:未读 1:已读
+Msg_type
+Msg_pic
+
+
+答题记录表RECORD
+rec_id
+rec_user_id
+rec_question_id
+rec_user_solution
+rec_user_pic
+rec_score
+rec_date
+
+--------------------------------------------------------------------------
+
+题目节点Question
+questionId
+questionDetail
+pic
+solutionPic
+solution
+score
+typeDistribution
+difficultyDistribution
+type 选择 主观题 客观题
+
+
+知识点节点Point
+pointId
+pointDetail
+chapter
+isbn
+grade
+distribution
+frequency
