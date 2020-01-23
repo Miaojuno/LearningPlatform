@@ -13,6 +13,7 @@ import xcj.hs.entity.User;
 import xcj.hs.service.RecordService;
 import xcj.hs.service.RoleService;
 import xcj.hs.service.UserService;
+import xcj.hs.util.TimeUtil;
 import xcj.hs.vo.UserVo;
 
 import java.math.BigInteger;
@@ -29,8 +30,11 @@ public class RecordServiceImpl extends BaseServiceImpl<Record> implements Record
   RecordDao recordDao;
 
   public void save(Record record){
+    record.setDate(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
     recordDao.save(record);
   }
 
-
+  public Record findByUserIdAndQuestionId(String userId,String questionId) {
+    return recordDao.findByUserIdAndQuestionId(userId,questionId);
+  }
 }

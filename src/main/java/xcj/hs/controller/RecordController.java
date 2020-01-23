@@ -26,8 +26,8 @@ public class RecordController {
 
   /**
    * 做题
-   *
-   * @param record
+   * @param request
+   * @param recordVo
    * @param file
    * @return
    */
@@ -40,9 +40,9 @@ public class RecordController {
       if (file != null) {
 //        String base64Pic = base64Encoder.encode(file.getBytes());
         recordVo.setUserPic(file.getBytes());
-        recordVo.setUserAccount((String) request.getSession().getAttribute("loginUserAccount"));
-        recordManager.save(recordVo);
       }
+      recordVo.setUserAccount((String) request.getSession().getAttribute("loginUserAccount"));
+      recordManager.save(recordVo);
     } catch (IOException e) {
       map.put("success", false);
       map.put("msg", e.getMessage());

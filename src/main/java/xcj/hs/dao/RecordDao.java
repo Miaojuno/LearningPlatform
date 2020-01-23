@@ -3,4 +3,11 @@ package xcj.hs.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import xcj.hs.entity.Record;
 
-public interface RecordDao extends JpaRepository<Record, String> {}
+import java.util.List;
+
+public interface RecordDao extends JpaRepository<Record, String> {
+
+    List<Record> findByUserIdContaining(String userId);
+
+    Record findByUserIdAndQuestionId(String userId,String questionId);
+}

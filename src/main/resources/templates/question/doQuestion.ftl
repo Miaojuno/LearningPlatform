@@ -18,15 +18,17 @@
                     <p class="questionDetail"></p>
                 </div>
                 <div class="card-body">
-                    <textarea rows="5" class="userSolution" style="width: 100%"
-                              placeholder="在这里输入你的答案。。。"></textarea>
                     <div class="col-10">
+                        <textarea rows="5" class="userSolution" style="width: 100%"
+                                  placeholder="在这里输入你的答案。。。"></textarea>
                         <input type="file" class="file" id="randomFile" hidden>
-                        <input type="text" class="fileInput form-control" placeholder="请选择文件">
+                        <input type="text" class="fileInput form-control" placeholder="上传jpg图片">
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="submitRecord btn btn-primary" style="margin-top: 1rem; margin-left: 1rem;">确认
+                    <button class="submitRecord btn btn-primary" style="margin-top: 1rem; margin-left: 1rem;">提交
+                    </button>
+                    <button class="changeRandom btn btn-primary" style="margin-top: 1rem; margin-left: 1rem;">换一题
                     </button>
                 </div>
             </div>
@@ -57,45 +59,65 @@
             $('#random .fileInput').val($('#random .file').val())
         });
 
+
+        $('#random .changeRandom').on('click', function () {
+            var qid = $('#random .questionId').val();
+            var number=0;
+            getRandomQuestion()
+            console.log(qid)
+            console.log($('#random .questionId').val())
+            while (qid == $('#random .questionId').val() && number<10) {
+                console.log(qid)
+                console.log($('#random .questionId').val())
+                getRandomQuestion();
+                number++;
+            }
+            if(number==10){
+                layer.msg("没有题目啦！", {icon: 2});
+            }
+        });
+
         $('#random .submitRecord').on('click', function () {
             layui.use('layer', function () {
                 layer = layui.layer;
                 var fileObj = document.getElementById('randomFile').files[0]; // js 获取文件对象
                 var url = "/record/add"; // 接收上传文件的后台地址
                 var form = new FormData();  // FormData 对象
+                form.append("questionId", $("#random .questionId").val())
+                form.append("userSolution", $("#random .userSolution").val())
                 form.append("file", fileObj); // 文件对象
-                form.append("questionId",$("#random .questionId").val())
-                form.append("userSolution",$("#random .userSolution").val())
-
-                var name = fileObj.name.split(".")
-                if (name[name.length - 1] != "jpg") {
-                    layer.confirm("导入失败,只支持jpg格式文件", {icon: 2}, function (index) {
-                        layer.close(index);
-                    });
+                if(fileObj!=null){
+                    var name = fileObj.name.split(".")
+                    if (name[name.length - 1] != "jpg") {
+                        layer.confirm("导入失败,只支持jpg格式文件", {icon: 2}, function (index) {
+                            layer.close(index);
+                        });
+                        return
+                    }
                 }
-                else {
-                    $.ajax({
-                        type: "post",
-                        url: url,
-                        data: form,
-                        processData: false,
-                        contentType: false,
-                        success: function (res) {
-                            layer.msg("ok", {icon: 1});
-                            $("#random .file").val("");
-                            $("#random .fileInput").val("");
-                            $("#random .userSolution").val("");
-                            getRandomQuestion()
 
-                        },
-                        error: function (err) {
-                            layer.msg("失败", {icon: 2});
-                            $("#random .file").val("");
-                            $("#random .fileInput").val("");
-                            $("#random .userSolution").val("");
-                        }
-                    });
-                }
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        layer.msg("ok", {icon: 1});
+                        $("#random .file").val("");
+                        $("#random .fileInput").val("");
+                        $("#random .userSolution").val("");
+                        getRandomQuestion()
+
+                    },
+                    error: function (err) {
+                        layer.msg("失败", {icon: 2});
+                        $("#random .file").val("");
+                        $("#random .fileInput").val("");
+                        $("#random .userSolution").val("");
+                    }
+                });
+
             })
         });
 
@@ -107,6 +129,7 @@
                 $.ajax({
                     url: "/neo/getRandomQuestion",
                     data: {},
+                    async: false,
                     dataType: "json",
                     type: "post",
                     success: function (result) {
@@ -116,6 +139,7 @@
                                 $("#random .questionDetail").hide()
                             }
                             else {
+                                $("#random .questionDetail").show()
                                 $("#random .questionDetail").html(result.data.questionDetail);
                             }
 
@@ -123,12 +147,12 @@
                                 $("#random .questionPic").hide()
                             }
                             else {
+                                $("#random .questionPic").show()
                                 $("#random .questionPic").attr("src", "data:image/jpeg;base64," + result.data.picStr);
                             }
 
-
                         } else {
-                            layer.msg(result.msg, {icon: 2});
+                            layer.msg("没有题目啦！", {icon: 2});
                         }
                     },
                     error: function (result) {

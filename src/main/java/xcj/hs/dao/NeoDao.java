@@ -9,5 +9,5 @@ public interface NeoDao {
 
   Question getRandomQuestion();
 
-  Question findById(String id);
+  Question findQuestionById(String id);
 }

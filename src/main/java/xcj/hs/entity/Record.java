@@ -32,4 +32,6 @@ public class Record {
     @Column( name = "REC_SCORE")
     private String score;
 
+    @Column( name = "REC_DATE")
+    private String date;
 }

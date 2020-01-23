@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.dao.impl.NeoDaoImpl;
 import xcj.hs.service.NeoService;
+import xcj.hs.vo.QuestionVo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,15 +84,23 @@ public class NeoController {
   /**
    * getRandomQuestion
    *
-   * @param model
+   * @param request
    * @return
    */
   @PostMapping("/getRandomQuestion")
   @ResponseBody
-  public Map<String, Object> getRandomQuestion(Model model) {
+  public Map<String, Object> getRandomQuestion(HttpServletRequest request) {
     Map<String, Object> resultMap = new HashMap();
-    resultMap.put("data", neoService.getRandomQuestion());
-    resultMap.put("success", true);
+    QuestionVo questionVo =
+        neoService.getRandomQuestion(
+            (String) request.getSession().getAttribute("loginUserAccount"));
+    if (questionVo != null) {
+      resultMap.put("data", questionVo);
+      resultMap.put("success", true);
+    } else {
+      resultMap.put("success", false);
+    }
+
     return resultMap;
   }
 }

@@ -9,19 +9,33 @@ import sun.misc.BASE64Encoder;
 import xcj.hs.dao.NeoDao;
 import xcj.hs.entity.Question;
 import xcj.hs.service.NeoService;
+import xcj.hs.service.RecordService;
+import xcj.hs.service.UserService;
 import xcj.hs.vo.QuestionVo;
 
 @Service
 @Slf4j
 public class NeoServiceImpl implements NeoService {
   @Autowired NeoDao neoDao;
+  @Autowired UserService userService;
+  @Autowired RecordService recordService;
 
   public String excelUpload(MultipartFile file) {
     return neoDao.excelUpload(file);
   }
 
-  public QuestionVo getRandomQuestion() {
-    Question question = neoDao.getRandomQuestion();
+  public QuestionVo getRandomQuestion(String userAccount) {
+    String userId = userService.findByUserAccount(userAccount).getUserId();
+    Question question;
+    question = neoDao.getRandomQuestion();
+    // 只获取该用户没做过的题目
+    int tryTimes = 0;
+    while (recordService.findByUserIdAndQuestionId(userId, question.getQuestionId()) != null
+        && tryTimes < 100) {
+      question = neoDao.getRandomQuestion();
+      tryTimes++;
+    }
+    if (tryTimes == 100) return null;
     QuestionVo questionVo = new QuestionVo();
     BeanUtils.copyProperties(question, questionVo);
     BASE64Encoder encoder = new BASE64Encoder();
@@ -31,7 +45,7 @@ public class NeoServiceImpl implements NeoService {
     return questionVo;
   }
 
-  public Question findById(String id) {
-    return findById(id);
+  public Question findQuestionById(String id) {
+    return findQuestionById(id);
   }
 }

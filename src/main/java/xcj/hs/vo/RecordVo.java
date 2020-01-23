@@ -19,5 +19,9 @@ public class RecordVo implements Serializable {
 
   private byte[] userPic;
 
+  private String userPicStr;
+
   private String score;
+
+  private String date;
 }

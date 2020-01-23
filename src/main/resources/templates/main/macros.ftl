@@ -45,9 +45,11 @@
                         </a>
 
                         <div class="dropdown-menu">
+                            <#--非学生-->
                             <#if Session["loginUserRole"] != "学生">
                                 <a class="dropdown-item" href="/user/list">用户管理</a>
                             </#if>
+                            <#--管理员-->
                             <#if Session["loginUserRole"] == "管理员">
                                 <a class="dropdown-item" href="/role/list">角色管理</a>
                             </#if>
@@ -55,6 +57,7 @@
 
                     </li>
 
+                    <#--非管理员-->
                     <#if Session["loginUserRole"] != "管理员">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -67,13 +70,14 @@
                     </li>
                     </#if>
 
+                    <#--教师和领导-->
                     <#if Session["loginUserRole"] != "管理员" && Session["loginUserRole"] != "学生">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             审核
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/apply/superiorApplyReview">角色变更申请</a>
+                            <a class="dropdown-item" href="/apply/superiorApplyReview">上级变更审核</a>
                         </div>
                     </li>
                     </#if>

@@ -39,26 +39,25 @@ public class NeoDaoImpl implements NeoDao {
     }
   }
 
-    public Question findById(String id) {
-        StatementResult result =
-                session.run(
-                        "MATCH (a:Question) WHERE a.questionId={id} return a", parameters("id", id));
-        Record record = result.next();
-        return new Question(
-                record.get("a").get("questionId").asString(),
-                record.get("a").get("questionDetail").asString(),
-                record.get("a").get("score").asString(),
-                record.get("a").get("solution").asString(),
-                record.get("a").get("typeDistribution").asString(),
-                record.get("a").get("difficultyDistribution").asString(),
-                "\"\"".equals(record.get("a").get("pic").toString())
-                        ? null
-                        : record.get("a").get("pic").asByteArray());
-    }
+  public Question findQuestionById(String id) {
+    StatementResult result =
+        session.run("MATCH (a:Question) WHERE a.questionId={id} return a", parameters("id", id));
+    Record record = result.next();
+    return new Question(
+        record.get("a").get("questionId").asString(),
+        record.get("a").get("questionDetail").asString(),
+        record.get("a").get("score").asString(),
+        record.get("a").get("solution").asString(),
+        record.get("a").get("typeDistribution").asString(),
+        record.get("a").get("difficultyDistribution").asString(),
+        "\"\"".equals(record.get("a").get("pic").toString())
+            ? null
+            : record.get("a").get("pic").asByteArray());
+  }
 
   public Question getRandomQuestion() {
     String randomId = String.valueOf((int) (1 + Math.random() * (questionNumber)));
-    return findById(randomId);
+    return findQuestionById(randomId);
   }
 
   // 源数据导入
@@ -173,6 +172,7 @@ public class NeoDaoImpl implements NeoDao {
     // 获取图片存入map
     XSSFSheet sheet2 = (XSSFSheet) sheet;
     Map<Integer, byte[]> sheetIndexPicMap = new HashMap<Integer, byte[]>();
+    Map<Integer, byte[]> sheetIndexSolutionPicMap = new HashMap<Integer, byte[]>();
 
     for (POIXMLDocumentPart dr : sheet2.getRelations()) {
       if (dr instanceof XSSFDrawing) {
@@ -182,7 +182,11 @@ public class NeoDaoImpl implements NeoDao {
           XSSFPicture pic = (XSSFPicture) shape;
           XSSFClientAnchor anchor = pic.getPreferredSize();
           CTMarker ctMarker = anchor.getFrom();
-          sheetIndexPicMap.put(ctMarker.getRow(), pic.getPictureData().getData());
+          if (ctMarker.getCol() == 7) {
+            sheetIndexPicMap.put(ctMarker.getRow(), pic.getPictureData().getData());
+          } else if (ctMarker.getCol() == 8) {
+            sheetIndexSolutionPicMap.put(ctMarker.getRow(), pic.getPictureData().getData());
+          }
         }
       }
     }
@@ -202,10 +206,12 @@ public class NeoDaoImpl implements NeoDao {
                 + "questionId: {questionId}, "
                 + "questionDetail: {questionDetail}, "
                 + "pic: {pic}, "
+                + "solutionPic: {solutionPic}, "
                 + "solution: {solution}, "
                 + "score: {score}, "
                 + "typeDistribution: {typeDistribution}, "
-                + "difficultyDistribution: {difficultyDistribution}})",
+                + "difficultyDistribution: {difficultyDistribution}, "
+                + "type: {type}})",
             parameters(
                 "questionId",
                 getString(row.getCell(0)),
@@ -213,6 +219,8 @@ public class NeoDaoImpl implements NeoDao {
                 getString(row.getCell(1)),
                 "pic",
                 sheetIndexPicMap.get(i) == null ? "" : sheetIndexPicMap.get(i),
+                "solutionPic",
+                sheetIndexSolutionPicMap.get(i) == null ? "" : sheetIndexSolutionPicMap.get(i),
                 "solution",
                 getString(row.getCell(2)),
                 "score",
@@ -220,7 +228,9 @@ public class NeoDaoImpl implements NeoDao {
                 "typeDistribution",
                 getString(row.getCell(4)),
                 "difficultyDistribution",
-                getString(row.getCell(5))));
+                getString(row.getCell(5)),
+                "type",
+                getString(row.getCell(6))));
       }
     } catch (Exception e) {
       resultMsg += "题目导入失败：题目id重复---------\n";
@@ -289,3 +299,8 @@ public class NeoDaoImpl implements NeoDao {
 // 绑定主键代码
 //    CREATE CONSTRAINT ON (point:Point) ASSERT point.pointId IS UNIQUE
 //    CREATE CONSTRAINT ON (question:Question) ASSERT question.questionId IS UNIQUE
+
+// 清空代码
+//  MATCH (n)
+//  OPTIONAL MATCH (n)-[r]-()
+//  DELETE n,r
