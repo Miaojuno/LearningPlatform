@@ -143,12 +143,12 @@
                                 $("#random .questionDetail").html(result.data.questionDetail);
                             }
 
-                            if (result.data.picStr == null) {
+                            if (result.data.pic == null) {
                                 $("#random .questionPic").hide()
                             }
                             else {
                                 $("#random .questionPic").show()
-                                $("#random .questionPic").attr("src", "data:image/jpeg;base64," + result.data.picStr);
+                                $("#random .questionPic").attr("src", "data:image/jpeg;base64," + result.data.pic);
                             }
 
                         } else {

@@ -45,7 +45,7 @@
                         </a>
 
                         <div class="dropdown-menu">
-                            <#--非学生-->
+                            <#--教师、领导、管理员-->
                             <#if Session["loginUserRole"] != "学生">
                                 <a class="dropdown-item" href="/user/list">用户管理</a>
                             </#if>
@@ -57,7 +57,7 @@
 
                     </li>
 
-                    <#--非管理员-->
+                    <#--学生、教师、领导-->
                     <#if Session["loginUserRole"] != "管理员">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -70,7 +70,7 @@
                     </li>
                     </#if>
 
-                    <#--教师和领导-->
+                    <#--教师、领导-->
                     <#if Session["loginUserRole"] != "管理员" && Session["loginUserRole"] != "学生">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -82,19 +82,23 @@
                     </li>
                     </#if>
 
+                    <#--学生-->
+                    <#if Session["loginUserRole"] == "学生">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/record/doQuestion">去做题</a>
+                    </li>
+                    </#if>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/neo/doQuestion">去做题</a>
+                        <a class="nav-link" href="/record/questionReview">去审阅</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="/neo/excelupload">数据导入</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/neo/questionupload">题目导入</a>
                     </li>
-                    <#--<li class="nav-item">-->
-                        <#--<a class="nav-link" href="#">界面3</a>-->
-                    <#--</li>-->
                     <li class="nav-item">
                         <a class="nav-link" href="/user/logout">注销</a>
                     </li>

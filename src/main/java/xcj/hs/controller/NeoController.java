@@ -70,16 +70,6 @@ public class NeoController {
     return resultMap;
   }
 
-  /**
-   * 做题界面
-   *
-   * @param model
-   * @return
-   */
-  @GetMapping("/doQuestion")
-  public String doQuestion(Model model) {
-    return "question/doQuestion";
-  }
 
   /**
    * getRandomQuestion

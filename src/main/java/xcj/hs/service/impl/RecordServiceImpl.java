@@ -37,4 +37,8 @@ public class RecordServiceImpl extends BaseServiceImpl<Record> implements Record
   public Record findByUserIdAndQuestionId(String userId,String questionId) {
     return recordDao.findByUserIdAndQuestionId(userId,questionId);
   }
+
+  public Record getOneUnreviewed(String userId) {
+    return recordDao.getFirstByReviewerIdContainingAndScoreIsNull(userId);
+  }
 }

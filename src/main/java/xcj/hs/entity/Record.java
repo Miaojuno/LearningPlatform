@@ -27,11 +27,15 @@ public class Record {
     private String userSolution;
 
     @Column( name = "REC_USER_PIC")
-    private byte[] userPic;
+    private byte[] recordUserPic;
 
     @Column( name = "REC_SCORE")
     private String score;
 
     @Column( name = "REC_DATE")
     private String date;
+
+    @Column( name = "REC_REVIEWER_ID")
+    private String reviewerId;
+
 }

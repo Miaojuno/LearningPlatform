@@ -45,8 +45,9 @@ Msg_pic
 rec_id
 rec_user_id
 rec_question_id
-rec_user_solution
-rec_user_pic
+rec_user_solution 学生输入的答案
+rec_user_pic 学生输入的pic
+rec_reviewer_id
 rec_score
 rec_date
 

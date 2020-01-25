@@ -12,6 +12,7 @@ public class Question {
   private String typeDistribution;
   private String difficultyDistribution;
   private byte[] pic;
+  private byte[] solutionPic;
 
   public Question() {}
 
@@ -22,7 +23,8 @@ public class Question {
       String solution,
       String typeDistribution,
       String difficultyDistribution,
-      byte[] pic) {
+      byte[] pic,
+      byte[] solutionPic) {
     this.questionId = questionId;
     this.questionDetail = questionDetail;
     this.score = score;
@@ -30,5 +32,6 @@ public class Question {
     this.typeDistribution = typeDistribution;
     this.difficultyDistribution = difficultyDistribution;
     this.pic = pic;
+    this.solutionPic = solutionPic;
   }
 }

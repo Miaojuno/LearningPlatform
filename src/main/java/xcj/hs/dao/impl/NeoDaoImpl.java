@@ -52,7 +52,10 @@ public class NeoDaoImpl implements NeoDao {
         record.get("a").get("difficultyDistribution").asString(),
         "\"\"".equals(record.get("a").get("pic").toString())
             ? null
-            : record.get("a").get("pic").asByteArray());
+            : record.get("a").get("pic").asByteArray(),
+        "\"\"".equals(record.get("a").get("solutionPic").toString())
+            ? null
+            : record.get("a").get("solutionPic").asByteArray());
   }
 
   public Question getRandomQuestion() {

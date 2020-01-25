@@ -38,14 +38,25 @@ public class NeoServiceImpl implements NeoService {
     if (tryTimes == 100) return null;
     QuestionVo questionVo = new QuestionVo();
     BeanUtils.copyProperties(question, questionVo);
-    BASE64Encoder encoder = new BASE64Encoder();
-    if (question.getPic() != null) {
-      questionVo.setPicStr(encoder.encode(question.getPic()));
-    }
+//    BASE64Encoder encoder = new BASE64Encoder();
+//    if (question.getPic() != null) {
+//      questionVo.setPicStr(encoder.encode(question.getPic()));
+//    }
     return questionVo;
   }
 
   public Question findQuestionById(String id) {
-    return findQuestionById(id);
+    return neoDao.findQuestionById(id);
+  }
+
+  public QuestionVo findQuestionVoById(String id) {
+    Question question = neoDao.findQuestionById(id);
+    QuestionVo questionVo = new QuestionVo();
+    BeanUtils.copyProperties(question, questionVo);
+//    BASE64Encoder encoder = new BASE64Encoder();
+//    if (question.getPic() != null) {
+//      questionVo.setPicStr(encoder.encode(question.getPic()));
+//    }
+    return questionVo;
   }
 }

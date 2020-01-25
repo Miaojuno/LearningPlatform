@@ -10,4 +10,6 @@ public interface NeoService {
   QuestionVo getRandomQuestion(String userAccount);
 
   Question findQuestionById(String id);
+
+  QuestionVo findQuestionVoById(String id);
 }

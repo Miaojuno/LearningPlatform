@@ -15,13 +15,21 @@ public class RecordVo implements Serializable {
 
   private String questionId;
 
+  private String questionDetail;
+
+  private byte[] questionPic;
+
+  private String solution;
+
+  private byte[] SolutionPic;
+
   private String userSolution;
 
-  private byte[] userPic;
-
-  private String userPicStr;
+  private byte[] recordUserPic;
 
   private String score;
 
   private String date;
+
+  private String reviewerId;
 }
