@@ -33,18 +33,28 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
 
   public void save(RecordVo recordVo) throws Exception {
     Record record = vo2po(recordVo);
+    // 当前做题用户
     User user = userService.findByUserAccount(recordVo.getUserAccount());
     record.setUserId(user.getUserId());
+    // 设置审阅人为当前学生的上级老师
     if (StringUtils.isBlank(user.getSuperiorId())) {
-      throw new Exception("请先选择上级教师");
+      throw new Exception("请先选择上级教师再做题");
     }
     record.setReviewerId(user.getSuperiorId());
+    // 选择题和客观题自动判题(忽略大小写)
+    QuestionVo questionVo = neoService.findQuestionVoById(recordVo.getQuestionId());
+    if ("选择题".equals(questionVo.getType()) || "客观题".equals(questionVo.getType())) {
+      if (recordVo.getUserSolution().equalsIgnoreCase(questionVo.getSolution())) {
+        record.setScore(questionVo.getScore());
+      } else record.setScore("0");
+    }
     recordService.save(record);
   }
 
   public RecordVo getOneUnreviewed(String userAccount) {
-    Record record=recordService.getOneUnreviewed(userService.findByUserAccount(userAccount).getUserId());
-    if(record!=null){
+    Record record =
+        recordService.getOneUnreviewed(userService.findByUserAccount(userAccount).getUserId());
+    if (record != null) {
       return po2vo(record);
     }
     return null;

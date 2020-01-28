@@ -62,17 +62,17 @@
 
         $('#random .changeRandom').on('click', function () {
             var qid = $('#random .questionId').val();
-            var number=0;
+            var number = 0;
             getRandomQuestion()
             console.log(qid)
             console.log($('#random .questionId').val())
-            while (qid == $('#random .questionId').val() && number<10) {
+            while (qid == $('#random .questionId').val() && number < 10) {
                 console.log(qid)
                 console.log($('#random .questionId').val())
                 getRandomQuestion();
                 number++;
             }
-            if(number==10){
+            if (number == 10) {
                 layer.msg("没有题目啦！", {icon: 2});
             }
         });
@@ -86,7 +86,7 @@
                 form.append("questionId", $("#random .questionId").val())
                 form.append("userSolution", $("#random .userSolution").val())
                 form.append("file", fileObj); // 文件对象
-                if(fileObj!=null){
+                if (fileObj != null) {
                     var name = fileObj.name.split(".")
                     if (name[name.length - 1] != "jpg") {
                         layer.confirm("导入失败,只支持jpg格式文件", {icon: 2}, function (index) {
@@ -149,6 +149,16 @@
                             else {
                                 $("#random .questionPic").show()
                                 $("#random .questionPic").attr("src", "data:image/jpeg;base64," + result.data.pic);
+                            }
+
+                            if (result.data.type == "主观题") {
+                                $("#random .fileInput").show();
+                                $("#random .userSolution").attr("rows","5");
+                            }
+                            else {
+                                $("#random .fileInput").hide();
+                                $("#random .userSolution").attr("rows","1");
+
                             }
 
                         } else {

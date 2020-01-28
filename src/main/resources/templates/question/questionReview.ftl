@@ -36,6 +36,33 @@
 
         getOneUnreviewed()
 
+        $('#questionReviewDiv .submitScore').on('click', function () {
+            layui.use('layer', function () {
+                layer = layui.layer;
+
+                $.ajax({
+                    type: "post",
+                    url: "/record/*************",
+                    data: {
+                        "recordId" : $("#questionReviewDiv .recordId").val(),
+                        "score": $("#questionReviewDiv .score").val()
+                    },
+                    dataType : "json",
+                    success: function (res) {
+                        layer.msg("ok", {icon: 1});
+                        $("#questionReviewDiv .score").val("");
+                        getOneUnreviewed()
+
+                    },
+                    error: function (err) {
+                        layer.msg("失败", {icon: 2});
+                        $("#questionReviewDiv .score").val("");
+                    }
+                });
+
+            })
+        });
+
 
         //加载一题待批改题目
         function getOneUnreviewed() {

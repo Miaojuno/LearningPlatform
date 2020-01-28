@@ -11,6 +11,7 @@ public class Question {
   private String solution;
   private String typeDistribution;
   private String difficultyDistribution;
+  private String type;
   private byte[] pic;
   private byte[] solutionPic;
 
@@ -23,6 +24,7 @@ public class Question {
       String solution,
       String typeDistribution,
       String difficultyDistribution,
+      String type,
       byte[] pic,
       byte[] solutionPic) {
     this.questionId = questionId;
@@ -31,6 +33,7 @@ public class Question {
     this.solution = solution;
     this.typeDistribution = typeDistribution;
     this.difficultyDistribution = difficultyDistribution;
+    this.type = type;
     this.pic = pic;
     this.solutionPic = solutionPic;
   }

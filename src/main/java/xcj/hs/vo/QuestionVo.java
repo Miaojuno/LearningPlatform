@@ -13,6 +13,7 @@ public class QuestionVo implements Serializable {
   private String solution;
   private String typeDistribution;
   private String difficultyDistribution;
+  private String type;
   private byte[] pic;
   private byte[] solutionPic;
 }

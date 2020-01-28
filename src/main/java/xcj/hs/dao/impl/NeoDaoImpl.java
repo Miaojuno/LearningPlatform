@@ -50,6 +50,7 @@ public class NeoDaoImpl implements NeoDao {
         record.get("a").get("solution").asString(),
         record.get("a").get("typeDistribution").asString(),
         record.get("a").get("difficultyDistribution").asString(),
+        record.get("a").get("type").asString(),
         "\"\"".equals(record.get("a").get("pic").toString())
             ? null
             : record.get("a").get("pic").asByteArray(),
@@ -284,6 +285,13 @@ public class NeoDaoImpl implements NeoDao {
       if (flag4) {
         resultMsg += "题目和知识点的关系导入成功---------\n";
       }
+    }
+
+    StatementResult result = session.run("MATCH (a:Question) RETURN count(a) AS count");
+    while (result.hasNext()) {
+      Record record = result.next();
+      questionNumber = Integer.valueOf(record.get("count").toString());
+      log.info("数据库中题目数更新为:" + record.get("count").toString());
     }
     return resultMsg;
   }
