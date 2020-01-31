@@ -43,8 +43,13 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     record.setReviewerId(user.getSuperiorId());
     // 选择题和客观题自动判题(忽略大小写)
     QuestionVo questionVo = neoService.findQuestionVoById(recordVo.getQuestionId());
-    if ("选择题".equals(questionVo.getType()) || "客观题".equals(questionVo.getType())) {
+    if ("客观题".equals(questionVo.getType())) {
       if (recordVo.getUserSolution().equalsIgnoreCase(questionVo.getSolution())) {
+        record.setScore(questionVo.getScore());
+      } else record.setScore("0");
+    }
+    if ("选择题".equals(questionVo.getType())) {
+      if (recordVo.getUserSolution().equalsIgnoreCase(questionVo.getSolution().split("/")[0])) {
         record.setScore(questionVo.getScore());
       } else record.setScore("0");
     }

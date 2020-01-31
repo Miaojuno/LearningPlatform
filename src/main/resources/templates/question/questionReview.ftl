@@ -8,7 +8,7 @@
     <div class="card" id="questionReviewDiv">
         <input class="recordId" hidden>
         <div class="card-header">
-            <p class="userName" style="position: absolute;right: 1rem;top: 0.5rem;">userName占位</p>
+            <div class="userShow" style="position: absolute;right: 1rem;top: 0.5rem;"></div>
             <p class="date" style="position: absolute;right: 1rem;top: 1.5rem;"></p>
             <h5>原题：</h5>
             <img class="questionPic img-thumbnail">
@@ -44,10 +44,10 @@
                     type: "post",
                     url: "/record/*************",
                     data: {
-                        "recordId" : $("#questionReviewDiv .recordId").val(),
+                        "recordId": $("#questionReviewDiv .recordId").val(),
                         "score": $("#questionReviewDiv .score").val()
                     },
-                    dataType : "json",
+                    dataType: "json",
                     success: function (res) {
                         layer.msg("ok", {icon: 1});
                         $("#questionReviewDiv .score").val("");
@@ -63,6 +63,10 @@
             })
         });
 
+        $("#questionReviewDiv .questionPic").on("click",function () {
+            console.log(123)
+            $("#qrUserShow .userId").val("123");
+        })
 
         //加载一题待批改题目
         function getOneUnreviewed() {
@@ -79,6 +83,21 @@
                             $("#questionReviewDiv").show();
                             $("#questionReviewDiv .recordId").val(result.data.recordId);
                             $("#questionReviewDiv .date").val(result.data.date);
+                            $.ajax({
+                                url: "/user/findbyid",
+                                dataType: "json",
+                                data: {
+                                    "userId": result.data.userId
+                                },
+                                type: "post",
+                                success: function (result2) {
+                                    if (result2.success == true) {
+                                        $("#questionReviewDiv .userShow").append("<p>"+result2.data.userName+"</p>")
+                                    }
+                                },
+                                error: function (result) {
+                                }
+                            })
                             if (result.data.questionDetail == null || result.data.questionDetail == "") {
                                 $("#questionReviewDiv .questionDetail").hide()
                             }

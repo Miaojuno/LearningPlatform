@@ -6,7 +6,7 @@
 <div class="main-contain" style="margin-top: 1rem">
     <ul id="doQuetsion-tab" class="nav nav-tabs" role="tablist">
         <li class="active nav-item"><a href="#random" data-toggle="tab" class="nav-link">随机做题</a></li>
-        <li class="nav-item"><a href="#recommend" data-toggle="tab" class="nav-link">为你精选</a></li>
+        <li class="nav-item"><a href="#recommend" data-toggle="tab" class="nav-link">为你推荐</a></li>
     </ul>
 
     <div id="myTabContent" class="tab-content" style="margin-top: 2rem;">
@@ -19,10 +19,11 @@
                 </div>
                 <div class="card-body">
                     <div class="col-10">
+                        <div class="btn-group optionsDiv"></div>
                         <textarea rows="5" class="userSolution" style="width: 100%"
                                   placeholder="在这里输入你的答案。。。"></textarea>
                         <input type="file" class="file" id="randomFile" hidden>
-                        <input type="text" class="fileInput form-control" placeholder="上传jpg图片">
+                        <input type="text" class="fileInput form-control" placeholder="上传图片(jpg/png)">
                     </div>
                 </div>
                 <div class="card-footer">
@@ -36,8 +37,7 @@
 
 
         <div class="tab-pane fade" id="recommend">
-            <p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple
-                TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+            <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
         </div>
 
     </div>
@@ -78,6 +78,17 @@
         });
 
         $('#random .submitRecord').on('click', function () {
+            submitRecord()
+        });
+
+        $(document).on('click','#random .optionsDiv .btn',function(){
+            $("#random .userSolution").val($(this).text())
+            submitRecord()
+        })
+
+
+
+        function submitRecord() {
             layui.use('layer', function () {
                 layer = layui.layer;
                 var fileObj = document.getElementById('randomFile').files[0]; // js 获取文件对象
@@ -88,8 +99,8 @@
                 form.append("file", fileObj); // 文件对象
                 if (fileObj != null) {
                     var name = fileObj.name.split(".")
-                    if (name[name.length - 1] != "jpg") {
-                        layer.confirm("导入失败,只支持jpg格式文件", {icon: 2}, function (index) {
+                    if (name[name.length - 1] != "jpg" && name[name.length - 1] != "png") {
+                        layer.confirm("导入失败,只支持jpg、png格式文件", {icon: 2}, function (index) {
                             layer.close(index);
                         });
                         return
@@ -107,6 +118,7 @@
                         $("#random .file").val("");
                         $("#random .fileInput").val("");
                         $("#random .userSolution").val("");
+                        $("#random .optionsDiv").empty();
                         getRandomQuestion()
 
                     },
@@ -115,11 +127,12 @@
                         $("#random .file").val("");
                         $("#random .fileInput").val("");
                         $("#random .userSolution").val("");
+                        $("#random .optionsDiv").empty();
                     }
                 });
 
             })
-        });
+        }
 
 
         //加载随机题目
@@ -153,11 +166,30 @@
 
                             if (result.data.type == "主观题") {
                                 $("#random .fileInput").show();
-                                $("#random .userSolution").attr("rows","5");
+                                $("#random .userSolution").show();
+                                $("#random .userSolution").attr("rows", "5");
+                                $("#random .optionsDiv").empty();
+                                $("#random .submitRecord").show()
+                            }
+                            else if (result.data.type == "客观题") {
+                                $("#random .fileInput").hide();
+                                $("#random .userSolution").show();
+                                $("#random .userSolution").attr("rows", "1");
+                                $("#random .optionsDiv").empty();
+                                $("#random .submitRecord").show()
+
                             }
                             else {
                                 $("#random .fileInput").hide();
-                                $("#random .userSolution").attr("rows","1");
+                                $("#random .userSolution").hide();
+                                var options = result.data.solution.split("/")[1];
+                                for (i = 0; i < options.length; i++) {
+                                    $("#random .optionsDiv").append("    <button type=\"button\" class=\"btn btn-primary\" " +
+                                            // "onclick=\"optionSubmitRecord(" + options.charAt(i) + ");\">" + options.charAt(i) + "</button>\n")
+                                            "\">" + options.charAt(i) + "</button>\n")
+
+                                }
+                                $("#random .submitRecord").hide()
 
                             }
 

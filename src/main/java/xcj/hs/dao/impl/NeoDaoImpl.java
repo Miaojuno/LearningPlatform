@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.neo4j.driver.v1.*;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.dao.NeoDao;
@@ -24,13 +25,22 @@ import static org.neo4j.driver.v1.Values.parameters;
 @Repository
 public class NeoDaoImpl implements NeoDao {
 
-  private static final Session session =
-      GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "123456")).session();
+  @Value("${neo4j.url}")
+  String neo4jUrl;
+
+  @Value("${neo4j.account}")
+  String neo4jAccount;
+
+  @Value("${neo4j.pwd}")
+  String neo4jPwd;
+
+  private Session session;
   private int questionNumber;
 
   @PostConstruct
   public void test() {
     log.info("Neo4j数据库连接");
+    session = GraphDatabase.driver(neo4jUrl, AuthTokens.basic(neo4jAccount, neo4jPwd)).session();
     StatementResult result = session.run("MATCH (a:Question) RETURN count(a) AS count");
     while (result.hasNext()) {
       Record record = result.next();
@@ -204,38 +214,40 @@ public class NeoDaoImpl implements NeoDao {
           // 读取数据前设置单元格类型
           cell.setCellType(CellType.STRING);
         }
-
-        session.run(
-            "CREATE (a:Question {"
-                + "questionId: {questionId}, "
-                + "questionDetail: {questionDetail}, "
-                + "pic: {pic}, "
-                + "solutionPic: {solutionPic}, "
-                + "solution: {solution}, "
-                + "score: {score}, "
-                + "typeDistribution: {typeDistribution}, "
-                + "difficultyDistribution: {difficultyDistribution}, "
-                + "type: {type}})",
-            parameters(
-                "questionId",
-                getString(row.getCell(0)),
-                "questionDetail",
-                getString(row.getCell(1)),
-                "pic",
-                sheetIndexPicMap.get(i) == null ? "" : sheetIndexPicMap.get(i),
-                "solutionPic",
-                sheetIndexSolutionPicMap.get(i) == null ? "" : sheetIndexSolutionPicMap.get(i),
-                "solution",
-                getString(row.getCell(2)),
-                "score",
-                getString(row.getCell(3)),
-                "typeDistribution",
-                getString(row.getCell(4)),
-                "difficultyDistribution",
-                getString(row.getCell(5)),
-                "type",
-                getString(row.getCell(6))));
+        if (StringUtils.isNotBlank(getString(row.getCell(0)))) {
+          session.run(
+              "CREATE (a:Question {"
+                  + "questionId: {questionId}, "
+                  + "questionDetail: {questionDetail}, "
+                  + "pic: {pic}, "
+                  + "solutionPic: {solutionPic}, "
+                  + "solution: {solution}, "
+                  + "score: {score}, "
+                  + "typeDistribution: {typeDistribution}, "
+                  + "difficultyDistribution: {difficultyDistribution}, "
+                  + "type: {type}})",
+              parameters(
+                  "questionId",
+                  getString(row.getCell(0)),
+                  "questionDetail",
+                  getString(row.getCell(1)),
+                  "pic",
+                  sheetIndexPicMap.get(i) == null ? "" : sheetIndexPicMap.get(i),
+                  "solutionPic",
+                  sheetIndexSolutionPicMap.get(i) == null ? "" : sheetIndexSolutionPicMap.get(i),
+                  "solution",
+                  getString(row.getCell(2)),
+                  "score",
+                  getString(row.getCell(3)),
+                  "typeDistribution",
+                  getString(row.getCell(4)),
+                  "difficultyDistribution",
+                  getString(row.getCell(5)),
+                  "type",
+                  getString(row.getCell(6))));
+        }
       }
+
     } catch (Exception e) {
       resultMsg += "题目导入失败：题目id重复---------\n";
       flag3 = false;
