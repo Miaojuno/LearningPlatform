@@ -20,7 +20,6 @@ import java.util.Map;
 public class RecordController {
   @Autowired RecordManager recordManager;
 
-
   /**
    * 做题界面
    *
@@ -82,11 +81,30 @@ public class RecordController {
   public Map<String, Object> getOneUnreviewed(String userAccount) {
     Map<String, Object> map = new HashMap<>();
     RecordVo recordVo = recordManager.getOneUnreviewed(userAccount);
-    if(recordVo==null){
+    if (recordVo == null) {
       map.put("success", false);
       return map;
     }
     map.put("data", recordVo);
+    map.put("success", true);
+    return map;
+  }
+
+  /**
+   * 获取最近15日记录
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping("/get15daysRecordData")
+  @ResponseBody
+  public Map<String, Object> get15daysRecordData(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<>();
+
+    map.put(
+        "data",
+        recordManager.get15daysRecordData(
+            (String) request.getSession().getAttribute("loginUserAccount")));
     map.put("success", true);
     return map;
   }

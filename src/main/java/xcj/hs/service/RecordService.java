@@ -2,6 +2,8 @@ package xcj.hs.service;
 
 import xcj.hs.entity.Record;
 
+import java.util.List;
+
 public interface RecordService {
   void save(Record record);
 
@@ -13,4 +15,11 @@ public interface RecordService {
    * @return
    */
   Record getOneUnreviewed(String userId);
+
+  /**
+   * 获取最近15日记录（前14天以及当天）
+   * @param userId
+   * @return
+   */
+  List<Record> get15daysRecords(String userId);
 }

@@ -88,6 +88,20 @@
             <version>1.9.1-1</version>
         </dependency>
 
+        <!--echarts-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>echarts</artifactId>
+            <version>4.6.0</version>
+        </dependency>
+
+        <!--visjs-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>visjs</artifactId>
+            <version>4.21.0</version>
+        </dependency>
+
         <!--jquery-->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -112,26 +126,26 @@
 
         <!--easypoi-->
         <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-spring-boot-starter</artifactId>-->
-            <!--<version>3.3.0</version>-->
+        <!--<groupId>cn.afterturn</groupId>-->
+        <!--<artifactId>easypoi-spring-boot-starter</artifactId>-->
+        <!--<version>3.3.0</version>-->
         <!--</dependency>-->
 
 
         <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-base</artifactId>-->
-            <!--<version>4.0.0</version>-->
+        <!--<groupId>cn.afterturn</groupId>-->
+        <!--<artifactId>easypoi-base</artifactId>-->
+        <!--<version>4.0.0</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-web</artifactId>-->
-            <!--<version>4.0.0</version>-->
+        <!--<groupId>cn.afterturn</groupId>-->
+        <!--<artifactId>easypoi-web</artifactId>-->
+        <!--<version>4.0.0</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-annotation</artifactId>-->
-            <!--<version>4.0.0</version>-->
+        <!--<groupId>cn.afterturn</groupId>-->
+        <!--<artifactId>easypoi-annotation</artifactId>-->
+        <!--<version>4.0.0</version>-->
         <!--</dependency>-->
 
         <!-- 操作Excel文件的poi包引入 -->

@@ -59,7 +59,7 @@
             $('#random .fileInput').val($('#random .file').val())
         });
 
-
+        //换一题
         $('#random .changeRandom').on('click', function () {
             var qid = $('#random .questionId').val();
             var number = 0;
@@ -77,17 +77,18 @@
             }
         });
 
+        //提交
         $('#random .submitRecord').on('click', function () {
             submitRecord()
         });
 
-        $(document).on('click','#random .optionsDiv .btn',function(){
+        //选择题选择答案
+        $(document).on('click', '#random .optionsDiv .btn', function () {
             $("#random .userSolution").val($(this).text())
             submitRecord()
         })
 
-
-
+        // 提交方法
         function submitRecord() {
             layui.use('layer', function () {
                 layer = layui.layer;

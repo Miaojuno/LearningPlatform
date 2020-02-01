@@ -9,6 +9,7 @@
         <script src="/webjars/popper.js/1.14.4/umd/popper.js"></script>
         <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="/webjars/bootstrap-table/1.9.1-1/bootstrap-table.js"></script>
+        <script src="/webjars/echarts/4.6.0/echarts.min.js"></script>
         <script src="/webjars/bootstrap-table/1.9.1-1/locale/bootstrap-table-zh-CN.js"></script>
         <script src="/webjars/layui/2.5.5/layui.js"></script>
         <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>

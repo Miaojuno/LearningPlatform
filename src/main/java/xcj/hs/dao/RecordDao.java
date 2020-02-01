@@ -1,6 +1,5 @@
 package xcj.hs.dao;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import xcj.hs.entity.Record;
 
@@ -8,9 +7,11 @@ import java.util.List;
 
 public interface RecordDao extends JpaRepository<Record, String> {
 
-    List<Record> findByUserIdContaining(String userId);
+  List<Record> findByUserIdContaining(String userId);
 
-    Record findByUserIdAndQuestionId(String userId,String questionId);
+  Record findByUserIdAndQuestionId(String userId, String questionId);
 
-    Record getFirstByReviewerIdContainingAndScoreIsNull(String reviewerId);
+  Record getFirstByReviewerIdContainingAndScoreIsNull(String reviewerId);
+
+  List<Record> findByDateGreaterThanAndUserIdContaining(String date, String userId);
 }

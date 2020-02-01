@@ -10,8 +10,15 @@ import xcj.hs.entity.User;
 import xcj.hs.service.NeoService;
 import xcj.hs.service.RecordService;
 import xcj.hs.service.UserService;
+import xcj.hs.util.TimeUtil;
 import xcj.hs.vo.QuestionVo;
 import xcj.hs.vo.RecordVo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -63,5 +70,37 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
       return po2vo(record);
     }
     return null;
+  }
+
+  public Map<String, Object> get15daysRecordData(String userAccount) {
+    Map<String, Object> map = new HashMap<>();
+    List<RecordVo> recordVos =
+        po2vo(
+            recordService.get15daysRecords(userService.findByUserAccount(userAccount).getUserId()));
+    List<String> dates = new ArrayList<>();
+    List<Integer> nums = new ArrayList<>();
+    List<Double> rates = new ArrayList<>();
+
+    Map<String, List<RecordVo>> recordVoGroupMap =
+        recordVos.stream().collect(Collectors.groupingBy(o -> o.getDate().substring(0, 8)));
+    for (int i = -14; i <= 0; i++) {
+      String timeStr = TimeUtil.getSpecifiedTimeStr(TimeUtil.DATESTR, i);
+      dates.add(timeStr);
+      if (recordVoGroupMap.containsKey(timeStr)) {
+        List<RecordVo> dayRecords = recordVoGroupMap.get(timeStr);
+        nums.add(dayRecords.size());
+        rates.add(
+            (double)
+                (dayRecords.stream().filter(o -> "0".equals(o.getScore())).count()
+                    / dayRecords.size()));
+      } else {
+        nums.add(0);
+        rates.add(0.0);
+      }
+    }
+    map.put("dates", dates.stream().map(o -> o.substring(4,6)+"/"+o.substring(6,8)).collect(Collectors.toList()));
+    map.put("nums", nums);
+    map.put("rates", rates);
+    return map;
   }
 }
