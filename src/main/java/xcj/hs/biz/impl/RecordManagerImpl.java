@@ -30,7 +30,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
   @Override
   public RecordVo po2vo(Record record) {
     RecordVo recordVo = super.po2vo(record);
-    QuestionVo questionVo = neoService.findQuestionVoById(recordVo.getQuestionId());
+    QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
     recordVo.setQuestionDetail(questionVo.getQuestionDetail());
     recordVo.setQuestionPic(questionVo.getPic());
     recordVo.setSolution(questionVo.getSolution());
@@ -49,7 +49,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     }
     record.setReviewerId(user.getSuperiorId());
     // 选择题和客观题自动判题(忽略大小写)
-    QuestionVo questionVo = neoService.findQuestionVoById(recordVo.getQuestionId());
+    QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
     if ("客观题".equals(questionVo.getType())) {
       if (recordVo.getUserSolution().equalsIgnoreCase(questionVo.getSolution())) {
         record.setScore(questionVo.getScore());

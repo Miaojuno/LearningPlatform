@@ -1,6 +1,7 @@
 package xcj.hs.dao;
 
 import org.springframework.web.multipart.MultipartFile;
+import xcj.hs.entity.Point;
 import xcj.hs.entity.Question;
 
 import java.util.List;
@@ -13,5 +14,9 @@ public interface NeoDao {
 
   Question getRandomQuestion();
 
+  Question findByQuestionId(String id);
+
   Question findQuestionById(String id);
+
+  Point findPointById(String id);
 }

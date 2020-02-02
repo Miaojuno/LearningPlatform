@@ -34,4 +34,6 @@
 
 2020.1.31 neo4j相关配置迁移至配置文件，做题审阅界面添加学生名，做题添加单选
 
-2020.2.1 添加echars，index页面添加最近15天做题,https://github.com/IsFive/neo4j-vis.js，通过vis进行知识点展示界面（=======详情框未完成=======）
+2020.2.1 添加echars，index页面添加最近15天做题,https://github.com/IsFive/neo4j-vis.js，通过vis进行知识点展示界面（详情框未完成）
+
+2020.2.1 完成知识点展示界面详情框

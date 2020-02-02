@@ -6,9 +6,15 @@
 <div class="main-contain" style="margin-top: 1rem;position: relative;">
     <div id="network_id" class="network"></div><!-- 拓扑图容器-->
     <div id="pointDetail"
-         style="position: absolute;right: 1rem;top: 0.5rem;border-radius: 0.1rem;box-shadow: 2px 2px 8px #333333;padding: 0.5rem;">
+         style="position: absolute;right: 0.5rem;top: 0.5rem;border-radius: 0.2rem;box-shadow: 2px 2px 8px #333333;padding: 0.5rem;">
         <div class="textShow">
             <p>知识点详情:</p>
+            <p class="pointDetail">内容:</p>
+            <p class="chapter">章节:</p>
+            <p class="isbn">ISBN:</p>
+            <p class="grade">年级:</p>
+            <p class="distribution">考试要求分布:</p>
+            <p class="frequency">频次:</p>
         </div>
         <div class="btnDiv">
             <button class="btn btn-primary" style="padding: 0.05rem 0.4rem;">练习该知识点</button>
@@ -19,6 +25,8 @@
 <script>
     $(".main-contain").css("height", $(window).height() * 0.9)
     $("#network_id").css("height", "100%")
+
+    $("#pointDetail").hide()
 
     //拓扑
     var network;
@@ -53,20 +61,72 @@
                     }
                 }
             });
+            //拖拉节点
             network.on("dragEnd", function (params) {
                 if (params.nodes && params.nodes.length > 0) {
                     network.clustering.updateClusteredNode(params.nodes[0], {physics: false});
                 }
             });
+            //点击节点显示详情
             network.on("click", function (params) {
                 var nodeId = params.nodes[0];
                 if (nodeId != null) {
-                    console.log(nodeId)
+                    $.ajax({
+                        url: '/neo/findPointById',
+                        type: "post",
+                        data: {
+                            "id": nodeId
+                        },
+                        success: function (ret) {
+                            if (ret) {
+                                $("#pointDetail").show()
+                                if (ret.data.pointDetail != "") {
+                                    $("#pointDetail .textShow .pointDetail").show()
+                                    console.log(ret.data.pointDetail)
+                                    $("#pointDetail .textShow .pointDetail").text("内容："+ret.data.pointDetail);
+                                }
+                                else $("#pointDetail .textShow .pointDetail").hide()
+
+                                if (ret.data.chapter != "") {
+                                    $("#pointDetail .textShow .chapter").show()
+                                    $("#pointDetail .textShow .chapter").text("章节："+ret.data.chapter);
+                                }
+                                else $("#pointDetail .textShow .chapter").hide()
+
+                                if (ret.data.isbn != "") {
+                                    $("#pointDetail .textShow .isbn").show()
+                                    $("#pointDetail .textShow .isbn").text("ISBN："+ret.data.isbn);
+                                }
+                                else $("#pointDetail .textShow .isbn").hide()
+
+                                if (ret.data.grade != "") {
+                                    $("#pointDetail .textShow .grade").show()
+                                    $("#pointDetail .textShow .isbgraden").text("年级："+ret.data.grade);
+                                }
+                                else $("#pointDetail .textShow .grade").hide()
+
+                                if (ret.data.distribution != "") {
+                                    $("#pointDetail .textShow .distribution").show()
+                                    $("#pointDetail .textShow .distribution").text("考试要求分布："+ret.data.distribution);
+                                }
+                                else $("#pointDetail .textShow .distribution").hide()
+
+                                if (ret.data.frequency != "") {
+                                    $("#pointDetail .textShow .frequency").show()
+                                    $("#pointDetail .textShow .frequency").text("频次："+ret.data.frequency);
+                                }
+                                else $("#pointDetail .textShow .frequency").hide()
+                            } else {
+                                layer.msg("查询失败");
+                            }
+                        }
+                    });
                 }
+
             });
             //双击扩展
             network.on("doubleClick", function (params) {
-                // 取出当前节点在Vis的节点ID
+                // 取出当前节点在Vis的节点ID、
                 var nodeId = params.nodes[0];
                 if (nodeExtendArr.indexOf(nodeId) != -1) {
                     layer.msg("该节点已经扩展");

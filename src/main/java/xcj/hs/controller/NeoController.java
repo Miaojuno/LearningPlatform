@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.dao.impl.NeoDaoImpl;
+import xcj.hs.entity.Point;
 import xcj.hs.service.NeoService;
 import xcj.hs.vo.QuestionVo;
 
@@ -70,7 +71,6 @@ public class NeoController {
     return resultMap;
   }
 
-
   /**
    * getRandomQuestion
    *
@@ -86,6 +86,48 @@ public class NeoController {
             (String) request.getSession().getAttribute("loginUserAccount"));
     if (questionVo != null) {
       resultMap.put("data", questionVo);
+      resultMap.put("success", true);
+    } else {
+      resultMap.put("success", false);
+    }
+
+    return resultMap;
+  }
+
+  /**
+   * findQuestionById(通过noe4j节点id找question，非questionId)
+   *
+   * @param
+   * @return
+   */
+  @PostMapping("/findQuestionById")
+  @ResponseBody
+  public Map<String, Object> findQuestionById(String id) {
+    Map<String, Object> resultMap = new HashMap();
+    QuestionVo questionVo = neoService.findQuestionById(id);
+    if (questionVo != null) {
+      resultMap.put("data", questionVo);
+      resultMap.put("success", true);
+    } else {
+      resultMap.put("success", false);
+    }
+
+    return resultMap;
+  }
+
+  /**
+   * findPointById(通过noe4j节点id找Point，非PointId)
+   *
+   * @param
+   * @return
+   */
+  @PostMapping("/findPointById")
+  @ResponseBody
+  public Map<String, Object> findPointById(String id) {
+    Map<String, Object> resultMap = new HashMap();
+    Point point = neoService.findPointById(id);
+    if (point != null) {
+      resultMap.put("data", point);
       resultMap.put("success", true);
     } else {
       resultMap.put("success", false);

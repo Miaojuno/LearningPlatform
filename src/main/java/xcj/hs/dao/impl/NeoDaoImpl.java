@@ -5,22 +5,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
-import org.neo4j.driver.internal.InternalNode;
-import org.neo4j.driver.internal.InternalRelationship;
 import org.neo4j.driver.v1.*;
-import org.neo4j.driver.v1.types.Node;
-import org.neo4j.driver.v1.types.Path;
-import org.neo4j.driver.v1.types.Relationship;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.dao.NeoDao;
+import xcj.hs.entity.Point;
 import xcj.hs.entity.Question;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
@@ -52,7 +50,7 @@ public class NeoDaoImpl implements NeoDao {
     }
   }
 
-  public Question findQuestionById(String id) {
+  public Question findByQuestionId(String id) {
     StatementResult result =
         session.run("MATCH (a:Question) WHERE a.questionId={id} return a", parameters("id", id));
     Record record = result.next();
@@ -72,9 +70,45 @@ public class NeoDaoImpl implements NeoDao {
             : record.get("a").get("solutionPic").asByteArray());
   }
 
+  public Question findQuestionById(String id) {
+    StatementResult result =
+        session.run(
+            "MATCH (a:Question) WHERE ID(a)={id} return a", parameters("id", Integer.valueOf(id)));
+    Record record = result.next();
+    return new Question(
+        record.get("a").get("questionId").asString(),
+        record.get("a").get("questionDetail").asString(),
+        record.get("a").get("score").asString(),
+        record.get("a").get("solution").asString(),
+        record.get("a").get("typeDistribution").asString(),
+        record.get("a").get("difficultyDistribution").asString(),
+        record.get("a").get("type").asString(),
+        "\"\"".equals(record.get("a").get("pic").toString())
+            ? null
+            : record.get("a").get("pic").asByteArray(),
+        "\"\"".equals(record.get("a").get("solutionPic").toString())
+            ? null
+            : record.get("a").get("solutionPic").asByteArray());
+  }
+
+  public Point findPointById(String id) {
+    StatementResult result =
+        session.run(
+            "MATCH (a:Point) WHERE ID(a)={id} return a", parameters("id", Integer.valueOf(id)));
+    Record record = result.next();
+    return new Point(
+        record.get("a").get("pointId").asString(),
+        record.get("a").get("pointDetail").asString(),
+        record.get("a").get("chapter").asString(),
+        record.get("a").get("isbn").asString(),
+        record.get("a").get("grade").asString(),
+        record.get("a").get("distribution").asString(),
+        record.get("a").get("frequency").asString());
+  }
+
   public Question getRandomQuestion() {
     String randomId = String.valueOf((int) (1 + Math.random() * (questionNumber)));
-    return findQuestionById(randomId);
+    return findByQuestionId(randomId);
   }
 
   // 源数据导入
