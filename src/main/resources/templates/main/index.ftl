@@ -3,9 +3,10 @@
 <#assign importJs=[]>
 <@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
 
-<section>
+<div class="main-contain" style="margin-top: 1rem">
+    <#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
     <div id="studentHistoryGraphics" style="width: 600px;height:400px;"></div>
-</section>
+</div>
 
 <script>
 

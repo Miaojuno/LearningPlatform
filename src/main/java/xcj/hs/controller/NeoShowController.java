@@ -1,9 +1,11 @@
 package xcj.hs.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xcj.hs.util.Neo4jUtil;
@@ -19,24 +21,30 @@ public class NeoShowController {
 
   @Autowired private Neo4jUtil neo4jUtil;
 
-  @GetMapping("/index")
+  @GetMapping("/pointShow")
   public String index(Model model) {
-    return "main/neo4j";
+    return "question/pointShow";
   }
 
-  @GetMapping("getOnePoint")
+  @PostMapping("getTopPoint")
   @ResponseBody
-  public Map<String, Object> getOnePoint() {
+  public Map<String, Object> getTopPoint(String id) {
     Map<String, Object> retMap = new HashMap<>();
-    // cql语句
-    String cql = "match (m:Point{pointId: \"100\"}) return m";
+    String cql;
+    // 默认返回三个根节点
+    if (StringUtils.isBlank(id)) {
+      cql = "match (m) where m.pointId IN [\"1\",\"2\",\"3\"] return m";
+      // 指定节点作为根节点
+    } else {
+      cql = "match (m:Point{pointId: " + id + "}) return m";
+    }
     Set<Map<String, Object>> nodeList = new HashSet<>();
     neo4jUtil.getList(cql, nodeList);
     retMap.put("nodeList", nodeList);
     return retMap;
   }
 
-  @GetMapping("getPointPath")
+  @PostMapping("getPointPath")
   @ResponseBody
   public Map<String, Object> getPointPath(String id) {
     Map<String, Object> retMap = new HashMap<>();

@@ -90,6 +90,10 @@
                     </#if>
 
                     <li class="nav-item">
+                        <a class="nav-link" href="/neo4jShow/pointShow">知识点查看</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="/record/questionReview">去审阅</a>
                     </li>
 

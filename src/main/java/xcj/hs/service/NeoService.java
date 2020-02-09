@@ -8,7 +8,7 @@ import xcj.hs.vo.QuestionVo;
 public interface NeoService {
   String excelUpload(MultipartFile file);
 
-  QuestionVo getRandomQuestion(String userAccount);
+  QuestionVo getRandomQuestion(String userAccount,String pointId);
 
   QuestionVo findByQuestionId(String id);
 
