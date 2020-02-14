@@ -13,6 +13,8 @@ import xcj.hs.service.RecordService;
 import xcj.hs.service.UserService;
 import xcj.hs.vo.QuestionVo;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class NeoServiceImpl implements NeoService {
@@ -61,5 +63,9 @@ public class NeoServiceImpl implements NeoService {
 
   public Point findPointById(String id) {
     return neoDao.findPointById(id);
+  }
+
+  public List<Point> findPointByDetail(String pointDetail) {
+    return neoDao.findPointByDetail(pointDetail);
   }
 }

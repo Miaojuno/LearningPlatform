@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="col-10">
                         <div class="btn-group optionsDiv"></div>
-                        <textarea rows="5" class="userSolution" style="width: 100%"
+                        <textarea rows="5" class="userSolution"
                                   placeholder="在这里输入你的答案。。。"></textarea>
                         <input type="file" class="file" id="randomFile" hidden>
                         <input type="text" class="fileInput form-control" placeholder="上传图片(jpg/png)">

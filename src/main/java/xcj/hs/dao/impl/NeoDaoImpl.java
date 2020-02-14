@@ -16,6 +16,7 @@ import xcj.hs.entity.Question;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,39 @@ public class NeoDaoImpl implements NeoDao {
       log.info("数据库中题目数:" + record.get("count").toString());
     }
   }
+
+//  public String addQuestion(Question question) {
+//    session.run(
+//        "CREATE (a:Question {"
+//            + "questionId: {questionId}, "
+//            + "questionDetail: {questionDetail}, "
+//            + "pic: {pic}, "
+//            + "solutionPic: {solutionPic}, "
+//            + "solution: {solution}, "
+//            + "score: {score}, "
+//            + "typeDistribution: {typeDistribution}, "
+//            + "difficultyDistribution: {difficultyDistribution}, "
+//            + "type: {type}})",
+//        parameters(
+//            "questionId",
+//            1,
+//            "questionDetail",
+//            question.getQuestionDetail(),
+//            "pic",
+//            question.getPic(),
+//            "solutionPic",
+//            question.getSolutionPic(),
+//            "solution",
+//            question.getSolution(),
+//            "score",
+//            question.getScore(),
+//            "typeDistribution",
+//            question.getTypeDistribution(),
+//            "difficultyDistribution",
+//            question.getTypeDistribution(),
+//            "type",
+//            question.getType()));
+//  }
 
   public Question findByQuestionId(String id) {
     StatementResult result =
@@ -105,6 +139,21 @@ public class NeoDaoImpl implements NeoDao {
         record.get("a").get("grade").asString(),
         record.get("a").get("distribution").asString(),
         record.get("a").get("frequency").asString());
+  }
+
+  public List<Point> findPointByDetail(String pointDetail) {
+    List<Record> list =
+        session
+            .run("Match (a:Point) where a.pointDetail CONTAINS \"" + pointDetail + "\"  return a")
+            .list();
+    List<Point> resultList = new ArrayList<>();
+    for (Record record : list) {
+      resultList.add(
+          new Point(
+              record.get("a").get("pointId").asString(),
+              record.get("a").get("pointDetail").asString()));
+    }
+    return resultList;
   }
 
   public Question findQuestionByPointIdAndIndex(String pointId, int index) {

@@ -6,7 +6,7 @@
 <div class="main-contain" style="margin-top: 1rem">
 
 
-    <div class="card">
+    <div class="card" id="random">
         <div class="card-header">
             <input class="questionId" hidden>
             <img class="questionPic img-thumbnail">
@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="col-10">
                 <div class="btn-group optionsDiv"></div>
-                <textarea rows="5" class="userSolution" style="width: 100%"
+                <textarea rows="5" class="userSolution"
                           placeholder="在这里输入你的答案。。。"></textarea>
                 <input type="file" class="file" id="randomFile" hidden>
                 <input type="text" class="fileInput form-control" placeholder="上传图片(jpg/png)">
@@ -54,13 +54,12 @@
             getRandomQuestion()
             console.log(qid)
             console.log($('#random .questionId').val())
-            while (qid == $('#random .questionId').val() && number < 10) {
-                console.log(qid)
-                console.log($('#random .questionId').val())
+            //重复请求，防止请求到相同题目
+            while (qid == $('#random .questionId').val() && number < 3) {
                 getRandomQuestion();
                 number++;
             }
-            if (number == 10) {
+            if (number == 3) {
                 layer.msg("没有题目啦！", {icon: 2});
             }
         });

@@ -31,4 +31,9 @@ public class Point {
     this.distribution = distribution;
     this.frequency = frequency;
   }
+
+  public Point(String pointId, String pointDetail) {
+    this.pointId = pointId;
+    this.pointDetail = pointDetail;
+  }
 }

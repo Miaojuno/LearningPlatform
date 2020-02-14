@@ -3,6 +3,7 @@ package xcj.hs.biz.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -86,8 +87,8 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
     } else if ("教师".equals(roleName) || "领导".equals(roleName)) {
       userVo.setRoleId(roleService.findRoleByRoleName("领导").getRoleId());
     }
-    if(StringUtils.isBlank(userVo.getRoleId())){
-        return null;
+    if (StringUtils.isBlank(userVo.getRoleId())) {
+      return null;
     }
     return po2vo(userService.pageFind(userVo, pageable));
   }

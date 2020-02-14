@@ -5,8 +5,6 @@ import xcj.hs.entity.Point;
 import xcj.hs.entity.Question;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public interface NeoDao {
 
@@ -19,4 +17,6 @@ public interface NeoDao {
   Question findQuestionById(String id);
 
   Point findPointById(String id);
+
+  List<Point> findPointByDetail(String pointDetail);
 }

@@ -93,9 +93,19 @@
                         <a class="nav-link" href="/neo4jShow/pointShow">知识点查看</a>
                     </li>
 
+                <#--教师-->
+                    <#if Session["loginUserRole"] == "教师">
                     <li class="nav-item">
                         <a class="nav-link" href="/record/questionReview">去审阅</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/neo/addQuestion">添加题目</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">添加题集</a>
+                    </li>
+
+                    </#if>
 
                     <li class="nav-item">
                         <a class="nav-link" href="/neo/excelupload">数据导入</a>
@@ -247,6 +257,8 @@
 
 
 
+
+
 <#--状态选择组件-->
 <#macro statusSelect id name>
     <select id="${id}" name="${name}" class=" form-control">
@@ -260,3 +272,101 @@
 
 
 
+
+<#--知识点选择组件，展示知识点内容，隐藏框内容为id-->
+<#macro pointChoose id class name>
+    <input type="text" class="macroPointChoseInput form-control" placeholder="">
+    <input type="text" id="${id}" name="${name}" class="${class} macroPointChoseId form-control" placeholder="" hidden>
+
+    <#--选择知识点遮罩层-->
+    <div id="pointChoose-div" class="maskLayer" style="display: none;">
+        <div class="modal-body">
+            <form id="pointChoose-form">
+                <div class="row">
+                    <label class="control-label col-4 text-right" for="">知识点</label>
+                    <div class="col-8">
+                        <input type="text" class="pointDetail form-control">
+                    </div>
+                </div>
+            </form>
+            <div class="tablediv m-auto">
+            <#--内容表格-->
+                <table id="pointChoose-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            if (!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //非移动端
+                $("#pointChoose-div").css("max-height",$(window).height()*0.6)
+            }
+
+            //表格
+            $('#pointChoose-table').bootstrapTable({
+                url: '/neo/findPointByDetail.json',
+                pagination: false,           //分页
+                uniqueId: "pointId",         //隐藏的id
+                // queryParamsType:'',
+                queryParams: function (params) {
+                    var temp = {
+                        pointDetail: $("#pointChoose-div .pointDetail").val(),
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field: 'pointDetail',
+                        title: '知识点'
+                    }, {
+                        field: 'action',
+                        title: '操作',
+                        formatter: actionFormatter
+                    },]
+            });
+
+            //操作栏的格式化
+            function actionFormatter(value, row, index) {
+                var id = value;
+                var result = "";
+                result += "<a href='javascript:;'  class='choosePoint' title='选择'><span>选择</span></a>";
+                return result;
+            }
+
+            var layerPointChoose;
+
+            //打开上级设置遮罩层
+            $(document).on("click", ".macroPointChoseInput", function () {
+                $("#pointChoose-table").bootstrapTable('refresh');
+                layui.use('layer', function () {
+                    layer = layui.layer;
+
+                    layerPointChoose = layer.open({
+                        type: 1,
+                        zIndex: "1",
+                        title: '选择知识点',
+                        // area: ['800px'],
+                        content: $('#pointChoose-div'),
+                        cancel: function (index) {
+                            layer.close(index);
+                            $("#superior-modify-form")[0].reset()
+                        }
+                    })
+                })
+            })
+
+            $(document).on("click", ".choosePoint", function () {
+                var id = $(this).parent().parent().attr("data-uniqueid");
+                $(".macroPointChoseId").val(id)
+                $(".macroPointChoseInput").val($(this).closest("tr").find("td").eq(0).text())
+                layer.close(layerPointChoose)
+            })
+
+            //输入时刷新表格
+            $(document).on("input","#pointChoose-div .pointDetail",function () {
+                $("#pointChoose-table").bootstrapTable('refresh');
+            })
+
+        })
+    </script>
+</#macro>

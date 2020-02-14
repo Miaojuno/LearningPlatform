@@ -77,7 +77,7 @@ public class UserController {
    * @param userVo
    * @return
    */
-  @CacheEvict(value = "userPageListCache", allEntries = true)
+  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
   @PostMapping("/register")
   @ResponseBody
   public Map<String, Object> register(UserVo userVo) {
@@ -97,7 +97,7 @@ public class UserController {
    * @param userVo
    * @return
    */
-  @CacheEvict(value = "userPageListCache", allEntries = true)
+  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
   @PostMapping("/modify")
   @ResponseBody
   public Map<String, Object> modify(UserVo userVo) {
@@ -135,7 +135,7 @@ public class UserController {
    * @param roleId
    * @return
    */
-  @CacheEvict(value = "userPageListCache")
+  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"} ,allEntries = true)
   @PostMapping("/modifyRole")
   @ResponseBody
   public Map<String, Object> modifyRole(String userAccount, String roleId) {
@@ -152,7 +152,7 @@ public class UserController {
    * @param superiorId
    * @return
    */
-  @CacheEvict(value = "userPageListCache", allEntries = true)
+  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
   @PostMapping("/updateSuperior")
   @ResponseBody
   public Map<String, Object> updateSuperior(String subordinateId, String superiorId) {
@@ -186,7 +186,7 @@ public class UserController {
    * @param userId
    * @return
    */
-  @CacheEvict(value = "userPageListCache", allEntries = true)
+  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
   @PostMapping("/delete")
   @ResponseBody
   public Map<String, Object> deleteUser(String userId) {
@@ -237,6 +237,7 @@ public class UserController {
    * @param subordinateId
    * @return
    */
+//  @Cacheable(value = "superiorPageListCache")
   @RequestMapping("/superiorPageList.json")
   @ResponseBody
   public Map<String, Object> superiorPageList(
@@ -250,15 +251,13 @@ public class UserController {
     if (StringUtils.isNotBlank(subordinateId) || StringUtils.isNotBlank(subordinateAccount)) {
       Page<UserVo> pages =
           userManager.superiorPageFind(userVo, subordinateId, subordinateAccount, pageable);
-      if (pages==null){
-          resultMap.put("data", null);
-          resultMap.put("total", 0);
+      if (pages == null) {
+        resultMap.put("data", null);
+        resultMap.put("total", 0);
+      } else {
+        resultMap.put("data", pages.getContent());
+        resultMap.put("total", pages.getTotalElements());
       }
-      else {
-          resultMap.put("data", pages.getContent());
-          resultMap.put("total", pages.getTotalElements());
-      }
-
     }
     return resultMap;
   }

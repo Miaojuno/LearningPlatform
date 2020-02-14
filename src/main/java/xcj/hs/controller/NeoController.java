@@ -1,17 +1,21 @@
 package xcj.hs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.dao.impl.NeoDaoImpl;
 import xcj.hs.entity.Point;
+import xcj.hs.entity.Question;
 import xcj.hs.service.NeoService;
 import xcj.hs.vo.QuestionVo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -53,6 +57,45 @@ public class NeoController {
     return "main/questionupload";
   }
 
+  /**
+   * 添加题目页面
+   *
+   * @param model
+   * @return
+   */
+  @GetMapping("/addQuestion")
+  public String addQuestionPage(Model model) {
+    return "question/addQuestion";
+  }
+
+//  /**
+//   * 添加题目
+//   *
+//   * @param file1
+//   * @param file2
+//   * @param question
+//   * @return
+//   */
+//  @PostMapping("/addQuestion")
+//  @ResponseBody
+//  public Map<String, Object> addQuestion(
+//      MultipartFile file1, MultipartFile file2, Question question) {
+//    Map<String, Object> resultMap = new HashMap();
+//    try {
+//      if (file1 != null) {
+//        question.setPic(file1.getBytes());
+//      }
+//      if (file2 != null) {
+//        question.setSolutionPic(file2.getBytes());
+//      }
+//    } catch (IOException e) {
+//      resultMap.put("success", false);
+//      resultMap.put("msg", e.getMessage());
+//    }
+//    neoService.addQuestion(question);
+//    return resultMap;
+//  }
+
   @PostMapping("/questionupload")
   @ResponseBody
   public Map<String, Object> questionupload(@RequestParam("file") MultipartFile file, Model model)
@@ -79,11 +122,11 @@ public class NeoController {
    */
   @PostMapping("/getRandomQuestion")
   @ResponseBody
-  public Map<String, Object> getRandomQuestion(HttpServletRequest request,String pointId) {
+  public Map<String, Object> getRandomQuestion(HttpServletRequest request, String pointId) {
     Map<String, Object> resultMap = new HashMap();
     QuestionVo questionVo =
         neoService.getRandomQuestion(
-            (String) request.getSession().getAttribute("loginUserAccount"),pointId);
+            (String) request.getSession().getAttribute("loginUserAccount"), pointId);
     if (questionVo != null) {
       resultMap.put("data", questionVo);
       resultMap.put("success", true);
@@ -128,6 +171,28 @@ public class NeoController {
     Point point = neoService.findPointById(id);
     if (point != null) {
       resultMap.put("data", point);
+      resultMap.put("success", true);
+    } else {
+      resultMap.put("success", false);
+    }
+
+    return resultMap;
+  }
+
+  /**
+   * 根据知识点内容查找知识点list
+   *
+   * @param pointDetail
+   * @return
+   */
+  @Cacheable(value = "findPointByDetailCache")
+  @RequestMapping("/findPointByDetail.json")
+  @ResponseBody
+  public Map<String, Object> findPointByDetail(String pointDetail) {
+    Map<String, Object> resultMap = new HashMap();
+    List<Point> points = neoService.findPointByDetail(pointDetail);
+    if (points != null && points.size() != 0) {
+      resultMap.put("data", points);
       resultMap.put("success", true);
     } else {
       resultMap.put("success", false);

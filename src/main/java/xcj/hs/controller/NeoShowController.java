@@ -2,6 +2,7 @@ package xcj.hs.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class NeoShowController {
     return "question/pointShow";
   }
 
+  @Cacheable(value = "getTopPointCache")
   @PostMapping("getTopPoint")
   @ResponseBody
   public Map<String, Object> getTopPoint(String id) {
@@ -44,6 +46,7 @@ public class NeoShowController {
     return retMap;
   }
 
+  @Cacheable(value = "getPointPathCache")
   @PostMapping("getPointPath")
   @ResponseBody
   public Map<String, Object> getPointPath(String id) {

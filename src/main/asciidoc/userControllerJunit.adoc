@@ -1,0 +1,31 @@
+= 接口文档
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:appendix-caption: 附录
+:caution-caption: 注意
+:example-caption: 示例
+:figure-caption: 图表
+:important-caption: 重要
+:last-update-label: 最后更新
+//:listing-caption: 列表
+:manname-title: 名称
+:note-caption: 笔记
+//:preface-title: 序言
+:table-caption: 表格
+:tip-caption: 提示
+:toc-title: 目录
+:untitled-label: 暂无标题
+:version-label: 版本
+:warning-caption: 警告
+
+
+== /user/findbyid
+operation::userController/findbyid[snippets='curl-request,request-fields,http-response,response-fields']
+
+
+== /user/pageList.json
+operation::userController/pageList.json[snippets='curl-request,request-fields,http-response,response-fields']
