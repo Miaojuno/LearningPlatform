@@ -68,33 +68,35 @@ public class NeoController {
     return "question/addQuestion";
   }
 
-//  /**
-//   * 添加题目
-//   *
-//   * @param file1
-//   * @param file2
-//   * @param question
-//   * @return
-//   */
-//  @PostMapping("/addQuestion")
-//  @ResponseBody
-//  public Map<String, Object> addQuestion(
-//      MultipartFile file1, MultipartFile file2, Question question) {
-//    Map<String, Object> resultMap = new HashMap();
-//    try {
-//      if (file1 != null) {
-//        question.setPic(file1.getBytes());
-//      }
-//      if (file2 != null) {
-//        question.setSolutionPic(file2.getBytes());
-//      }
-//    } catch (IOException e) {
-//      resultMap.put("success", false);
-//      resultMap.put("msg", e.getMessage());
-//    }
-//    neoService.addQuestion(question);
-//    return resultMap;
-//  }
+  /**
+   * 添加题目
+   *
+   * @param file1
+   * @param file2
+   * @param question
+   * @return
+   */
+  @PostMapping("/addQuestion")
+  @ResponseBody
+  public Map<String, Object> addQuestion(
+      MultipartFile file1, MultipartFile file2, Question question) {
+    Map<String, Object> resultMap = new HashMap();
+    try {
+      if (file1 != null) {
+        question.setPic(file1.getBytes());
+      }
+      if (file2 != null) {
+        question.setSolutionPic(file2.getBytes());
+      }
+    } catch (IOException e) {
+      resultMap.put("success", false);
+      resultMap.put("msg", e.getMessage());
+    }
+    String questionId = neoService.addQuestion(question);
+    resultMap.put("success", true);
+    resultMap.put("questionId", questionId);
+    return resultMap;
+  }
 
   @PostMapping("/questionupload")
   @ResponseBody
@@ -148,6 +150,27 @@ public class NeoController {
   public Map<String, Object> findQuestionById(String id) {
     Map<String, Object> resultMap = new HashMap();
     QuestionVo questionVo = neoService.findQuestionById(id);
+    if (questionVo != null) {
+      resultMap.put("data", questionVo);
+      resultMap.put("success", true);
+    } else {
+      resultMap.put("success", false);
+    }
+
+    return resultMap;
+  }
+
+  /**
+   * findByQuestionId
+   *
+   * @param
+   * @return
+   */
+  @PostMapping("/findByQuestionId")
+  @ResponseBody
+  public Map<String, Object> findByQuestionId(String questionId) {
+    Map<String, Object> resultMap = new HashMap();
+    QuestionVo questionVo = neoService.findByQuestionId(questionId);
     if (questionVo != null) {
       resultMap.put("data", questionVo);
       resultMap.put("success", true);

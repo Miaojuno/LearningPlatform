@@ -2,6 +2,7 @@ package xcj.hs.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.entity.Point;
+import xcj.hs.entity.Question;
 import xcj.hs.vo.QuestionVo;
 
 import java.util.List;
@@ -18,4 +19,12 @@ public interface NeoService {
   Point findPointById(String id);
 
   List<Point> findPointByDetail(String pointDetail);
+
+  /**
+   * 成功返回id
+   *
+   * @param question
+   * @return
+   */
+  String addQuestion(Question question);
 }

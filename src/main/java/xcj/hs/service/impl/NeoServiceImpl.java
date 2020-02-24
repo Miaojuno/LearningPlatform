@@ -68,4 +68,8 @@ public class NeoServiceImpl implements NeoService {
   public List<Point> findPointByDetail(String pointDetail) {
     return neoDao.findPointByDetail(pointDetail);
   }
+
+  public String addQuestion(Question question){
+    return neoDao.addQuestion(question);
+  }
 }

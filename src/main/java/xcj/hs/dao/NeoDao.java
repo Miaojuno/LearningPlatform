@@ -19,4 +19,12 @@ public interface NeoDao {
   Point findPointById(String id);
 
   List<Point> findPointByDetail(String pointDetail);
+
+  /**
+   * 成功返回id
+   *
+   * @param question
+   * @return
+   */
+  String addQuestion(Question question);
 }

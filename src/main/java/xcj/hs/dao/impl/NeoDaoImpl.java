@@ -52,38 +52,50 @@ public class NeoDaoImpl implements NeoDao {
     }
   }
 
-//  public String addQuestion(Question question) {
-//    session.run(
-//        "CREATE (a:Question {"
-//            + "questionId: {questionId}, "
-//            + "questionDetail: {questionDetail}, "
-//            + "pic: {pic}, "
-//            + "solutionPic: {solutionPic}, "
-//            + "solution: {solution}, "
-//            + "score: {score}, "
-//            + "typeDistribution: {typeDistribution}, "
-//            + "difficultyDistribution: {difficultyDistribution}, "
-//            + "type: {type}})",
-//        parameters(
-//            "questionId",
-//            1,
-//            "questionDetail",
-//            question.getQuestionDetail(),
-//            "pic",
-//            question.getPic(),
-//            "solutionPic",
-//            question.getSolutionPic(),
-//            "solution",
-//            question.getSolution(),
-//            "score",
-//            question.getScore(),
-//            "typeDistribution",
-//            question.getTypeDistribution(),
-//            "difficultyDistribution",
-//            question.getTypeDistribution(),
-//            "type",
-//            question.getType()));
-//  }
+  public String addQuestion(Question question) {
+    String maxIdStr =
+        session
+            .run("match (a:Question ) return max(a.questionId)")
+            .next()
+            .get("max(a.questionId)")
+            .toString();
+    String idStr = String.valueOf(Integer.valueOf(maxIdStr.replaceAll("\"", "")) + 1);
+    StatementResult result =
+        session.run(
+            "CREATE (a:Question {"
+                + "questionId: {questionId}, "
+                + "questionDetail: {questionDetail}, "
+                + "pic: {pic}, "
+                + "solutionPic: {solutionPic}, "
+                + "solution: {solution}, "
+                + "score: {score}, "
+                + "typeDistribution: {typeDistribution}, "
+                + "difficultyDistribution: {difficultyDistribution}, "
+                + "type: {type}})"
+                + "return ID(a)",
+            parameters(
+                "questionId",
+                idStr,
+                "questionDetail",
+                question.getQuestionDetail() == null ? "" : question.getQuestionDetail(),
+                "pic",
+                question.getPic() == null ? "" : question.getPic(),
+                "solutionPic",
+                question.getSolutionPic() == null ? "" : question.getSolutionPic(),
+                "solution",
+                question.getSolution() == null ? "" : question.getSolution(),
+                "score",
+                question.getScore() == null ? "" : question.getScore(),
+                "typeDistribution",
+                question.getTypeDistribution() == null ? "" : question.getTypeDistribution(),
+                "difficultyDistribution",
+                question.getDifficultyDistribution() == null
+                    ? ""
+                    : question.getDifficultyDistribution(),
+                "type",
+                question.getType() == null ? "" : question.getType()));
+    return idStr;
+  }
 
   public Question findByQuestionId(String id) {
     StatementResult result =
@@ -161,7 +173,7 @@ public class NeoDaoImpl implements NeoDao {
     if (StringUtils.isNotBlank(pointId)) {
       list =
           session
-              .run(
+              .run( // ==============当前知识点的直属题目=================
                   "Match (start:Point{pointId:\""
                       + pointId
                       + "\"})-[:属于*1..1]-(a:Question)  return a skip "
@@ -189,9 +201,11 @@ public class NeoDaoImpl implements NeoDao {
         record.get("a").get("difficultyDistribution").asString(),
         record.get("a").get("type").asString(),
         "\"\"".equals(record.get("a").get("pic").toString())
+                || "NULL".equals(record.get("a").get("pic").toString())
             ? null
             : record.get("a").get("pic").asByteArray(),
         "\"\"".equals(record.get("a").get("solutionPic").toString())
+                || "NULL".equals(record.get("a").get("solutionPic").toString())
             ? null
             : record.get("a").get("solutionPic").asByteArray());
   }

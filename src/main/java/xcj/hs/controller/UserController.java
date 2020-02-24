@@ -77,7 +77,9 @@ public class UserController {
    * @param userVo
    * @return
    */
-  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
+  @CacheEvict(
+      value = {"userPageListCache", "superiorPageListCache"},
+      allEntries = true)
   @PostMapping("/register")
   @ResponseBody
   public Map<String, Object> register(UserVo userVo) {
@@ -97,7 +99,9 @@ public class UserController {
    * @param userVo
    * @return
    */
-  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
+  @CacheEvict(
+      value = {"userPageListCache", "superiorPageListCache"},
+      allEntries = true)
   @PostMapping("/modify")
   @ResponseBody
   public Map<String, Object> modify(UserVo userVo) {
@@ -135,7 +139,9 @@ public class UserController {
    * @param roleId
    * @return
    */
-  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"} ,allEntries = true)
+  @CacheEvict(
+      value = {"userPageListCache", "superiorPageListCache"},
+      allEntries = true)
   @PostMapping("/modifyRole")
   @ResponseBody
   public Map<String, Object> modifyRole(String userAccount, String roleId) {
@@ -152,7 +158,9 @@ public class UserController {
    * @param superiorId
    * @return
    */
-  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
+  @CacheEvict(
+      value = {"userPageListCache", "superiorPageListCache"},
+      allEntries = true)
   @PostMapping("/updateSuperior")
   @ResponseBody
   public Map<String, Object> updateSuperior(String subordinateId, String superiorId) {
@@ -186,7 +194,9 @@ public class UserController {
    * @param userId
    * @return
    */
-  @CacheEvict(value = {"userPageListCache", "superiorPageListCache"}, allEntries = true)
+  @CacheEvict(
+      value = {"userPageListCache", "superiorPageListCache"},
+      allEntries = true)
   @PostMapping("/delete")
   @ResponseBody
   public Map<String, Object> deleteUser(String userId) {
@@ -208,7 +218,7 @@ public class UserController {
   }
 
   /**
-   * 分页查询
+   * 分页查询，管理员通过roleId查询，非管理员传入roleName区分查询的角色 superiorId用于填入当前用户的id，用于查询当前用户下级
    *
    * @param userVo
    * @param pageSize
@@ -237,7 +247,7 @@ public class UserController {
    * @param subordinateId
    * @return
    */
-//  @Cacheable(value = "superiorPageListCache")
+  //  @Cacheable(value = "superiorPageListCache")
   @RequestMapping("/superiorPageList.json")
   @ResponseBody
   public Map<String, Object> superiorPageList(

@@ -60,7 +60,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
   }
 
   public Page<User> pageFind(UserVo userVo, Pageable pageable) {
-    // 非管理员 只可查询下一级
+    // 非管理员 只可查询本人的下一级
     if (StringUtils.isNotBlank(userVo.getSuperiorAccount())) {
       List<Object> superiorIds = new ArrayList<>();
       superiorIds.add(userDao.findByUserAccount(userVo.getSuperiorAccount()).getUserId());
