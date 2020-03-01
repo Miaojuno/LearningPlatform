@@ -29,6 +29,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
 
   @Override
   public RecordVo po2vo(Record record) {
+    if(record==null) return null;
     RecordVo recordVo = super.po2vo(record);
     QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
     recordVo.setQuestionDetail(questionVo.getQuestionDetail());
@@ -98,9 +99,19 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
         rates.add(0.0);
       }
     }
-    map.put("dates", dates.stream().map(o -> o.substring(4,6)+"/"+o.substring(6,8)).collect(Collectors.toList()));
+    map.put(
+        "dates",
+        dates.stream()
+            .map(o -> o.substring(4, 6) + "/" + o.substring(6, 8))
+            .collect(Collectors.toList()));
     map.put("nums", nums);
     map.put("rates", rates);
     return map;
+  }
+
+  public RecordVo findByUserAccountAndQuestionId(String userAccount, String questionId) {
+    return po2vo(
+        recordService.findByUserIdAndQuestionId(
+            userService.findByUserAccount(userAccount).getUserId(), questionId));
   }
 }

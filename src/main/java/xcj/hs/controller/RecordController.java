@@ -108,4 +108,28 @@ public class RecordController {
     map.put("success", true);
     return map;
   }
+
+  /**
+   * findByUserAccountAndQuestionId
+   *
+   * @param userAccount
+   * @param questionId
+   * @return
+   */
+  @PostMapping("/findByUserAccountAndQuestionId")
+  @ResponseBody
+  public Map<String, Object> findReofindByUserAccountAndQuestionIdcrd(
+      String userAccount, String questionId) {
+    Map<String, Object> map = new HashMap<>();
+    RecordVo recordVo=recordManager.findByUserAccountAndQuestionId(userAccount, questionId);
+    if(recordVo!=null){
+      map.put("data",recordVo );
+      map.put("success", true);
+    }
+    else {
+      map.put("msg","不存在" );
+      map.put("success", false);
+    }
+    return map;
+  }
 }

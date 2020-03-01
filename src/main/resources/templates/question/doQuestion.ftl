@@ -90,11 +90,7 @@
             var qid = $('#random .questionId').val();
             var number = 0;
             getRandomQuestion()
-            console.log(qid)
-            console.log($('#random .questionId').val())
             while (qid == $('#random .questionId').val() && number < 10) {
-                console.log(qid)
-                console.log($('#random .questionId').val())
                 getRandomQuestion();
                 number++;
             }
@@ -210,6 +206,7 @@
                             }
                             else {
                                 $("#random .fileInput").hide();
+                                $("#random .optionsDiv").empty()
                                 $("#random .userSolution").hide();
                                 var options = result.data.solution.split("/")[1];
                                 for (i = 0; i < options.length; i++) {

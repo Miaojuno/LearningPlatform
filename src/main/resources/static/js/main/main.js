@@ -7,6 +7,8 @@ $(function () {
         $(".main-contain").css("margin-top","0.5rem")
     }
 
+    //去掉所有input的autocomplete, 显示指定的除外
+    $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
 
     $.ajax({
         url: "/role/listActive",
