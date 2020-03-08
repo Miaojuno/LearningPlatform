@@ -56,18 +56,7 @@
 
                     </li>
 
-                <#--学生、教师、领导-->
-                    <#if Session["loginUserRole"] != "管理员">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                            申请
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" id="roleModifyApplyBtn">角色变更申请</a>
-                            <a class="dropdown-item" href="#" id="supeiorModifyApplyBtn">上级变更申请</a>
-                        </div>
-                    </li>
-                    </#if>
+
 
                 <#--教师、领导-->
                     <#if Session["loginUserRole"] != "管理员" && Session["loginUserRole"] != "学生">
@@ -117,8 +106,20 @@
                 <#--<li class="nav-item">-->
                 <#--<a class="nav-link" href="/neo/questionupload">题目导入</a>-->
                 <#--</li>-->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/logout">注销</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" style="padding-top: 0;padding-bottom: 0;">
+                            <img class="img-fluid rounded" id="userPicInNavHead" style="height: 2.2rem;width: 2.2rem;">
+                        </a>
+                        <div class="dropdown-menu" style="left: -4.8rem;">
+                        <#--学生、教师、领导-->
+                            <#if Session["loginUserRole"] != "管理员">
+                            <a class="dropdown-item" href="#" id="roleModifyApplyBtn">角色变更申请</a>
+                            <a class="dropdown-item" href="#" id="supeiorModifyApplyBtn">上级变更申请</a>
+                            </#if>
+                            <a class="dropdown-item" href="#" id="userPicModifyBtn">修改头像</a>
+                            <a class="dropdown-item" href="/friendShip/main">我的好友</a>
+                            <a class="dropdown-item" href="/user/logout">注销</a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -129,6 +130,15 @@
     <input id="loginUserAccount" value="${Session ["loginUserAccount"]}" hidden>
     <input id="loginUserRole" value="${Session ["loginUserRole"]}" hidden>
     </body>
+
+    <#--头像修改遮罩层-->
+    <div id="modify-userPic-div" class="maskLayer" style="display: none;">
+        <div class="modal-body">
+            <div class="row">
+                <input type="file" id="user-pic-modify-file" hidden>
+            </div>
+        </div>
+    </div>
 
 
     <#if Session["loginUserRole"] != "管理员">
@@ -153,6 +163,8 @@
                 </form>
             </div>
         </div>
+
+
 
     <#--上级修改申请遮罩层-->
         <div id="superior-modify-apply-div" class="maskLayer" style="display: none;">

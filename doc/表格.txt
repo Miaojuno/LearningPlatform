@@ -51,6 +51,21 @@ rec_reviewer_id
 rec_score
 rec_date
 
+题集表QUESTION_SET
+QS_ID
+QS_PIC
+QS_NAME
+QS_OWNER
+QUESTION_IDS
+USER_IDS
+
+好友关系表FRIEND_SHIP
+FS_ID
+FS_USER1
+FS_USER2
+FS_USER1_ACTIVE
+FS_USER2_ACTIVE
+
 --------------------------------------------------------------------------
 
 题目节点Question

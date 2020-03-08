@@ -31,5 +31,7 @@ public class UserVo implements Serializable {
     private String userDesc;
 
     private String grade;
+
+    private byte[] pic;
 }
 

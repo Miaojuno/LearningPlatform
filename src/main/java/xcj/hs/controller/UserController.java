@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.biz.UserManager;
 import xcj.hs.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +63,26 @@ public class UserController {
   }
 
   /**
+   * 修改头像
+   *
+   * @param userAccount
+   * @param file
+   * @return
+   */
+  @PostMapping("/modifyPic")
+  @ResponseBody
+  public Map<String, Object> modifyPic(String userAccount, MultipartFile file) throws IOException {
+    Map<String, Object> map = new HashMap<String, Object>();
+    if (file == null) {
+      map.put("success", false);
+    } else {
+      userManager.modifyPic(userAccount, file.getBytes());
+      map.put("success", true);
+    }
+    return map;
+  }
+
+  /**
    * 注册界面
    *
    * @param model
@@ -72,7 +94,7 @@ public class UserController {
   }
 
   /**
-   * 注册操作
+   * 注册操作,默认角色为学生
    *
    * @param userVo
    * @return
@@ -133,9 +155,24 @@ public class UserController {
   }
 
   /**
+   * @param userAccount
+   * @return
+   */
+  @PostMapping("/findByUserAccount")
+  @ResponseBody
+  public Map<String, Object> findByUserAccount(String userAccount) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    UserVo userVo = userManager.findByUserAccount(userAccount);
+
+    map.put("success", true);
+    map.put("data", userVo);
+    return map;
+  }
+
+  /**
    * 修改角色
    *
-   * @param userId
+   * @param userAccount
    * @param roleId
    * @return
    */

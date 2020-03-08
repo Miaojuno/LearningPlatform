@@ -1,10 +1,31 @@
 $(function () {
     if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
         // $(".main-contain").css("height",$(window).height()*0.9)
-        $(".main-contain").css("margin-top","0")
+        $(".main-contain").css("margin-top", "0")
     }
     else {
-        $(".main-contain").css("margin-top","0.5rem")
+        $(".main-contain").css("margin-top", "0.5rem")
+    }
+
+
+    getUserPicInTop()
+
+    function getUserPicInTop(){
+        //获取右上角头像
+        $.ajax({
+            url: "/user/findByUserAccount",
+            data: {
+                "userAccount": $('#loginUserAccount').val()
+            },
+            dataType: "json",
+            type: "post",
+            success: function (result) {
+                $("#userPicInNavHead").attr("src", "data:image/jpeg;base64," + result.data.pic);
+            },
+            error: function (result) {
+                layer.msg("ERROR", {icon: 2});
+            }
+        })
     }
 
     //去掉所有input的autocomplete, 显示指定的除外
@@ -12,16 +33,60 @@ $(function () {
 
     $.ajax({
         url: "/role/listActive",
-        dataType : "json",
-        type : "post",
-        success : function(result){
-            for(i in result){
-                $("#role-modify-apply-select").append("<option value='"+result[i].roleId+"' >"+result[i].roleName+"</option>");
+        dataType: "json",
+        type: "post",
+        success: function (result) {
+            for (i in result) {
+                $("#role-modify-apply-select").append("<option value='" + result[i].roleId + "' >" + result[i].roleName + "</option>");
             }
         },
-        error : function(result){9
+        error: function (result) {
+            9
         }
     })
+
+    //修改头像
+    $(document).on("click", "#userPicModifyBtn", function () {
+        console.log(1)
+        $("#user-pic-modify-file").click();
+    })
+
+    $("#user-pic-modify-file").bind("input propertychange", function() {
+        layui.use('layer', function () {
+            layer = layui.layer;
+            var fileObj = document.getElementById('user-pic-modify-file').files[0]; // js 获取文件对象
+            var url = "/user/modifyPic"; // 接收上传文件的后台地址
+            var form = new FormData();  // FormData 对象
+            form.append("userAccount", $("#loginUserAccount").val())
+            form.append("file", fileObj); // 文件对象
+            if (fileObj != null) {
+                var name = fileObj.name.split(".")
+                if (name[name.length - 1] != "jpg" && name[name.length - 1] != "png") {
+                    layer.confirm("导入失败,只支持jpg、png格式文件", {icon: 2}, function (index) {
+                        layer.close(index);
+                    });
+                    return
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: url,
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    layer.msg("头像修改成功", {icon: 1});
+                    getUserPicInTop()
+                },
+                error: function (err) {
+                    layer.msg("失败", {icon: 2});
+                }
+            });
+
+        })
+    });
+
 
     $(document).on("click", "#roleModifyApplyBtn", function () {
         layui.use('layer', function () {
@@ -36,7 +101,7 @@ $(function () {
                 yes: function (index) {
                     $.ajax({
                         url: "/apply/modifyRoleApply",
-                        data:  {
+                        data: {
                             "userAccount": $('#loginUserAccount').val(),
                             "newId": $("#role-modify-apply-select").val(),
                             "reason": $("#role-modify-apply-div .reason").val()
@@ -82,7 +147,7 @@ $(function () {
                 yes: function (index) {
                     $.ajax({
                         url: "/apply/modifySuperiorApply",
-                        data:  {
+                        data: {
                             "userAccount": $('#loginUserAccount').val(),
                             "newId": $("#superior-modify-apply-div .newId").val(),
                             "reason": $("#superior-modify-apply-div .reason").val()
@@ -126,18 +191,18 @@ $(function () {
             pageList: [10, 20, 30, 50],        //可供选择的每页的行数（*）
             uniqueId: "userId",         //隐藏的id
             // queryParamsType:'',
-            queryParams : function(params){
-                var temp={
+            queryParams: function (params) {
+                var temp = {
                     pageNumber: (params.offset / params.limit) + 1,     //页数
                     pageSize: params.limit,                             //每页的记录行数
-                    userName : $("#choose-superior-div .searchSuperiorName").val(),
-                    subordinateAccount : $("#loginUserAccount").val()
+                    userName: $("#choose-superior-div .searchSuperiorName").val(),
+                    subordinateAccount: $("#loginUserAccount").val()
                 };
                 return temp;
             },
-            responseHandler:function(res) {
+            responseHandler: function (res) {
                 return {
-                    "total":res.total,//总条目数
+                    "total": res.total,//总条目数
                     "rows": res.data //数据
                 }
             },
@@ -155,7 +220,7 @@ $(function () {
                     field: 'action',
                     title: '操作',
                     formatter: actionFormatter
-                }, ]
+                },]
         });
     }
 
@@ -170,35 +235,35 @@ $(function () {
     var layerSuperiorChoose;
 
     //打开上级选择遮罩层
-    $(document).on("click", "#superior-modify-apply-div .newName", function (){
+    $(document).on("click", "#superior-modify-apply-div .newName", function () {
         initSuperiorModifyTable()
-        var userId=$(this).parent().parent().attr("data-uniqueid");
+        var userId = $(this).parent().parent().attr("data-uniqueid");
         $("#choose-superior-div .subordinateId").val(userId);
         $("#superior-table").bootstrapTable('refresh');
-        layui.use('layer',function(){
-            layer=layui.layer;
+        layui.use('layer', function () {
+            layer = layui.layer;
 
             layerSuperiorChoose = layer.open({
                 type: 1,
-                zIndex:"1",
+                zIndex: "1",
                 title: '选择上级',
                 // area: ['800px'],
                 content: $('#choose-superior-div'),
-                cancel: function(index){
+                cancel: function (index) {
                     layer.close(index);
                 }
             })
         })
     });
 
-    $(document).on("click", ".chooseSuperior", function (){
-        var superiorId=$(this).parent().parent().attr("data-uniqueid");
+    $(document).on("click", ".chooseSuperior", function () {
+        var superiorId = $(this).parent().parent().attr("data-uniqueid");
         $("#superior-modify-apply-div .newName").val($(this).closest("tr").find("td").eq(1).text())
         $("#superior-modify-apply-div .newId").val(superiorId)
         layer.close(layerSuperiorChoose)
     });
 
-    $(document).on("input","#choose-superior-div .searchSuperiorName",function () {
+    $(document).on("input", "#choose-superior-div .searchSuperiorName", function () {
         $("#choose-superior-table").bootstrapTable('refresh');
     })
 

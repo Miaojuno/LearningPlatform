@@ -3,7 +3,6 @@ package xcj.hs.biz.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -35,6 +34,10 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
     return userService.create(newUser);
   }
 
+  public void modifyPic(String userAccount, byte[] pic) {
+    userService.modifyPic(userAccount, pic);
+  }
+
   public void modifyRole(String userAccount, String roleId) {
     userService.modifyRole(userAccount, roleId);
   }
@@ -62,6 +65,11 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
     }
     // 不把密码传输到前端
     userVo.setUserPwd("");
+
+    //没有头像时默认为superadmin头像
+    if (userVo.getPic() == null) {
+      userVo.setPic(userService.findByUserAccount("superadmin").getPic());
+    }
 
     return userVo;
   }
@@ -112,6 +120,10 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
 
   public UserVo findById(String userId) {
     return po2vo(userService.findById(userId));
+  }
+
+  public UserVo findByUserAccount(String userAccount) {
+    return po2vo(userService.findByUserAccount(userAccount));
   }
 
   public String getRoleName(String userAccount) {

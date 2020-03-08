@@ -24,6 +24,8 @@ public interface UserManager {
    */
   boolean register(UserVo userVo);
 
+  void modifyPic(String userAccount, byte[] pic);
+
   void modifyRole(String userAccount, String roleId);
 
   boolean updateSuperior(String subordinateId, String superiorId);
@@ -54,6 +56,8 @@ public interface UserManager {
   int getActiveUserNumber();
 
   UserVo findById(String userId);
+
+  UserVo findByUserAccount(String userAccount);
 
   /**
    * 根据用户账号获得角色名

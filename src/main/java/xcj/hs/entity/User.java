@@ -40,4 +40,7 @@ public class User {
 
     @Column( name = "GRADE")
     private String grade;
+
+    @Column( name = "PIC")
+    private byte[] pic;
 }

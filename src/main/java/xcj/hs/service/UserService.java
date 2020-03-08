@@ -23,6 +23,8 @@ public interface UserService {
      */
     boolean create(User newUser);
 
+    void modifyPic(String userAccount, byte[] pic);
+
     void modifyRole(String userAccount,String roleId);
 
     List<User> findAllActiveUser();

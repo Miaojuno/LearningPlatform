@@ -47,6 +47,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     return false;
   }
 
+  public void modifyPic(String userAccount, byte[] pic) {
+    userDao.modifyPicByUserAccount(userAccount, pic);
+  }
+
   public void modifyRole(String userAccount, String roleId) {
     userDao.modifyRoleIdByUserAccount(roleId, userAccount);
   }
