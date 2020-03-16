@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/js/user/user.js","/js/user/superior.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="题集"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
     <ul id="qs-tab" class="nav nav-tabs" role="tablist">

@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/js/role/role.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="角色"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
     <div class="searchdiv m-auto row">

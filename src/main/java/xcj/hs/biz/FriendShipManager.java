@@ -17,4 +17,10 @@ public interface FriendShipManager {
   List<FriendShipVo> findAllFriendActive(String userAccount);
 
   List<FriendShipVo> findAllFriendOnRequest(String userAccount);
+
+  void addMsg(String userAccount, String id, String msgContent);
+
+  void readMsg(String userAccount, String fsId);
+
+  FriendShipVo findById(String fsId);
 }

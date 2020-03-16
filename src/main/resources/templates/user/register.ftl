@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>RegisterPage</title>
+    <title>注册-学习平台</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>

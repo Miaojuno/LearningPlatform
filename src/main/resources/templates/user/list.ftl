@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/js/user/user.js","/js/user/superior.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="用户"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
     <div class="searchdiv m-auto row">

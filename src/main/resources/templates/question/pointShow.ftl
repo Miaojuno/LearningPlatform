@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/webjars/visjs/4.21.0/vis.js","/js/question/pointShow.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="知识点"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem;position: relative;">
     <div id="network_id" class="network"></div><!-- 拓扑图容器-->

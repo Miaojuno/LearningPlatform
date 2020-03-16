@@ -28,4 +28,10 @@ public interface FriendShipService {
    * @return
    */
   List<FriendShip> findFrinedsOnRequest(String userId);
+
+  void addMsg(String userId, String id, String msgContent);
+
+  void readMsg(String userId, String fsId);
+
+  FriendShip findById(String fsId);
 }

@@ -1,9 +1,9 @@
 <#--导航栏-->
-<#macro navhead importJs=[] importCss=[]>
+<#macro navhead importJs=[] importCss=[] titleName="首页">
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <title>Online Learning</title>
+        <title>${titleName}-学习平台</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
         <script src="/webjars/popper.js/1.14.4/umd/popper.js"></script>
@@ -47,10 +47,10 @@
                         </#if>
                         <div class="dropdown-menu">
                         <#--教师、领导、管理员-->
-                            <a class="dropdown-item" href="/user/list">用户管理</a>
+                            <a class="dropdown-item" target="_blank" href="/user/list">用户管理</a>
                         <#--管理员-->
                             <#if Session["loginUserRole"] == "管理员">
-                                <a class="dropdown-item" href="/role/list">角色管理</a>
+                                <a class="dropdown-item" target="_blank" href="/role/list">角色管理</a>
                             </#if>
                         </div>
 
@@ -65,7 +65,7 @@
                             审核
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/apply/superiorApplyReview">上级变更审核</a>
+                            <a class="dropdown-item" target="_blank" href="/apply/superiorApplyReview">上级变更审核</a>
                         </div>
                     </li>
                     </#if>
@@ -73,41 +73,42 @@
                 <#--学生-->
                     <#if Session["loginUserRole"] == "学生">
                     <li class="nav-item">
-                        <a class="nav-link" href="/record/doQuestion">去做题</a>
+                        <a class="nav-link" target="_blank" href="/record/doQuestion">去做题</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/questionSet/list">我的题集</a>
+                        <a class="nav-link" target="_blank" href="/questionSet/list">我的题集</a>
                     </li>
                     </#if>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/neo4jShow/pointShow">知识点查看</a>
+                        <a class="nav-link" target="_blank" href="/neo4jShow/pointShow">知识点查看</a>
                     </li>
 
                 <#--教师-->
                     <#if Session["loginUserRole"] == "教师">
                     <li class="nav-item">
-                        <a class="nav-link" href="/record/questionReview">去审阅</a>
+                        <a class="nav-link" target="_blank" href="/record/questionReview">去审阅</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             题目题集
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/neo/addQuestion">添加题目</a>
-                            <a class="dropdown-item" href="/questionSet/addQuestionSet">添加题集</a>
+                            <a class="dropdown-item" target="_blank" href="/neo/addQuestion">添加题目</a>
+                            <a class="dropdown-item" target="_blank" href="/questionSet/addQuestionSet">添加题集</a>
                         </div>
                     </li>
                     </#if>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/neo/excelupload">数据导入</a>
+                        <a class="nav-link" target="_blank" href="/neo/excelupload">数据导入</a>
                     </li>
                 <#--<li class="nav-item">-->
                 <#--<a class="nav-link" href="/neo/questionupload">题目导入</a>-->
                 <#--</li>-->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" style="padding-top: 0;padding-bottom: 0;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"
+                           style="padding-top: 0;padding-bottom: 0;">
                             <img class="img-fluid rounded" id="userPicInNavHead" style="height: 2.2rem;width: 2.2rem;">
                         </a>
                         <div class="dropdown-menu" style="left: -4.8rem;">
@@ -117,7 +118,7 @@
                             <a class="dropdown-item" href="#" id="supeiorModifyApplyBtn">上级变更申请</a>
                             </#if>
                             <a class="dropdown-item" href="#" id="userPicModifyBtn">修改头像</a>
-                            <a class="dropdown-item" href="/friendShip/main">我的好友</a>
+                            <a class="dropdown-item" target="_blank" href="/friendShip/main">我的消息</a>
                             <a class="dropdown-item" href="/user/logout">注销</a>
                         </div>
                     </li>

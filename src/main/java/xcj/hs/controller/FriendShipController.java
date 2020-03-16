@@ -19,6 +19,7 @@ public class FriendShipController {
 
   /**
    * 好友关系主界面
+   *
    * @param model
    * @return
    */
@@ -70,6 +71,39 @@ public class FriendShipController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("success", true);
     map.put("data", friendShipManager.findAllFriendOnRequest(userAccount));
+    return map;
+  }
+
+  /**
+   * addMsg
+   *
+   * @param userAccount
+   * @param id
+   * @param msgContent
+   * @return
+   */
+  @PostMapping("/addMsg")
+  @ResponseBody
+  public Map<String, Object> addMsg(String userAccount, String id, String msgContent) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    friendShipManager.addMsg(userAccount, id, msgContent);
+    map.put("success", true);
+    return map;
+  }
+
+  /**
+   * readMsg ，查看消息 用于未读数清空
+   *
+   * @param userAccount
+   * @param fsId
+   * @return
+   */
+  @PostMapping("/readMsg")
+  @ResponseBody
+  public Map<String, Object> readMsg(String userAccount, String fsId) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    friendShipManager.readMsg(userAccount, fsId);
+    map.put("success", true);
     return map;
   }
 }

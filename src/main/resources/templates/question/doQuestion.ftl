@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/js/question/doQuestion.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="做题"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
     <ul id="doQuetsion-tab" class="nav nav-tabs" role="tablist">

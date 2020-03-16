@@ -1,7 +1,7 @@
 <#import "/main/macros.ftl" as macros>
 <#assign importCss=[]>
 <#assign importJs=["/js/question/addQuestion.js"]>
-<@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
+<@macros.navhead importJs=importJs importCss=importCss titleName="添加题目"></@macros.navhead>
 
 <div class="main-contain addDiv" style="margin-top: 1rem">
 

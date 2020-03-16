@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>LoginPage</title>
+    <title>登录-学习平台</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -14,7 +14,7 @@
     <div class="container">
         <form id="form-login" action="/user/login" method="post">
             <div class="row">
-                <h3 class="text-center">xxxx系统</h3>
+                <h3 class="text-center">学习平台</h3>
             </div>
             <div class="row form-group">
                 <label class="control-label col-2" for="">账户</label>

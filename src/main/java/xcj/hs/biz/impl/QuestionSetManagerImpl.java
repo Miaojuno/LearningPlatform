@@ -40,9 +40,11 @@ public class QuestionSetManagerImpl extends BaseManagerImpl<QuestionSetVo, Quest
     // 计算该用户各个题集的做题数
     for (QuestionSetVo questionSetVo : questionSetVos) {
       int finishedNumber = 0;
-      for (String questionId : questionSetVo.getQuestionIds().split("、")) {
-        if (recordService.findByUserIdAndQuestionId(userId, questionId) != null) {
-          finishedNumber++;
+      if(StringUtils.isNotBlank(questionSetVo.getQuestionIds())){
+        for (String questionId : questionSetVo.getQuestionIds().split("、")) {
+          if (recordService.findByUserIdAndQuestionId(userId, questionId) != null) {
+            finishedNumber++;
+          }
         }
       }
       questionSetVo.setFinishedNumber(String.valueOf(finishedNumber));

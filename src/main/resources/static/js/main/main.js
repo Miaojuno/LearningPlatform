@@ -47,7 +47,6 @@ $(function () {
 
     //修改头像
     $(document).on("click", "#userPicModifyBtn", function () {
-        console.log(1)
         $("#user-pic-modify-file").click();
     })
 

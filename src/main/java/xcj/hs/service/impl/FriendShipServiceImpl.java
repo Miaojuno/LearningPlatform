@@ -1,12 +1,16 @@
 package xcj.hs.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.FriendShipDao;
 import xcj.hs.entity.FriendShip;
 import xcj.hs.service.FriendShipService;
 import xcj.hs.util.TimeUtil;
+import xcj.hs.vo.FriendShipMsg;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +51,7 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
             friendShip ->
                 "1".equals(friendShip.getFsUser1Active())
                     && "1".equals(friendShip.getFsUser2Active()))
-        .sorted((a, b) -> b.getFsLastTime().compareTo(a.getFsLastTime()))//降序
+        .sorted((a, b) -> b.getFsLastTime().compareTo(a.getFsLastTime())) // 降序
         .collect(Collectors.toList());
   }
 
@@ -62,7 +66,49 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
                     || (friendShip.getFsUser2().equals(userId)
                         && friendShip.getFsUser2Active() == null
                         && friendShip.getFsUser1Active() == "1"))
-        .sorted((a, b) -> b.getFsLastTime().compareTo(a.getFsLastTime()))//降序
+        .sorted((a, b) -> b.getFsLastTime().compareTo(a.getFsLastTime())) // 降序
         .collect(Collectors.toList());
+  }
+
+  public void addMsg(String userId, String id, String msgContent) {
+    FriendShip friendShip = friendShipDao.findById(id).get();
+    FriendShipMsg msg = new FriendShipMsg();
+    msg.setMsgTime(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
+    msg.setMsgUser(userId);
+    msg.setMsgContent(msgContent);
+    if (StringUtils.isBlank(friendShip.getFsMsgRecord())) { // 没记录
+      List<FriendShipMsg> msgs = new ArrayList<>();
+      msgs.add(msg);
+      friendShip.setFsMsgRecord(JSONArray.toJSONString(msgs));
+    } else { // 有记录
+      List msgs = new ArrayList<>();
+      JSONArray jsonArray = JSONArray.parseArray(friendShip.getFsMsgRecord());
+      for (Object it : jsonArray) {
+        msgs.add(it);
+      }
+      msgs.add(msg);
+      friendShip.setFsMsgRecord(JSONArray.toJSONString(msgs));
+    }
+    // 对方未读数＋1
+    if (friendShip.getFsUser1().equals(userId)) {
+      friendShip.setFsUnread2(String.valueOf(Integer.parseInt(friendShip.getFsUnread2()) + 1));
+    } else {
+      friendShip.setFsUnread1(String.valueOf(Integer.parseInt(friendShip.getFsUnread1()) + 1));
+    }
+    friendShipDao.save(friendShip);
+  }
+
+  public void readMsg(String userId, String fsId) {
+    FriendShip friendShip = friendShipDao.findById(fsId).get();
+    if (friendShip.getFsUser1().equals(userId)) {
+      friendShip.setFsUnread1("0");
+    } else {
+      friendShip.setFsUnread2("0");
+    }
+    friendShipDao.save(friendShip);
+  }
+
+  public FriendShip findById(String fsId) {
+    return friendShipDao.findById(fsId).get();
   }
 }

@@ -51,4 +51,17 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
     }
     return result;
   }
+
+  public void addMsg(String userAccount, String id, String msgContent) {
+    friendShipService.addMsg(
+        userService.findByUserAccount(userAccount).getUserId(), id, msgContent);
+  }
+
+  public void readMsg(String userAccount, String fsId) {
+    friendShipService.readMsg(userService.findByUserAccount(userAccount).getUserId(), fsId);
+  }
+
+  public FriendShipVo findById(String fsId) {
+    return po2vo(friendShipService.findById(fsId));
+  }
 }
