@@ -11,6 +11,7 @@ import xcj.hs.service.NeoService;
 import xcj.hs.service.RecordService;
 import xcj.hs.service.UserService;
 import xcj.hs.util.TimeUtil;
+import xcj.hs.vo.NameValueVo;
 import xcj.hs.vo.QuestionVo;
 import xcj.hs.vo.RecordVo;
 
@@ -29,7 +30,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
 
   @Override
   public RecordVo po2vo(Record record) {
-    if(record==null) return null;
+    if (record == null) return null;
     RecordVo recordVo = super.po2vo(record);
     QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
     recordVo.setQuestionDetail(questionVo.getQuestionDetail());
@@ -107,6 +108,82 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     map.put("nums", nums);
     map.put("rates", rates);
     return map;
+  }
+
+  public List<NameValueVo> getErrorCountGroupByKind(String userAccount) {
+    List<NameValueVo> result = new ArrayList<>();
+    List<RecordVo> recordVos =
+        po2vo(recordService.findByUserId(userService.findByUserAccount(userAccount).getUserId()));
+
+    Map<String, List<RecordVo>> recordVoGroupMap =
+        recordVos.stream()
+            .map(
+                recordVo -> {
+                  QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
+                  recordVo.setQuestionType(questionVo.getType());
+                  recordVo.setQuestionScore(questionVo.getScore());
+                  return recordVo;
+                })
+            .collect(Collectors.groupingBy(recordVo -> recordVo.getQuestionType()));
+
+    for (Map.Entry<String, List<RecordVo>> entry : recordVoGroupMap.entrySet()) {
+      NameValueVo nameValueVo = new NameValueVo();
+      nameValueVo.setName(entry.getKey());
+      nameValueVo.setValue(
+          String.valueOf(
+              entry.getValue().stream()
+                  .mapToDouble(
+                      recordVo -> {
+                        if (StringUtils.isBlank(recordVo.getScore())
+                            || recordVo.getQuestionScore().equals(recordVo.getScore())) return 0;
+                        else if (recordVo.getScore().equals("0")) return 1;
+                        else return 0.5;
+                      })
+                  .sum()));
+      result.add(nameValueVo);
+    }
+
+    return result;
+  }
+
+  public Map<String, Object> getRecordByDiff(String userAccount) {
+    Map<String, Object> map = new HashMap<>();
+    List<RecordVo> recordVos =
+        po2vo(recordService.findByUserId(userService.findByUserAccount(userAccount).getUserId()));
+    Map<String, List<RecordVo>> recordVoGroupMap =
+        recordVos.stream()
+            .map(
+                recordVo -> {
+                  QuestionVo questionVo = neoService.findByQuestionId(recordVo.getQuestionId());
+                  recordVo.setQuestionDiff(diffConversion(questionVo.getDifficultyDistribution()));
+                  recordVo.setQuestionScore(questionVo.getScore());
+                  return recordVo;
+                })
+            .collect(Collectors.groupingBy(recordVo -> recordVo.getQuestionDiff()));
+    Double allNumber = Double.valueOf(recordVos.stream().count());
+    for (Map.Entry<String, List<RecordVo>> entry : recordVoGroupMap.entrySet()) {
+      Map<String, Double> aMap = new HashMap<>();
+      aMap.put(
+          "correctRate",
+          entry.getValue().stream()
+              .mapToDouble(
+                  recordVo -> {
+                    if (StringUtils.isBlank(recordVo.getScore()) || recordVo.getScore().equals("0"))
+                      return 0;
+                    else if (recordVo.getQuestionScore().equals(recordVo.getScore())) return 1;
+                    else return 0.5;
+                  })
+              .sum());
+      aMap.put("numberRate", entry.getValue().stream().count() / allNumber);
+      map.put(entry.getKey(), aMap);
+    }
+    return map;
+  }
+
+//  难度名转换
+  private String diffConversion(String diff) {
+    if (StringUtils.isBlank(diff)) return "diff1";
+    else return "diff" + diff;
   }
 
   public RecordVo findByUserAccountAndQuestionId(String userAccount, String questionId) {

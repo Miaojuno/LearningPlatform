@@ -1,4 +1,5 @@
 $(function () {
+    //按照知识点做题时，隐藏tab栏
     var url = location.search;
     var nodeId;
     if (url.indexOf("?") != -1) {

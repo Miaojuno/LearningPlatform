@@ -1,0 +1,84 @@
+.friend-div {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.friendList {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.friend-tab {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #d9dde1;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.lastTime {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    color: #61a1a1;
+}
+
+.unreadNum {
+    position: absolute;
+    right: 1rem;
+    bottom: -1rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 0.8rem;
+    background-color: rgba(236, 4, 7, 0.61);
+    font-size: 0.2rem;
+    color: white;
+}
+
+.content-div {
+
+}
+
+.content-top {
+    background-color: #f6f6f6;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 1rem;
+    /*border-bottom: 1px solid #bdbdbd;*/
+}
+
+.content-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.content-bottom input {
+    margin-left: 1rem;
+}
+
+.choosed-friend {
+    background-color: #f6f6f6;
+}
+
+.msg-tab .msg {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.msg-l .msg {
+    float: left;
+    margin-left: 1rem;
+    background-color: #c8c9ca;
+}
+
+.msg-r .msg {
+    margin-right: 1rem;
+    float: right;
+    color: white;
+    background-color: #1882c6;
+}
+
+.msg span{
+    word-break:break-all;
+}

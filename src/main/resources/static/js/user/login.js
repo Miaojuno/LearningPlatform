@@ -48,24 +48,24 @@ $(function () {
                 layer.msg("两次密码不一致", {icon: 2});
                 return;
             }
-            $.ajax({
-                url: "/user/register",
-                data: $("#form-register").serialize(),
-                dataType: "json",
-                type: "post",
-                success: function (result) {
-                    if (result.success == true) {
-                        layer.msg("注册成功，跳转中。。。", {icon: 1});
-                        setTimeout(function () {
-                            location.href = "/";
-                        }, 1500)
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-                    }
-                },
-                error: function (result) {
-                }
-            })
+            // $.ajax({
+            //     url: "/user/register",
+            //     data: $("#form-register").serialize(),
+            //     dataType: "json",
+            //     type: "post",
+            //     success: function (result) {
+            //         if (result.success == true) {
+            //             layer.msg("注册成功，跳转中。。。", {icon: 1});
+            //             setTimeout(function () {
+            //                 location.href = "/";
+            //             }, 1500)
+            //         } else {
+            //             layer.msg(result.msg, {icon: 2});
+            //         }
+            //     },
+            //     error: function (result) {
+            //     }
+            // })
         })
     });
 })

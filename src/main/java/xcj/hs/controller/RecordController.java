@@ -110,6 +110,44 @@ public class RecordController {
   }
 
   /**
+   * 获取三种类型题目错误数
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping("/getErrorCountGroupByKind")
+  @ResponseBody
+  public Map<String, Object> getErrorCountGroupByKind(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<>();
+
+    map.put(
+        "data",
+        recordManager.getErrorCountGroupByKind(
+            (String) request.getSession().getAttribute("loginUserAccount")));
+    map.put("success", true);
+    return map;
+  }
+
+  /**
+   * getRecordByDiff
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping("/getRecordByDiff")
+  @ResponseBody
+  public Map<String, Object> getRecordByDiff(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<>();
+
+    map.put(
+            "data",
+            recordManager.getRecordByDiff(
+                    (String) request.getSession().getAttribute("loginUserAccount")));
+    map.put("success", true);
+    return map;
+  }
+
+  /**
    * findByUserAccountAndQuestionId
    *
    * @param userAccount
@@ -121,13 +159,12 @@ public class RecordController {
   public Map<String, Object> findReofindByUserAccountAndQuestionIdcrd(
       String userAccount, String questionId) {
     Map<String, Object> map = new HashMap<>();
-    RecordVo recordVo=recordManager.findByUserAccountAndQuestionId(userAccount, questionId);
-    if(recordVo!=null){
-      map.put("data",recordVo );
+    RecordVo recordVo = recordManager.findByUserAccountAndQuestionId(userAccount, questionId);
+    if (recordVo != null) {
+      map.put("data", recordVo);
       map.put("success", true);
-    }
-    else {
-      map.put("msg","不存在" );
+    } else {
+      map.put("msg", "不存在");
       map.put("success", false);
     }
     return map;

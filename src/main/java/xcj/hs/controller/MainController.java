@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class MainController {
 
@@ -15,8 +17,12 @@ public class MainController {
    * @return
    */
   @GetMapping("/")
-  public String loginPage(Model model) {
-    return "user/login";
+  public String loginPage(HttpServletRequest request, Model model) {
+    if (request.getSession().getAttribute("loginUserAccount") == null) {
+      return "user/login";
+    } else {
+      return "index";
+    }
   }
 
   @GetMapping("/gologin")

@@ -34,4 +34,8 @@ public class RecordServiceImpl extends BaseServiceImpl<Record> implements Record
     return recordDao.findByDateGreaterThanAndUserIdContaining(
         TimeUtil.getSpecifiedTimeStr(TimeUtil.DATESTR, -14) + "000000", userId);
   }
+
+  public List<Record> findByUserId(String userId) {
+    return recordDao.findByUserIdContaining(userId);
+  }
 }

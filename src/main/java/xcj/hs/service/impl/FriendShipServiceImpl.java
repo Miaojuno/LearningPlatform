@@ -95,6 +95,8 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
     } else {
       friendShip.setFsUnread1(String.valueOf(Integer.parseInt(friendShip.getFsUnread1()) + 1));
     }
+    // 更新时间
+    friendShip.setFsLastTime(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
     friendShipDao.save(friendShip);
   }
 

@@ -1,7 +1,9 @@
 package xcj.hs.biz;
 
+import xcj.hs.vo.NameValueVo;
 import xcj.hs.vo.RecordVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface RecordManager {
@@ -22,6 +24,10 @@ public interface RecordManager {
    * @return
    */
   Map<String, Object> get15daysRecordData(String userAccount);
+
+  List<NameValueVo> getErrorCountGroupByKind(String userAccount);
+
+  Map<String, Object> getRecordByDiff(String userAccount);
 
   RecordVo findByUserAccountAndQuestionId(String userAccount, String questionId);
 }

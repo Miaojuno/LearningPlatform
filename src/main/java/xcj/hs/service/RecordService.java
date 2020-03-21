@@ -7,10 +7,11 @@ import java.util.List;
 public interface RecordService {
   void save(Record record);
 
-  Record findByUserIdAndQuestionId(String userId,String questionId);
+  Record findByUserIdAndQuestionId(String userId, String questionId);
 
   /**
    * 根据userId获取一个当前用户需要审核的record;
+   *
    * @param userId
    * @return
    */
@@ -18,8 +19,11 @@ public interface RecordService {
 
   /**
    * 获取最近15日记录（前14天以及当天）
+   *
    * @param userId
    * @return
    */
   List<Record> get15daysRecords(String userId);
+
+  List<Record> findByUserId(String userId);
 }
