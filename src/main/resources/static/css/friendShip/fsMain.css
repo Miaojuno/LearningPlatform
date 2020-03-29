@@ -79,6 +79,17 @@
     background-color: #1882c6;
 }
 
-.msg span{
-    word-break:break-all;
+.msg span {
+    word-break: break-all;
+}
+
+#pic-send-icon {
+    height: 2rem;
+    width: 3rem;
+    margin-top: 0.1rem;
+    margin-left: 1.5rem;
+}
+
+.pic-div :hover{
+    cursor:pointer
 }

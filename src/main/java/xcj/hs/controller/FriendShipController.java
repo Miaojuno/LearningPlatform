@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import xcj.hs.biz.FriendShipManager;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,9 +86,15 @@ public class FriendShipController {
    */
   @PostMapping("/addMsg")
   @ResponseBody
-  public Map<String, Object> addMsg(String userAccount, String id, String msgContent) {
+  public Map<String, Object> addMsg(
+      String userAccount, String id, String msgContent, MultipartFile file) throws IOException {
     Map<String, Object> map = new HashMap<String, Object>();
-    friendShipManager.addMsg(userAccount, id, msgContent);
+    if (file != null) {
+      friendShipManager.addMsg(userAccount, id, msgContent, file.getBytes());
+    } else {
+      friendShipManager.addMsg(userAccount, id, msgContent, null);
+    }
+
     map.put("success", true);
     return map;
   }
@@ -119,6 +127,21 @@ public class FriendShipController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("success", true);
     map.put("data", friendShipManager.haveNewMsg(userAccount));
+    return map;
+  }
+
+  /**
+   * 根据图片id加载图片
+   *
+   * @param imgId
+   * @return
+   */
+  @PostMapping("/getPic")
+  @ResponseBody
+  public Map<String, Object> getPic(String imgId) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("success", true);
+    map.put("data", friendShipManager.getPic(imgId));
     return map;
   }
 }

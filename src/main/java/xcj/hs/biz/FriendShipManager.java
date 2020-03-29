@@ -1,5 +1,6 @@
 package xcj.hs.biz;
 
+import xcj.hs.entity.Img;
 import xcj.hs.vo.FriendShipVo;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public interface FriendShipManager {
 
   List<FriendShipVo> findAllFriendOnRequest(String userAccount);
 
-  void addMsg(String userAccount, String id, String msgContent);
+  void addMsg(String userAccount, String id, String msgContent,byte[] imgContent);
 
   void readMsg(String userAccount, String fsId);
 
   FriendShipVo findById(String fsId);
 
   boolean haveNewMsg(String userAccount);
+
+  Img getPic(String id);
 }

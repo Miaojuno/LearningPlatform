@@ -29,7 +29,7 @@ public interface FriendShipService {
    */
   List<FriendShip> findFrinedsOnRequest(String userId);
 
-  void addMsg(String userId, String id, String msgContent);
+  void addMsg(String userId, String id, String msgContent,byte[] imgContent);
 
   void readMsg(String userId, String fsId);
 

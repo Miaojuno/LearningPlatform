@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import xcj.hs.dao.FriendShipDao;
 import xcj.hs.entity.FriendShip;
 import xcj.hs.service.FriendShipService;
+import xcj.hs.service.ImgService;
 import xcj.hs.service.NewMsgService;
 import xcj.hs.util.TimeUtil;
 import xcj.hs.vo.FriendShipMsg;
@@ -22,6 +23,9 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   @Autowired FriendShipDao friendShipDao;
 
   @Autowired NewMsgService newMsgService;
+
+  @Autowired
+  ImgService imgService;
 
   public void activeShip(String userId1, String userId2) {
     FriendShip friendShip1 = friendShipDao.findByFsUser1AndFsUser2(userId1, userId2);
@@ -73,13 +77,20 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
         .collect(Collectors.toList());
   }
 
-  public void addMsg(String userId, String id, String msgContent) {
+  public void addMsg(String userId, String id, String msgContent,byte[] imgContent) {
     newMsgService.addNumber(userId, 1);
     FriendShip friendShip = friendShipDao.findById(id).get();
     FriendShipMsg msg = new FriendShipMsg();
     msg.setMsgTime(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
     msg.setMsgUser(userId);
-    msg.setMsgContent(msgContent);
+    if(StringUtils.isNotBlank(msgContent)){
+      msg.setMsgContent(msgContent);
+      msg.setMsgType("text");
+    }
+    else {
+      msg.setMsgContent(imgService.save(imgContent));
+      msg.setMsgType("img");
+    }
     if (StringUtils.isBlank(friendShip.getFsMsgRecord())) { // 没记录
       List<FriendShipMsg> msgs = new ArrayList<>();
       msgs.add(msg);

@@ -318,12 +318,44 @@ $(function () {
                 //当前选中的话，将消息添加至聊天框
                 if ($(".choosed-friend").attr("id").substring(4) == fsData.fsId) {
                     var rocordData = eval(fsData.fsMsgRecord).pop();
-                    $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
-                        "                    <div class='col-6'> " +
-                        "                       <div class='msg'><span>" + rocordData.msgContent + "</span></div>" +
-                        "                    </div>" +
-                        "                    <div class='col-6'></div>\n" +
-                        "                </div>")
+                    if(rocordData.msgType="img"){
+                        $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
+                            "                    <div class='col-8'>\n" +
+                            "                       <div class='msg msg-pic-div' id='pic-"+rocordData.msgContent+"'>" +
+                            "                       </div>" +
+                            "                    </div>" +
+                            "                    <div class='col-4'></div>\n" +
+                            "                </div>")
+                        //异步加载图片
+                        $.ajax({
+                            url: "/friendShip/getPic",
+                            data: {
+                                "imgId": rocordData.msgContent
+                            },
+                            dataType: "json",
+                            type: "post",
+                            success: function (result) {
+                                if (result.success == true) {
+                                    $("#pic-"+result.data.imgId).append("<img class='friendPic rounded' style='max-width: 20rem' " +
+                                        "src='data:image/jpeg;base64," + result.data.imgContent + "'>")
+                                    $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
+                                } else {
+                                    layer.msg(result.msg, {icon: 2});
+                                }
+                            },
+                            error: function (result) {
+                            }
+                        })
+                    }
+                    else {
+                        $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
+                            "                    <div class='col-6'> " +
+                            "                       <div class='msg'><span>" + rocordData.msgContent + "</span></div>" +
+                            "                    </div>" +
+                            "                    <div class='col-6'></div>\n" +
+                            "                </div>")
+                    }
+
                     $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
                 }
             }

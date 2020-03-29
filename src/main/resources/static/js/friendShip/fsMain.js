@@ -66,20 +66,61 @@ $(function () {
         var data = eval($(".choosed-friend .rowData").val())
         var friendId = $(".choosed-friend .friendId").val()
         for (i in data) {
-            if (friendId != data[i].msgUser) {//我的消息
-                $(".content-top").append("<div class='row msg-tab msg-r'>\n" +
-                    "                    <div class='col-4'></div>\n" +
-                    "                    <div class='col-8'>" +
-                    "                       <div class='msg'><span>" + data[i].msgContent + "</span></div>" +
-                    "                    </div>" +
-                    "                </div>")
-            } else {//对方的消息
-                $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
-                    "                    <div class='col-8'> " +
-                    "                       <div class='msg'><span>" + data[i].msgContent + "</span></div>" +
-                    "                    </div>" +
-                    "                    <div class='col-4'></div>\n" +
-                    "                </div>")
+            if(data[i].msgType=="img"){//图片类型消息
+                if (friendId != data[i].msgUser) {//我的消息
+                    $(".content-top").append("<div class='row msg-tab msg-r'>\n" +
+                        "                    <div class='col-4'></div>\n" +
+                        "                    <div class='col-8'>\n" +
+                        "                       <div class='msg msg-pic-div' id='pic-"+data[i].msgContent+"'>" +
+                        "                       </div>" +
+                        "                    </div>" +
+                        "                </div>")
+                } else {//对方的消息
+                    $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
+                        "                    <div class='col-8'>\n" +
+                        "                       <div class='msg msg-pic-div' id='pic-"+data[i].msgContent+"'>" +
+                        "                       </div>" +
+                        "                    </div>" +
+                        "                    <div class='col-4'></div>\n" +
+                        "                </div>")
+                }
+                //异步加载图片
+                $.ajax({
+                    url: "/friendShip/getPic",
+                    data: {
+                        "imgId": data[i].msgContent
+                    },
+                    dataType: "json",
+                    type: "post",
+                    success: function (result) {
+                        if (result.success == true) {
+                            $("#pic-"+result.data.imgId).append("<img class='friendPic rounded' style='max-width: 20rem' " +
+                                "src='data:image/jpeg;base64," + result.data.imgContent + "'>")
+                            $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
+                        } else {
+                            layer.msg(result.msg, {icon: 2});
+                        }
+                    },
+                    error: function (result) {
+                    }
+                })
+            }
+            else{//文字类型消息
+                if (friendId != data[i].msgUser) {//我的消息
+                    $(".content-top").append("<div class='row msg-tab msg-r'>\n" +
+                        "                    <div class='col-4'></div>\n" +
+                        "                    <div class='col-8'>" +
+                        "                       <div class='msg'><span>" + data[i].msgContent + "</span></div>" +
+                        "                    </div>" +
+                        "                </div>")
+                } else {//对方的消息
+                    $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
+                        "                    <div class='col-8'> " +
+                        "                       <div class='msg'><span>" + data[i].msgContent + "</span></div>" +
+                        "                    </div>" +
+                        "                    <div class='col-4'></div>\n" +
+                        "                </div>")
+                }
             }
         }
         $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
@@ -109,16 +150,26 @@ $(function () {
         $(".choosed-friend .unreadNum").remove()
     })
 
+    //选择图片 立即发送
+    $('#pic-send-icon').on('click', function () {
+        $("#picFile").click()
+    });
+    $("#picFile").bind("input propertychange", function () {
+        if($("#picFile").val()!=""){
+            sendPicMessage()
+        }
+    });
+
+    // 发送消息
+    $(".sendBtn").on("click", function (event) {
+        sendMessage();
+    });
+
     // 回车发送消息
     $(".in-msg").keyup(function (event) {
         if (event.keyCode == 13) {
             sendMessage();
         }
-    });
-
-    // 回车发送消息
-    $(".sendBtn").on("click", function (event) {
-        sendMessage();
     });
 
     function sendMessage() {
@@ -134,8 +185,8 @@ $(function () {
             success: function (result) {
                 if (result.success == true) {
                     $(".content-top").append("<div class='row msg-tab msg-r'>\n" +
-                        "                    <div class='col-8'></div>\n" +
-                        "                    <div class='col-4'>" +
+                        "                    <div class='col-4'></div>\n" +
+                        "                    <div class='col-8'>" +
                         "                       <div class='msg'><span>" + $(".in-msg").val() + "</span></div>" +
                         "                    </div>" +
                         "                </div>")
@@ -167,6 +218,85 @@ $(function () {
             error: function (result) {
             }
         })
+    }
+
+    var picDivId=0
+
+    function sendPicMessage() {
+        var fileObj = document.getElementById('picFile').files[0]; // js 获取文件对象
+        var form = new FormData();  // FormData 对象
+        form.append("userAccount", $("#loginUserAccount").val())
+        form.append("id", $(".choosed-friend").attr("id").substring(4))
+        form.append("msgContent", "")
+        form.append("file", fileObj); // 文件对象
+        $.ajax({
+            url: "/friendShip/addMsg",
+            data: form,
+            dataType: "json",
+            type: "post",
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result.success == true) {
+                    var reads= new FileReader();
+                    reads.readAsDataURL(fileObj);
+
+                    reads.onload=function (e) {
+                        $(".content-top").append("<div class='row msg-tab msg-r'>\n" +
+                            "                    <div class='col-4'></div>\n" +
+                            "                    <div class='col-8'>\n" +
+                            "                       <div id='picId-"+picDivId+"' class='msg msg-pic-div' " +
+                            "                       </div>" +
+                            "                    </div>" +
+                            "                </div>")
+                        $("#picId-"+picDivId).append("<img class='friendPic rounded' style='max-width: 20rem' " +
+                            "src='" + this.result + "'>")
+                        picDivId=picDivId+1
+                        $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
+                    };
+
+                    $(".in-msg").val("")
+                    $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
+                    $("#picFile").val("")
+                    //通知对方
+                    $.ajax({
+                        url: "/ws/chat/messageRecordUpload",
+                        data: {
+                            "fsId": $(".choosed-friend").attr("id").substring(4),
+                            "toAccount": $(".choosed-friend .friendAccount").val()
+                        },
+                        dataType: "json",
+                        type: "post",
+                        success: function (result) {
+                            if (result.success == true) {
+
+                            } else {
+                                layer.msg(result.msg, {icon: 2});
+                            }
+                        },
+                        error: function (result) {
+                        }
+                    })
+                } else {
+                    layer.msg(result.msg, {icon: 2});
+                }
+            },
+            error: function (result) {
+            }
+        })
+    }
+    function getObjectURL(file) {
+        var url = null;
+        /* window.URL = window.URL || window.webkitURL;*/
+
+        if (window.createObjcectURL != undefined) {
+            url = window.createOjcectURL(file);
+        } else if (window.URL != undefined) {
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
     }
 
     //后端返回时间转换为显示时间

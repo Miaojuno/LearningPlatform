@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 import xcj.hs.biz.FriendShipManager;
 import xcj.hs.biz.UserManager;
 import xcj.hs.entity.FriendShip;
+import xcj.hs.entity.Img;
 import xcj.hs.entity.NewMsg;
 import xcj.hs.service.FriendShipService;
+import xcj.hs.service.ImgService;
 import xcj.hs.service.NewMsgService;
 import xcj.hs.service.UserService;
 import xcj.hs.vo.FriendShipVo;
@@ -23,6 +25,9 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
   @Autowired UserService userService;
 
   @Autowired NewMsgService newMsgService;
+
+  @Autowired
+  ImgService imgService;
 
   public void activeShip(String userAccount1, String userAccount2) {
     friendShipService.activeShip(
@@ -56,9 +61,9 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
     return result;
   }
 
-  public void addMsg(String userAccount, String id, String msgContent) {
+  public void addMsg(String userAccount, String id, String msgContent,byte[] imgContent) {
     friendShipService.addMsg(
-        userService.findByUserAccount(userAccount).getUserId(), id, msgContent);
+        userService.findByUserAccount(userAccount).getUserId(), id, msgContent,imgContent);
   }
 
   public void readMsg(String userAccount, String fsId) {
@@ -74,5 +79,9 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
         newMsgService.findByUserId(userService.findByUserAccount(userAccount).getUserId());
     if (newMsg == null || newMsg.getNmNumber().equals("0")) return false;
     else return true;
+  }
+
+  public Img getPic(String id){
+    return imgService.findById(id);
   }
 }
