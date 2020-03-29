@@ -10,7 +10,7 @@ import java.util.List;
 public interface NeoService {
   String excelUpload(MultipartFile file);
 
-  QuestionVo getRandomQuestion(String userAccount, String pointId);
+  QuestionVo getRandomQuestion(String userAccount, String pointId, String diff, String type);
 
   QuestionVo findByQuestionId(String id);
 

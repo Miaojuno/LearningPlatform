@@ -106,4 +106,19 @@ public class FriendShipController {
     map.put("success", true);
     return map;
   }
+
+  /**
+   * haveNewMsg ，查看是否有新消息
+   *
+   * @param userAccount
+   * @return
+   */
+  @PostMapping("/haveNewMsg")
+  @ResponseBody
+  public Map<String, Object> haveNewMsg(String userAccount) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("success", true);
+    map.put("data", friendShipManager.haveNewMsg(userAccount));
+    return map;
+  }
 }

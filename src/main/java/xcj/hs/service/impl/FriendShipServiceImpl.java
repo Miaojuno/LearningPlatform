@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import xcj.hs.dao.FriendShipDao;
 import xcj.hs.entity.FriendShip;
 import xcj.hs.service.FriendShipService;
+import xcj.hs.service.NewMsgService;
 import xcj.hs.util.TimeUtil;
 import xcj.hs.vo.FriendShipMsg;
 
@@ -19,6 +20,8 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
     implements FriendShipService {
 
   @Autowired FriendShipDao friendShipDao;
+
+  @Autowired NewMsgService newMsgService;
 
   public void activeShip(String userId1, String userId2) {
     FriendShip friendShip1 = friendShipDao.findByFsUser1AndFsUser2(userId1, userId2);
@@ -71,6 +74,7 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   }
 
   public void addMsg(String userId, String id, String msgContent) {
+    newMsgService.addNumber(userId, 1);
     FriendShip friendShip = friendShipDao.findById(id).get();
     FriendShipMsg msg = new FriendShipMsg();
     msg.setMsgTime(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
@@ -103,8 +107,10 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   public void readMsg(String userId, String fsId) {
     FriendShip friendShip = friendShipDao.findById(fsId).get();
     if (friendShip.getFsUser1().equals(userId)) {
+      newMsgService.addNumber(userId, Integer.parseInt(friendShip.getFsUnread1()));
       friendShip.setFsUnread1("0");
     } else {
+      newMsgService.addNumber(userId, Integer.parseInt(friendShip.getFsUnread2()));
       friendShip.setFsUnread2("0");
     }
     friendShipDao.save(friendShip);
@@ -113,4 +119,5 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   public FriendShip findById(String fsId) {
     return friendShipDao.findById(fsId).get();
   }
+
 }

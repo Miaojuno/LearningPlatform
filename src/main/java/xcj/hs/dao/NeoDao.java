@@ -10,7 +10,7 @@ public interface NeoDao {
 
   String excelUpload(MultipartFile file);
 
-  Question getRandomQuestion(String pointId);
+  Question getRandomQuestion(String pointId,String diff,String type);
 
   Question findByQuestionId(String id);
 

@@ -80,3 +80,20 @@ textarea {
     border-radius: 10px;
     background   : white;
 }
+span4msg {
+    color: white;
+    transform: scale(0.6);
+    background-color: red;
+    padding: 0 0.1rem;
+    border-radius: 0.1rem;
+}
+
+.spanInPic {
+    position: absolute;
+    right: 1rem;
+    bottom: -0.3rem;
+}
+.spanInTab{
+    font-size: 0.5rem;
+    margin-left: 1rem;
+}

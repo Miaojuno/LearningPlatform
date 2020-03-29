@@ -184,55 +184,5 @@ $(function () {
         return time;
     }
 
-    // websocket
-    var socket;
-    if (typeof (WebSocket) == "undefined") {
-        console.log("浏览器不支持WebSocket");
-    } else {
 
-        socket = new WebSocket("ws://localhost:8080/webSocket/chatModule?userAccount=" + $("#loginUserAccount").val());
-        //连接打开事件
-        socket.onopen = function () {
-            // socket.send($("#loginUserAccount").val() + "已连接");
-        };
-        //收到消息事件
-        socket.onmessage = function (msg) {
-            var fsData = JSON.parse(msg.data)
-            //添加未读
-            if ($("#tab-" + fsData.fsId + " .unreadNum").length > 0) {
-                $("#tab-" + fsData.fsId + " .unreadNum").text(eval($("#tab-" + fsData.fsId + " .unreadNum").text()) + 1)
-            }
-            else {
-                $("#tab-" + fsData.fsId + " .tab-right").append("<p class='unreadNum text-center'>" + 1 + "</p>\n")
-            }
-            //添加消息
-            $("#tab-" + fsData.fsId + " .rowData").val(fsData.fsMsgRecord)
-            //当前选中的话，将消息添加至聊天框
-            if ($(".choosed-friend").attr("id").substring(4) == fsData.fsId) {
-                var rocordData = eval(fsData.fsMsgRecord).pop();
-                $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
-                    "                    <div class='col-6'> " +
-                    "                       <div class='msg'><span>" + rocordData.msgContent + "</span></div>" +
-                    "                    </div>" +
-                    "                    <div class='col-6'></div>\n" +
-                    "                </div>")
-                $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
-            }
-        };
-
-
-        //连接关闭事件
-        socket.onclose = function () {
-            // console.log("Socket已关闭");
-        };
-        //发生了错误事件
-        socket.onerror = function () {
-            alert("Socket发生了错误");
-        }
-
-        //窗口关闭时，关闭连接
-        window.unload = function () {
-            socket.close();
-        };
-    }
 })

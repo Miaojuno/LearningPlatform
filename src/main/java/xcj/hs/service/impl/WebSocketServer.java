@@ -17,7 +17,7 @@ public class WebSocketServer {
 
   @PostConstruct
   public void init() {
-    System.out.println("websocket 加载");
+    log.info("websocket 加载");
   }
 
   private static final AtomicInteger OnlineCount = new AtomicInteger(0);
@@ -101,14 +101,13 @@ public class WebSocketServer {
     Session session = null;
     for (Session s : SessionSet) {
       if (s.getQueryString().split("=")[1].equals(userAccount)) {
-        session = s;
-        break;
+          SendMessage(s, message);
       }
     }
-    if (session != null) {
-      SendMessage(session, message);
-    } else {
-      log.warn("没有找到你指定账户的会话：{}", userAccount);
-    }
+//    if (session != null) {
+//      SendMessage(session, message);
+//    } else {
+//      log.warn("没有找到你指定账户的会话：{}", userAccount);
+//    }
   }
 }

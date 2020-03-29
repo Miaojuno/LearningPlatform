@@ -124,11 +124,12 @@ public class NeoController {
    */
   @PostMapping("/getRandomQuestion")
   @ResponseBody
-  public Map<String, Object> getRandomQuestion(HttpServletRequest request, String pointId) {
+  public Map<String, Object> getRandomQuestion(
+      HttpServletRequest request, String pointId, String diff, String type) {
     Map<String, Object> resultMap = new HashMap();
     QuestionVo questionVo =
         neoService.getRandomQuestion(
-            (String) request.getSession().getAttribute("loginUserAccount"), pointId);
+            (String) request.getSession().getAttribute("loginUserAccount"), pointId, diff, type);
     if (questionVo != null) {
       resultMap.put("data", questionVo);
       resultMap.put("success", true);

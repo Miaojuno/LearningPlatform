@@ -26,15 +26,15 @@ public class NeoServiceImpl implements NeoService {
     return neoDao.excelUpload(file);
   }
 
-  public QuestionVo getRandomQuestion(String userAccount, String pointId) {
+  public QuestionVo getRandomQuestion(String userAccount, String pointId,String diff,String type) {
     String userId = userService.findByUserAccount(userAccount).getUserId();
-    Question question = neoDao.getRandomQuestion(pointId);
+    Question question = neoDao.getRandomQuestion(pointId,diff,type);
     // 只获取该用户没做过的题目
     int tryTimes = 0;
     while (question != null
         && recordService.findByUserIdAndQuestionId(userId, question.getQuestionId()) != null
         && tryTimes < 100) {
-      question = neoDao.getRandomQuestion(pointId);
+      question = neoDao.getRandomQuestion(pointId,diff,type);
       tryTimes++;
     }
     if (tryTimes == 100 || question == null) return null;

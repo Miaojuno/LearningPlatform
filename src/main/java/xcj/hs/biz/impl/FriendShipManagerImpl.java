@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import xcj.hs.biz.FriendShipManager;
 import xcj.hs.biz.UserManager;
 import xcj.hs.entity.FriendShip;
+import xcj.hs.entity.NewMsg;
 import xcj.hs.service.FriendShipService;
+import xcj.hs.service.NewMsgService;
 import xcj.hs.service.UserService;
 import xcj.hs.vo.FriendShipVo;
 
@@ -19,6 +21,8 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
   @Autowired UserManager userManager;
 
   @Autowired UserService userService;
+
+  @Autowired NewMsgService newMsgService;
 
   public void activeShip(String userAccount1, String userAccount2) {
     friendShipService.activeShip(
@@ -63,5 +67,12 @@ public class FriendShipManagerImpl extends BaseManagerImpl<FriendShipVo, FriendS
 
   public FriendShipVo findById(String fsId) {
     return po2vo(friendShipService.findById(fsId));
+  }
+
+  public boolean haveNewMsg(String userAccount) {
+    NewMsg newMsg =
+        newMsgService.findByUserId(userService.findByUserAccount(userAccount).getUserId());
+    if (newMsg == null || newMsg.getNmNumber().equals("0")) return false;
+    else return true;
   }
 }

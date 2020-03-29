@@ -110,6 +110,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"
                            style="padding-top: 0;padding-bottom: 0;">
                             <img class="img-fluid rounded" id="userPicInNavHead" style="height: 2.2rem;width: 2.2rem;">
+                            <span4msg class="msgTip spanInPic">NEW</span4msg>
                         </a>
                         <div class="dropdown-menu" style="left: -4.8rem;">
                         <#--学生、教师、领导-->
@@ -118,7 +119,7 @@
                             <a class="dropdown-item" href="#" id="supeiorModifyApplyBtn">上级变更申请</a>
                             </#if>
                             <a class="dropdown-item" href="#" id="userPicModifyBtn">修改头像</a>
-                            <a class="dropdown-item" target="_blank" href="/friendShip/main">我的消息</a>
+                            <a class="dropdown-item" target="_blank" href="/friendShip/main">我的消息<span4msg class="msgTip spanInTab">NEW</span4msg></a>
                             <a class="dropdown-item" href="/user/logout">注销</a>
                         </div>
                     </li>

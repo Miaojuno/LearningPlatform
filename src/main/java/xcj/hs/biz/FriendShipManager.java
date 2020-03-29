@@ -23,4 +23,6 @@ public interface FriendShipManager {
   void readMsg(String userAccount, String fsId);
 
   FriendShipVo findById(String fsId);
+
+  boolean haveNewMsg(String userAccount);
 }

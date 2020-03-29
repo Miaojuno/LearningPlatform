@@ -1,32 +1,136 @@
 $(function () {
+
+    $(".diff-div").hide()
+    $(".type-div").hide()
+
+
+    //选择随机
+    $("#btn-random").on("click", function () {
+        $("#pointId").val("")
+        $("#diff").val("")
+        $("#type").val("")
+        $("#doq-title").text("随机做题")
+        $(".diff-div").hide()
+        $(".type-div").hide()
+        getRandomQuestion()
+    })
+
+    //选择难度
+    $("#btn-diff").on("click", function () {
+        $(".diff-div").show()
+        $(".type-div").hide()
+    })
+    //选择具体难度
+    $("#btn-diff1").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("")
+        $("#diff").val("1")
+        $("#doq-title").text("简单难度")
+        getRandomQuestion()
+    })
+    $("#btn-diff2").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("")
+        $("#diff").val("2")
+        $("#doq-title").text("普通难度")
+        getRandomQuestion()
+    })
+    $("#btn-diff3").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("")
+        $("#diff").val("3")
+        $("#doq-title").text("困难难度")
+        getRandomQuestion()
+    })
+
+    //选择类型
+    $("#btn-type").on("click", function () {
+        console.log(1)
+        $(".diff-div").hide()
+        $(".type-div").show()
+    })
+    //选择具体类型
+    $("#btn-type1").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("主观题")
+        $("#diff").val("")
+        $("#doq-title").text("主观题")
+        getRandomQuestion()
+    })
+    $("#btn-type2").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("客观题")
+        $("#diff").val("")
+        $("#doq-title").text("客观题")
+        getRandomQuestion()
+    })
+    $("#btn-type3").on("click", function () {
+        $("#pointId").val("")
+        $("#type").val("选择题")
+        $("#diff").val("")
+        $("#doq-title").text("选择题")
+        getRandomQuestion()
+    })
+
     //按照知识点做题时，隐藏tab栏
     var url = location.search;
     var nodeId;
     if (url.indexOf("?") != -1) {
-        nodeId = url.split("=")[1];
-        $("#doQuetsion-tab").hide();
-        $("#pointDetail").show();
-        $.ajax({
-            type: "post",
-            url: "/neo/findPointById",
-            data: {
-                "id": nodeId
-            },
-            success: function (res) {
-                $("#pointDetail").text("知识点："+res.data.pointDetail)
-                $("#pointId").val(res.data.pointId)
-            },
-            error: function (err) {
-                layer.msg("失败", {icon: 2});
+        //知识点
+        if(url.split("=")[0]=="?nodeId"){
+            $(".choose-div").hide()
+            nodeId = url.split("=")[1];
+            $("#doQuetsion-tab").hide();
+            $("#pointDetail").show();
+            $.ajax({
+                type: "post",
+                url: "/neo/findPointById",
+                data: {
+                    "id": nodeId
+                },
+                success: function (res) {
+                    $("#pointDetail").text("知识点：" + res.data.pointDetail)
+                    $("#pointId").val(res.data.pointId)
+                    getRandomQuestion()
+                },
+                error: function (err) {
+                    layer.msg("失败", {icon: 2});
+                }
+            });
+        }
+        //按照难度
+        else if(url.split("=")[0]=="?diff"){
+            var diff=unescape(url.split("=")[1])
+            $("#btn-diff").click()
+            $("#btn-diff"+diff.substring(diff.length-1)).click()
+        }
+        //按照类型
+        else if(url.split("=")[0]=="?type"){
+            $("#btn-type").click()
+            var type=unescape(url.split("=")[1])
+            if(type=="主观题"){
+                $("#btn-type1").click()
             }
-        });
+            else if(type=="客观题"){
+                $("#btn-type2").click()
+            }
+            else if(type=="选择题"){
+                $("#btn-type3").click()
+            }
+        }
+
     }
 
 
-    //默认显示第一个tab
-    $('#doQuetsion-tab li:eq(0) a').tab('show');
+    // //默认显示第一个tab
+    // $('#doQuetsion-tab li:eq(0) a').tab('show');
     //随机加载题目
     getRandomQuestion()
+
+
+
+
+
 
     $('#random .fileInput').on('click', function () {
         $("#random .file").click()
@@ -116,7 +220,9 @@ $(function () {
             $.ajax({
                 url: "/neo/getRandomQuestion",
                 data: {
-                    "pointId":$("#pointId").val()
+                    "pointId": $("#pointId").val(),
+                    "diff": $("#diff").val(),
+                    "type": $("#type").val()
                 },
                 async: false,
                 dataType: "json",

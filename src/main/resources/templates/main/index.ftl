@@ -4,6 +4,38 @@
 <@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
+    <#--轮播-->
+    <div id="carousel-qs" class="carousel slide" data-ride="carousel">
+
+        <!-- 指示符 -->
+        <ul class="carousel-indicators">
+            <li data-target="#carousel-qs" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-qs" data-slide-to="1"></li>
+            <li data-target="#carousel-qs" data-slide-to="2"></li>
+        </ul>
+
+        <!-- 轮播图片 -->
+        <div class="carousel-inner">
+
+        </div>
+
+        <!-- 左右切换按钮 -->
+        <a class="carousel-control-prev" href="#carousel-qs" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#carousel-qs" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+
+    <div class="row my-title-div">
+        <div class="col-6 my-title">
+            <h3>
+                我的做题统计
+            </h3>
+        </div>
+    </div>
+
 <#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
     <div id="studentHistoryGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
 
@@ -18,6 +50,24 @@
     .index-graphics{
         float: left;
     }
+    .index-graphics {
+        background-color: rgba(0, 0, 0, 0.02);
+        margin: 1rem;
+        border-radius: 1rem;
+    }
+    .carousel-img{
+        width: 66rem;
+        height: 38rem;
+    }
+    .my-title{
+        margin-left: 1rem;
+        margin-top: 1rem;
+        padding: 0.5rem;
+        border-bottom: solid 1px rgba(152, 152, 152, 0.69);
+    }
+    .my-title-div{
+        /*border-bottom: solid 1px #5f5f5f;*/
+    }
 </style>
 
 <script>
@@ -30,9 +80,41 @@
         $("#studentRecordByDiffGraphics").css("height", $(window).width() * 0.6)
         // $(".main-contain").css("width","90%")
     }
+     $(".main-contain").css("min-height", $(window).height() * 1.5)
+    $("#carousel-qs").css("width", "66rem")
 
-    $(".main-contain").css("min-height", $(window).height() * 0.9)
 
+    $.ajax({
+        type: "post",
+        async: true,
+        url: "questionSet/findAll",
+        dataType: "json",
+        success: function (result) {
+            if (result.success == true) {
+                for (var i = 0; i < 3; i++) {
+                    $(".carousel-inner").append("            <div class=\"carousel-item\">\n" +
+                            "                <img class='carousel-img' src='data:image/jpeg;base64," + result.data[i].qsPic + "'>\n" +
+                            "               <div class=\"carousel-caption\">\n" +
+                            "                   <h3>"+result.data[i].qsName+"</h3>\n" +
+                            "               </div>"+
+                            "            </div>")
+                }
+                $(".carousel-inner").find(".carousel-item").eq(0).addClass("active")
+
+            } else {
+                alert("后台数据获取失败!");
+            }
+        },
+        error: function (errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            chart1.hideLoading();
+        }
+    })
+
+    $(document).on("click",".carousel-img",function () {
+        location.href="/questionSet/list"
+    })
 
     //chart1----------------------------------------------------------------------------------------------------
     var chart1 = echarts.init(document.getElementById('studentHistoryGraphics'));
@@ -130,7 +212,7 @@
                     title: {
                         text: '错题分布',
                         left: 'center',
-                        top: 20,
+                        top: 5,
                         textStyle: {
                             color: '#898989'
                         }
@@ -138,7 +220,7 @@
 
                     tooltip: {
                         trigger: 'item',
-                        formatter: '{b} : {c} ({d}%)'
+                        formatter: '{b} : {c} ({d}%)--点击去练习'
                     },
 
                     series: [
@@ -179,16 +261,16 @@
 
     chart2.on('mouseover',(v) => {
         if(v.dataIndex != 0){
-        chart2.dispatchAction({
-            type: 'downplay',
-            seriesIndex: 0,
-            dataIndex: 0
-        });
-    }
+            chart2.dispatchAction({
+                type: 'downplay',
+                seriesIndex: 0,
+                dataIndex: 0
+            });
+        }
     });
 
     chart2.on('click', function (params) {
-        console.log(params.name);
+        window.open("/record/doQuestion?type="+escape(params.name))
     });
 
     chart2.on('mouseout',(v) => {
@@ -219,13 +301,22 @@
                     title: {
                         text: '做题难度分布/各难度正确率',
                         left: 'center',
-                        top: 20,
+                        top: 10,
                         textStyle: {
                             color: '#898989'
                         }
                     },
 
-                    tooltip: {},
+                    tooltip: {
+                        formatter: function (params, ticket, callback) {
+                            if(params.seriesIndex==0){
+                                return params.name+"占比："+params.data[1]+"--点击去练习";
+                            }
+                            else {
+                                return params.name+"正确率："+params.data[1]+"--点击去练习";
+                            }
+                        }
+                    },
                     dataset: {
                         source: data
                     },
@@ -240,7 +331,7 @@
                         },
                         type: 'pie',
                         radius: 70,
-                        center: ['27%', '50%'],
+                        center: ['30%', '60%'],
                         encode: {
                             itemName: '难度',
                             value: '做题比例'
@@ -248,7 +339,7 @@
                     }, {
                         type: 'pie',
                         radius: 60,
-                        center: ['73%', '50%'],
+                        center: ['70%', '60%'],
                         encode: {
                             itemName: '难度',
                             value: '正确率'
@@ -265,6 +356,10 @@
             chart1.hideLoading();
         }
     })
+
+    chart3.on('click', function (params) {
+        window.open("/record/doQuestion?diff="+escape(params.name))
+    });
 
 
 </script>

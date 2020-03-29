@@ -210,12 +210,65 @@ public class NeoDaoImpl implements NeoDao {
             : record.get("a").get("solutionPic").asByteArray());
   }
 
-  public Question getRandomQuestion(String pointId) {
+  public Question findQuestionByDiffOrType(String diff, String type, int index) {
+    List<Record> list = null;
+    if (StringUtils.isNotBlank(diff)) {
+      list =
+          session
+              .run(
+                  "Match (a:Question) where a.difficultyDistribution ='"
+                      + diff
+                      + "'  return a skip "
+                      + index
+                      + " limit 1")
+              .list();
+    } else {
+      list =
+          session
+              .run(
+                  "MATCH (a:Question) where a.type ='"
+                      + type
+                      + "'  return a skip "
+                      + index
+                      + " limit 1")
+              .list();
+    }
+    if (list.size() == 0) {
+      randomNumber = 0;
+      return null;
+    }
+    randomNumber++;
+    Record record = list.get(0);
+    return new Question(
+        record.get("a").get("questionId").asString(),
+        record.get("a").get("questionDetail").asString(),
+        record.get("a").get("score").asString(),
+        record.get("a").get("solution").asString(),
+        record.get("a").get("typeDistribution").asString(),
+        record.get("a").get("difficultyDistribution").asString(),
+        record.get("a").get("type").asString(),
+        "\"\"".equals(record.get("a").get("pic").toString())
+                || "NULL".equals(record.get("a").get("pic").toString())
+            ? null
+            : record.get("a").get("pic").asByteArray(),
+        "\"\"".equals(record.get("a").get("solutionPic").toString())
+                || "NULL".equals(record.get("a").get("solutionPic").toString())
+            ? null
+            : record.get("a").get("solutionPic").asByteArray());
+  }
+
+  public Question getRandomQuestion(String pointId, String diff, String type) {
     //    String randomId = String.valueOf((int) (1 + Math.random() * (questionNumber)));
     //    return findByQuestionId(randomId);
-    Question question = findQuestionByPointIdAndIndex(pointId, randomNumber);
-    if (question == null) question = findQuestionByPointIdAndIndex(pointId, randomNumber);
-    return question;
+    if (StringUtils.isBlank(diff) && StringUtils.isBlank(type)) {
+      Question question = findQuestionByPointIdAndIndex(pointId, randomNumber);
+      if (question == null) question = findQuestionByPointIdAndIndex(pointId, randomNumber);
+      return question;
+    } else {
+      Question question = findQuestionByDiffOrType(diff, type, randomNumber);
+      if (question == null) question = findQuestionByDiffOrType(diff, type, randomNumber);
+      return question;
+    }
   }
 
   // 源数据导入
