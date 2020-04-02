@@ -1,4 +1,4 @@
-用户表 USER （区别于病人信息表）
+用户表 USER
 user_id
 user_name
 user_account
@@ -28,18 +28,6 @@ status   0:申请中 1:通过 2:拒绝
 review_content 审核人意见
 
 
-留言表 MSG
-msg_id
-msg_date
-msg_title
-msg_detail
-msg_role_id 可以查看该消息的角色
-msg_user_id 可以查看该消息的用户
-msg_creater 发布者user_id
-MSG_STATUS    0:未读 1:已读
-Msg_type
-Msg_pic
-
 
 答题记录表RECORD
 rec_id
@@ -65,6 +53,14 @@ FS_USER1
 FS_USER2
 FS_USER1_ACTIVE
 FS_USER2_ACTIVE
+FS_MSG_RECORD
+FS_UNREAD1
+FS_UNREAD2
+FS_LAST_TIME
+
+图片IMG
+IMG_ID
+IMG_CONTENT
 
 --------------------------------------------------------------------------
 

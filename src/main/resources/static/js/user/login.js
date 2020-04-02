@@ -1,5 +1,7 @@
 $(function () {
 
+
+
     $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
 
     $('#go-register').on('click', function () {
@@ -53,7 +55,7 @@ $(function () {
             //     data: $("#form-register").serialize(),
             //     dataType: "json",
             //     type: "post",
-            //     success: function (result) {
+            //     success: function (result) {d
             //         if (result.success == true) {
             //             layer.msg("注册成功，跳转中。。。", {icon: 1});
             //             setTimeout(function () {
@@ -68,4 +70,6 @@ $(function () {
             // })
         })
     });
+
+
 })

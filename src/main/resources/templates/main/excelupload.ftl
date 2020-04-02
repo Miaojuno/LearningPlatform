@@ -4,14 +4,19 @@
 <@macros.navhead importJs=importJs importCss=importCss titleName="上传"></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 2rem">
-    <row>
+    <div class="row">
         <label class="control-label col-12" for="">导入测试:</label>
         <div class="col-10">
             <input type="file" id="file" hidden >
             <input type="text" id="fileInput" class="form-control" placeholder="请选择文件">
         </div>
-        <button id="submitUpload" class="btn btn-primary" style="margin-top: 1rem; margin-left: 1rem;">确定</button>
-    </row>
+        <button id="submitUpload" class="btn btn-primary" style="">确定</button>
+    </div>
+
+    <div class="progress" style="margin-top: 4rem">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:0;"></div>
+    </div>
+
 </div>
 
 <script>
@@ -24,7 +29,21 @@
         // $(".main-contain").css("width","90%")
     }
 
+    $(".progress").css('background-color','rgba(0, 0, 0, 0)');
+    var allWidth=parseFloat($(".progress").css("width").substring(0,$(".progress").css("width").length-2))
+    var n=0;
+    var dt;
+
     $('#submitUpload').on('click', function () {
+        $(".progress").css('background-color','#e9ecef');
+        dt=setInterval(function () {
+            if(n<400){
+                console.log(n)
+                n=n+1
+                $(".progress-bar").css("width",allWidth/500*n)
+            }
+
+        },"100");
         UpladFile();
     });
 
@@ -35,6 +54,7 @@
     $("#file").bind("input propertychange", function() {
         $('#fileInput').val($('#file').val())
     });
+    
 
 
     function UpladFile() {
@@ -64,12 +84,19 @@
                         });
                         $("#file").val("");
                         $("#fileInput").val("");
-
+                        $(".progress-bar").css("width","0")
+                        n=0
+                        clearInterval(dt);
+                        $(".progress").css('background-color','rgba(0, 0, 0, 0)');
                     },
                     error: function (err) {
                         layer.msg("导入失败",{icon:2});
                         $("#file").val("");
                         $("#fileInput").val("");
+                        $(".progress-bar").css("width","0")
+                        n=0
+                        clearInterval(dt);
+                        $(".progress").css('background-color','rgba(0, 0, 0, 0)');
                     }
                 });
             }

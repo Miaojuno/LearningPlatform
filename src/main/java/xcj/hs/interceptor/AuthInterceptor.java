@@ -1,5 +1,6 @@
 package xcj.hs.interceptor;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,11 +37,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
   @Value("${Authority.admin}")
   List<String> adminAuthority;
 
-  @Value("${Group.userCheck}")
-  List<String> userChcke;
-
-  @Value("${Group.roleCheck}")
-  List<String> roleChcek;
 
   Map<String, List<String>> groupMap;
   List<String> studentUrls;
@@ -54,11 +47,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
   public AuthInterceptor() {}
 
+  @SneakyThrows
   @PostConstruct
   void initUrls() {
     groupMap = new HashMap<>();
-    groupMap.put("userCheck", userChcke);
-    groupMap.put("roleCheck", roleChcek);
+    Properties properties = new Properties();
+    properties.load(AuthInterceptor.class.getClassLoader().getResourceAsStream("security.properties"));
+    for (String key : properties.stringPropertyNames()) {
+      if(key.contains(".") && key.split("\\.")[0].equals("Group")){
+        groupMap.put(key.split("\\.")[1], Arrays.asList(properties.getProperty(key).trim().split(",")));
+      }
+    }
     studentUrls = new ArrayList<>();
     teacherUrls = new ArrayList<>();
     leaderUrls = new ArrayList<>();
@@ -127,8 +126,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     ? leaderUrls
                     : "管理员".equals(loginUserRole) ? adminUrls : null;
 
+
     if (!permissionUrls.contains(servletPath) && allUrls.contains(servletPath)) {
-      return false;
+      if(!permissionUrls.contains("/"+servletPath.split("/")[1]+"/"+"*")){
+        return false;
+      }
     }
     return true;
   }
