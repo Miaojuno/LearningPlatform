@@ -66,4 +66,6 @@ public interface UserManager {
    * @return
    */
   String getRoleName(String userAccount);
+
+  List<UserVo> findAllSubordinate(String account);
 }

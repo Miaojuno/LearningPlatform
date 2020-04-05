@@ -34,4 +34,17 @@ public class TimeUtil {
     return simpleDateFormat.format(calendar.getTime());
   }
 
+  /**
+   * 时间比较，time1在前则返回0，time一致返回1，time1在后返回2，时间格式不一致返回3
+   * @param time1
+   * @param time2
+   * @return
+   */
+  public static String timeCompare(String time1, String time2) {
+    if(time1.length()!=time2.length()) return "3";
+    if(time1.compareTo(time2)<0) return "0";
+    if(time1.compareTo(time2)==0)return "1";
+    else return "2";
+  }
+
 }

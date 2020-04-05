@@ -53,4 +53,12 @@ public interface UserService {
     User findById(String userId);
 
     User findByUserAccount(String userAccount);
+
+
+    /**
+     * 查找下级
+     * @param account
+     * @return
+     */
+    List<User> findAllSubordinate(String account);
 }

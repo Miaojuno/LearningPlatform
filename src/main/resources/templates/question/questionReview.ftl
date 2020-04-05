@@ -42,7 +42,7 @@
 
                 $.ajax({
                     type: "post",
-                    url: "/record/*************",
+                    url: "/record/updateScore",
                     data: {
                         "recordId": $("#questionReviewDiv .recordId").val(),
                         "score": $("#questionReviewDiv .score").val()
@@ -92,7 +92,7 @@
                                 type: "post",
                                 success: function (result2) {
                                     if (result2.success == true) {
-                                        $("#questionReviewDiv .userShow").append("<p>"+result2.data.userName+"</p>")
+                                        $("#questionReviewDiv .userShow").append("<p>来自："+result2.data.userName+"</p>")
                                     }
                                 },
                                 error: function (result) {

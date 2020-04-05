@@ -1,6 +1,9 @@
 package xcj.hs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,6 +131,35 @@ public class RecordController {
     return map;
   }
 
+  @PostMapping("/updateScore")
+  @ResponseBody
+  public Map<String, Object> updateScore(String recordId, String score) {
+    Map<String, Object> map = new HashMap<>();
+
+    recordManager.updateScore(recordId, score);
+    map.put("success", true);
+    return map;
+  }
+
+  /**
+   * 学生七天内状况
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping("/getSubordinateSituation")
+  @ResponseBody
+  public Map<String, Object> getSubordinateSituation(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<>();
+
+    map.put(
+        "data",
+        recordManager.getSubordinateSituation(
+            (String) request.getSession().getAttribute("loginUserAccount")));
+    map.put("success", true);
+    return map;
+  }
+
   /**
    * getRecordByDiff
    *
@@ -140,9 +172,9 @@ public class RecordController {
     Map<String, Object> map = new HashMap<>();
 
     map.put(
-            "data",
-            recordManager.getRecordByDiff(
-                    (String) request.getSession().getAttribute("loginUserAccount")));
+        "data",
+        recordManager.getRecordByDiff(
+            (String) request.getSession().getAttribute("loginUserAccount")));
     map.put("success", true);
     return map;
   }
@@ -168,5 +200,32 @@ public class RecordController {
       map.put("success", false);
     }
     return map;
+  }
+
+  @GetMapping("/list")
+  public String rlist(Model model) {
+    return "record/myRecord";
+  }
+
+  @RequestMapping("/pageList.json")
+  @ResponseBody
+  public Map<String, Object> listUser(String userAccount, Integer pageSize, Integer pageNumber) {
+    Map<String, Object> resultMap = new HashMap();
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    Page<RecordVo> pages = recordManager.pageFind(userAccount, pageable);
+
+    resultMap.put("data", pages.getContent());
+    resultMap.put("total", pages.getTotalElements());
+    return resultMap;
+  }
+
+  @RequestMapping("/findById")
+  @ResponseBody
+  public Map<String, Object> findById(String id) {
+    Map<String, Object> resultMap = new HashMap();
+
+    resultMap.put("success", true);
+    resultMap.put("data", recordManager.findById(id));
+    return resultMap;
   }
 }

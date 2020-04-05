@@ -44,11 +44,23 @@ $(function () {
                         $("#tab-" + result.data[i].fsId + " .tab-right").append("<p class='unreadNum text-center'>" + unreadNum + "</p>\n")
                     }
                     $("#tab-" + result.data[i].fsId + " .friendId").val(friendId)
+                    $("#tab-" + result.data[i].fsId ).addClass("tab-user-"+friendId)
                     $("#tab-" + result.data[i].fsId + " .friendAccount").val(result.data[i].userVo.userAccount)
                     $("#tab-" + result.data[i].fsId + " .rowData").val(result.data[i].fsMsgRecord)
                 }
-                $(".friendList").find(".friend-tab").eq(0).addClass("choosed-friend")
-                $(".friendList").find(".friend-tab").eq(0).click()
+
+                var url = location.search;
+                var chooseId;
+                if (url.indexOf("?") != -1) {
+                    chooseId = url.split("=")[1];
+                    $(".tab-user-"+chooseId).addClass("choosed-friend")
+                    $(".tab-user-"+chooseId).click()
+                }
+
+                else{
+                    $(".friendList").find(".friend-tab").eq(0).addClass("choosed-friend")
+                    $(".friendList").find(".friend-tab").eq(0).click()
+                }
 
             } else {
                 layer.msg(result.msg, {icon: 2});

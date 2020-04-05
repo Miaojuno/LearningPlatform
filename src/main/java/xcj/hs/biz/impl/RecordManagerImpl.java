@@ -3,8 +3,11 @@ package xcj.hs.biz.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import xcj.hs.biz.RecordManager;
+import xcj.hs.biz.UserManager;
 import xcj.hs.entity.Record;
 import xcj.hs.entity.User;
 import xcj.hs.service.NeoService;
@@ -14,6 +17,7 @@ import xcj.hs.util.TimeUtil;
 import xcj.hs.vo.NameValueVo;
 import xcj.hs.vo.QuestionVo;
 import xcj.hs.vo.RecordVo;
+import xcj.hs.vo.UserVo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +31,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
   @Autowired RecordService recordService;
   @Autowired UserService userService;
   @Autowired NeoService neoService;
+  @Autowired UserManager userManager;
 
   @Override
   public RecordVo po2vo(Record record) {
@@ -37,6 +42,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     recordVo.setQuestionPic(questionVo.getPic());
     recordVo.setSolution(questionVo.getSolution());
     recordVo.setSolutionPic(questionVo.getSolutionPic());
+    recordVo.setQuestionScore(questionVo.getScore());
     return recordVo;
   }
 
@@ -146,6 +152,30 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return result;
   }
 
+  public List<Object> getSubordinateSituation(String userAccount) {
+    List<Object> result = new ArrayList<>();
+    for (UserVo user : userManager.findAllSubordinate(userAccount)) {
+      Map<String, Object> smap = new HashMap<>();
+      smap.put("user", user);
+      smap.put(
+          "count",
+          String.valueOf(
+              recordService.findByUserId(user.getUserId()).stream()
+                  .filter(
+                      r ->
+                          TimeUtil.timeCompare(
+                                  r.getDate(), TimeUtil.getSpecifiedTimeStr(TimeUtil.TIMESTR, -7))
+                              .equals("2"))
+                  .count()));
+      result.add(smap);
+    }
+    return result;
+  }
+
+  public void updateScore(String recordId, String score) {
+    recordService.updateScore(recordId, score);
+  }
+
   public Map<String, Object> getRecordByDiff(String userAccount) {
     Map<String, Object> map = new HashMap<>();
     List<RecordVo> recordVos =
@@ -180,7 +210,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return map;
   }
 
-//  难度名转换
+  //  难度名转换
   private String diffConversion(String diff) {
     if (StringUtils.isBlank(diff)) return "diff1";
     else return "diff" + diff;
@@ -190,5 +220,14 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return po2vo(
         recordService.findByUserIdAndQuestionId(
             userService.findByUserAccount(userAccount).getUserId(), questionId));
+  }
+
+  public Page<RecordVo> pageFind(String userAccount, Pageable pageable) {
+    return po2vo(
+        recordService.pageFind(userService.findByUserAccount(userAccount).getUserId(), pageable));
+  }
+
+  public RecordVo findById(String id){
+    return po2vo(recordService.findById(id));
   }
 }

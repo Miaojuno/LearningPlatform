@@ -4,8 +4,15 @@
 <@macros.navhead importJs=importJs importCss=importCss></@macros.navhead>
 
 <div class="main-contain" style="margin-top: 1rem">
-    <#--轮播-->
-    <div id="carousel-qs" class="carousel slide" data-ride="carousel">
+<#--轮播-->
+    <div class="row my-title-div">
+        <div class="col-6 my-title">
+            <h3>
+                热门题集
+            </h3>
+        </div>
+    </div>
+    <div id="carousel-qs" class="carousel slide" data-ride="carousel" >
 
         <!-- 指示符 -->
         <ul class="carousel-indicators">
@@ -28,7 +35,7 @@
         </a>
     </div>
 
-    <#if Session["loginUserRole"] == "学生">
+<#if Session["loginUserRole"] == "学生">
         <div class="row my-title-div">
             <div class="col-6 my-title">
                 <h3>
@@ -37,39 +44,79 @@
             </div>
         </div>
 
-        <#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
+<#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
             <div id="studentHistoryGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
 
-        <#--错误率按照题目类型-->
+<#--错误率按照题目类型-->
             <div id="studentErrorByKindGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
 
-        <#--正确率按照题目难度-->
+<#--正确率按照题目难度-->
             <div id="studentRecordByDiffGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
+        </div>
+</#if>
+
+    <#if Session["loginUserRole"] == "教师">
+        <div class="row my-title-div">
+            <div class="col-6 my-title">
+                <h3>
+                    我的学生最近七天做题排名
+                </h3>
+            </div>
+        </div>
+        <div id="my-student-situation"  style="width: 50%">
+            <ul class="list-group">
+                <#--<li class="list-group-item">-->
+                    <#--<div class="row">-->
+                        <#--<div class="col-3 text-right" style="font-size: 1.5rem;padding: 0;">-->
+                            <#--<img class="img-fluid rounded" style="height: 2.2rem;width: 2.2rem;">-->
+                            <#--用户1-->
+                        <#--</div>-->
+                        <#--<div class="col-2 text-right" style="font-size: 0.1rem;padding: 1rem 0 0 0;">做题数:</div>-->
+                        <#--<div class="col-2" style="font-size: 1.5rem;color: red;padding: 0;">20</div>-->
+                    <#--</div>-->
+                <#--</li>-->
+            </ul>
         </div>
     </#if>
 
 <style>
-    .index-graphics{
+    #carousel-qs{
+        width: 66rem;
+        margin-left: 0.5rem;
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+
+    .index-graphics {
         float: left;
     }
+
     .index-graphics {
         background-color: rgba(0, 0, 0, 0.02);
         margin: 1rem;
         border-radius: 1rem;
     }
-    .carousel-img{
+
+    .carousel-img {
         width: 66rem;
         height: 38rem;
     }
-    .my-title{
+
+    .my-title {
         margin-left: 1rem;
         margin-top: 1rem;
         padding: 0.5rem;
         border-bottom: solid 1px rgba(152, 152, 152, 0.69);
     }
-    .my-title-div{
+
+    .my-title-div {
         /*border-bottom: solid 1px #5f5f5f;*/
     }
+
+    .list-group-item :hover{
+        cursor:pointer;
+    }
+
 </style>
 
 <script>
@@ -82,8 +129,7 @@
         $("#studentRecordByDiffGraphics").css("height", $(window).width() * 0.6)
         // $(".main-contain").css("width","90%")
     }
-     $(".main-contain").css("min-height", $(window).height() * 1.5)
-    $("#carousel-qs").css("width", "66rem")
+    $(".main-contain").css("min-height", $(window).height() * 1.5)
 
 
     $.ajax({
@@ -95,10 +141,10 @@
             if (result.success == true) {
                 for (var i = 0; i < 3; i++) {
                     $(".carousel-inner").append("            <div class=\"carousel-item\">\n" +
-                            "                <img class='carousel-img' src='data:image/jpeg;base64," + result.data[i].qsPic + "'>\n" +
+                            "                <img class='carousel-img rounded' src='data:image/jpeg;base64," + result.data[i].qsPic + "'>\n" +
                             "               <div class=\"carousel-caption\">\n" +
-                            "                   <h3>"+result.data[i].qsName+"</h3>\n" +
-                            "               </div>"+
+                            "                   <h3>" + result.data[i].qsName + "</h3>\n" +
+                            "               </div>" +
                             "            </div>")
                 }
                 $(".carousel-inner").find(".carousel-item").eq(0).addClass("active")
@@ -114,8 +160,8 @@
         }
     })
 
-    $(document).on("click",".carousel-img",function () {
-        location.href="/questionSet/list"
+    $(document).on("click", ".carousel-img", function () {
+        location.href = "/questionSet/list"
     })
 
 
@@ -274,7 +320,7 @@
     });
 
     chart2.on('click', function (params) {
-        window.open("/record/doQuestion?type="+escape(params.name))
+        window.open("/record/doQuestion?type=" + escape(params.name))
     });
 
     chart2.on('mouseout',(v) => {
@@ -293,12 +339,12 @@
         dataType: "json",
         success: function (result) {
             if (result.success == true) {
-                var data=[['难度', '做题比例', '正确率']]
-                if(result.data.diff1!=null) data.push(['难度1', result.data.diff1.correctRate, result.data.diff1.numberRate])
+                var data = [['难度', '做题比例', '正确率']]
+                if (result.data.diff1 != null) data.push(['难度1', result.data.diff1.correctRate, result.data.diff1.numberRate])
                 else data.push(['难度1', 0.1, 0.1])
-                if(result.data.diff2!=null) data.push(['难度2', result.data.diff2.correctRate, result.data.diff2.numberRate])
+                if (result.data.diff2 != null) data.push(['难度2', result.data.diff2.correctRate, result.data.diff2.numberRate])
                 else data.push(['难度2', 0.1, 0.1])
-                if(result.data.diff3!=null) data.push(['难度3', result.data.diff3.correctRate, result.data.diff3.numberRate])
+                if (result.data.diff3 != null) data.push(['难度3', result.data.diff3.correctRate, result.data.diff3.numberRate])
                 else data.push(['难度3', 0.1, 0.1])
                 chart3.hideLoading(); //隐藏加载动画
                 chart3.setOption({ //加载数据图表
@@ -313,11 +359,11 @@
 
                     tooltip: {
                         formatter: function (params, ticket, callback) {
-                            if(params.seriesIndex==0){
-                                return params.name+"占比："+params.data[1]+"--点击去练习";
+                            if (params.seriesIndex == 0) {
+                                return params.name + "占比：" + params.data[1] + "--点击去练习";
                             }
                             else {
-                                return params.name+"正确率："+params.data[1]+"--点击去练习";
+                                return params.name + "正确率：" + params.data[1] + "--点击去练习";
                             }
                         }
                     },
@@ -362,8 +408,55 @@
     })
 
     chart3.on('click', function (params) {
-        window.open("/record/doQuestion?diff="+escape(params.name))
+        window.open("/record/doQuestion?diff=" + escape(params.name))
     });
+    </#if>
+
+
+    <#if Session["loginUserRole"] == "教师">
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "record/getSubordinateSituation",
+            dataType: "json",
+            success: function (result) {
+                if (result.success == true) {
+                    var list = result.data.sort(function (a, b) {
+                        if (a.count > b.count) {
+                            return -1;
+                        } else if (a.count < b.count) {
+                            return 1
+                        } else {
+                            return 0;
+                        }
+                    });
+                    var it;
+                    for(it in list){
+                        $("#my-student-situation ul").append(" <li class=\"list-group-item\" id="+list[it].user.userId+">\n" +
+                                "                    <div class=\"row\">\n" +
+                                "                        <div class=\"col-4\" style=\"font-size: 1.5rem;padding: 0 0 0 2rem;\">\n" +
+                                "                <img class=\"img-fluid rounded\" style='max-height: 2rem;max-width: 2rem' src='data:image/jpeg;base64," + list[it].user.pic + "'>\n" +
+                                "                            "+list[it].user.userName+
+                                "                        </div>\n" +
+                                "                        <div class=\"col-6 text-right\" style=\"font-size: 0.1rem;padding: 1rem 0 0 0;\">做题数:</div>\n" +
+                                "                        <div class=\"col-2\" style=\"font-size: 1.5rem;color: red;padding: 0 0 0 1rem;\">"+list[it].count+"</div>\n" +
+                                "                    </div>\n" +
+                                "                </li>")
+                    }
+                } else {
+                    alert("后台数据获取失败!");
+                }
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+
+            }
+        })
+
+    $(document).on("click",".list-group-item",function () {
+        window.open("/friendShip/main?userId=" + $(this).attr("id"))
+    })
     </#if>
 
 </script>

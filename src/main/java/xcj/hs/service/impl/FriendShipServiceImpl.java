@@ -31,10 +31,10 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
     FriendShip friendShip2 = friendShipDao.findByFsUser1AndFsUser2(userId2, userId1);
     // 好友关系已经存在，进行更新
     if (friendShip1 != null) {
-      friendShip1.setFsUser1("1");
+      friendShip1.setFsUser1Active("1");
       friendShipDao.save(friendShip1);
     } else if (friendShip2 != null) {
-      friendShip2.setFsUser2("1");
+      friendShip2.setFsUser2Active("1");
       friendShipDao.save(friendShip2);
     }
     // 好友关系不存在,新建好友关系

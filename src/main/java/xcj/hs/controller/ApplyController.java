@@ -62,6 +62,8 @@ public class ApplyController {
     return "apply/superiorApplyReviewList";
   }
 
+
+
   @RequestMapping("/superiorApplyPageList.json")
   @ResponseBody
   public Map<String, Object> superiorApplyPageList(

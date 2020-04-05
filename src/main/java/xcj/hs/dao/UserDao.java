@@ -55,6 +55,8 @@ public interface UserDao extends JpaRepository<User, String> {
 
   List<User> findByIsActiveEquals(String isActive);
 
+  List<User> findBySuperiorIdAndIsActive(String superiorId,String isActive);
+
   int countByIsActiveEquals(String isActive);
 
   Page<User> findByIsActiveAndUserNameContainingAndRoleIdContaining(

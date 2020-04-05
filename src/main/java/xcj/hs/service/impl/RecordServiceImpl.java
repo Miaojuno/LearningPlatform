@@ -1,13 +1,19 @@
 package xcj.hs.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.RecordDao;
 import xcj.hs.entity.Record;
+import xcj.hs.entity.User;
 import xcj.hs.service.RecordService;
 import xcj.hs.util.TimeUtil;
+import xcj.hs.vo.UserVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,5 +43,18 @@ public class RecordServiceImpl extends BaseServiceImpl<Record> implements Record
 
   public List<Record> findByUserId(String userId) {
     return recordDao.findByUserIdContaining(userId);
+  }
+  public void updateScore(String recordId,String score){
+    Record record=recordDao.findById(recordId).get();
+    record.setScore(score);
+    recordDao.save(record);
+  }
+
+  public Page<Record> pageFind(String userId, Pageable pageable) {
+    return recordDao.findByUserId(userId, pageable);
+  }
+
+  public Record findById(String id){
+    return recordDao.findById(id).get();
   }
 }

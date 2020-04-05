@@ -131,4 +131,8 @@ public class UserManagerImpl extends BaseManagerImpl<UserVo, User> implements Us
         .findRoleByRoleId(userService.findByUserAccount(userAccount).getRoleId())
         .getRoleName();
   }
+
+  public List<UserVo> findAllSubordinate(String account){
+    return po2vo(userService.findAllSubordinate(account));
+  }
 }

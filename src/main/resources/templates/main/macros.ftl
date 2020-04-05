@@ -76,6 +76,9 @@
                         <a class="nav-link" target="_blank" href="/record/doQuestion">去做题</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="/record/list">做题记录</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" target="_blank" href="/questionSet/list">我的题集</a>
                     </li>
                     </#if>

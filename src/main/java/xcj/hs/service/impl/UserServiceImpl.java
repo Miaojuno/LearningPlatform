@@ -27,8 +27,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
   @Autowired RoleService roleService;
 
-  @Autowired
-  FriendShipService friendShipService;
+  @Autowired FriendShipService friendShipService;
 
   public boolean loginCheck(String account, String pwd) {
     User user = userDao.findByUserAccount(account);
@@ -78,7 +77,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
           "1",
           userVo.getUserName(),
           superiorIds,
-          StringUtils.isNotBlank(userVo.getRoleId())?userVo.getRoleId():roleService.findRoleByRoleName(userVo.getRoleName()).getRoleId(),
+          StringUtils.isNotBlank(userVo.getRoleId())
+              ? userVo.getRoleId()
+              : roleService.findRoleByRoleName(userVo.getRoleName()).getRoleId(),
           pageable);
     }
     // 管理员
@@ -87,10 +88,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
   }
 
   public boolean updateSuperior(String subordinateId, String superiorId) {
-    //自动建立好友关系
-    friendShipService.activeShip(subordinateId,superiorId);
-    friendShipService.activeShip(superiorId,subordinateId);
-    //更新上级
+    // 自动建立好友关系
+    friendShipService.activeShip(subordinateId, superiorId);
+    friendShipService.activeShip(superiorId, subordinateId);
+    // 更新上级
     User user = findById(subordinateId);
     if (user != null) {
       user.setSuperiorId(superiorId);
@@ -125,6 +126,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
   public User findByUserAccount(String userAccount) {
     return userDao.findByUserAccount(userAccount);
+  }
+
+  public List<User> findAllSubordinate(String account) {
+    return userDao.findBySuperiorIdAndIsActive(findByUserAccount(account).getUserId(), "1");
   }
 
   private String shaEncoding(String pwd) {

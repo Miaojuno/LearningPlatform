@@ -1,6 +1,9 @@
 package xcj.hs.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import xcj.hs.entity.Record;
+import xcj.hs.entity.User;
 
 import java.util.List;
 
@@ -26,4 +29,10 @@ public interface RecordService {
   List<Record> get15daysRecords(String userId);
 
   List<Record> findByUserId(String userId);
+
+  void updateScore(String recordId,String score);
+
+  Page<Record> pageFind(String userId, Pageable pageable);
+
+  Record findById(String id);
 }

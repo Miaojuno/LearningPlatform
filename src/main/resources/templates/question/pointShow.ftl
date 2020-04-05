@@ -17,9 +17,11 @@
             <p class="distribution">考试要求分布:</p>
             <p class="frequency">频次:</p>
         </div>
+        <#if Session["loginUserRole"] == "学生">
         <div class="btnDiv">
             <button class="btn btn-primary jumpBtn" style="padding: 0.05rem 0.4rem;">练习该知识点</button>
         </div>
+        </#if>
     </div>
 </div>
 

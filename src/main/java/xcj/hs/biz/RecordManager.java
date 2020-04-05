@@ -1,5 +1,8 @@
 package xcj.hs.biz;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import xcj.hs.entity.Record;
 import xcj.hs.vo.NameValueVo;
 import xcj.hs.vo.RecordVo;
 
@@ -27,7 +30,15 @@ public interface RecordManager {
 
   List<NameValueVo> getErrorCountGroupByKind(String userAccount);
 
+  List<Object> getSubordinateSituation (String userAccount);
+
   Map<String, Object> getRecordByDiff(String userAccount);
 
   RecordVo findByUserAccountAndQuestionId(String userAccount, String questionId);
+
+  void updateScore(String recordId,String score);
+
+  Page<RecordVo> pageFind(String userAccount, Pageable pageable);
+
+  RecordVo findById(String id);
 }

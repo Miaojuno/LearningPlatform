@@ -60,7 +60,7 @@ $(function () {
                 field: 'action',
                 title: '操作',
                 formatter: actionFormatter
-            },]
+            }]
     });
 
     //操作栏的格式化
