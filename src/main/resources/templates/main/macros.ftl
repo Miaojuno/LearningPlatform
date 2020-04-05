@@ -418,8 +418,35 @@ type:single代表单选,multiple代表多选,默认单选-->
                         // area: ['800px'],
                         content: $('#userChoose-div'),
                         <#if type=="multiple">
-                            btn: ['确定'],
+                            btn: ['全部','确定'],
                             yes: function (index) {
+                                $.ajax({
+                                    url: "/user/pageList.json",
+                                    data: {
+                                        pageNumber: 1,
+                                        pageSize: 999,
+                                        userName: $(".userName").val(),
+                                        roleId: "8a8181816e209f02016e209f20330001",//学生的id
+                                        superiorAccount: $("#loginUserAccount").val()
+                                    },
+                                    dataType: "json",
+                                    type: "post",
+                                    success: function (result) {
+                                        var ids = result.data[0].userId;
+                                        var names = result.data[0].userName;
+                                        for (i = 1; i < result.data.length; i++) {
+                                            ids = ids + "、" + result.data[i].userId;
+                                            names = names + "、" + result.data[i].userName;
+                                        }
+                                        $(".macroUserIds").val(ids);
+                                        $(".userNames").val(names);
+                                        layer.close(index);
+                                    },
+                                    error: function (result) {
+                                    }
+                                })
+                            },
+                            btn2: function (index) {
                                 var allUser = $(".choosed-users").children();
                                 if (allUser.length == 0) {
                                     layer.msg("请选择至少一个用户", {icon: 2, time: 2000});

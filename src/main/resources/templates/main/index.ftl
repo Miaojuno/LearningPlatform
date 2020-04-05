@@ -28,23 +28,25 @@
         </a>
     </div>
 
-    <div class="row my-title-div">
-        <div class="col-6 my-title">
-            <h3>
-                我的做题统计
-            </h3>
+    <#if Session["loginUserRole"] == "学生">
+        <div class="row my-title-div">
+            <div class="col-6 my-title">
+                <h3>
+                    我的做题统计
+                </h3>
+            </div>
         </div>
-    </div>
 
-<#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
-    <div id="studentHistoryGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
+        <#--学生最近15天概况（做题数、正确率）（柱形图、折线图）-->
+            <div id="studentHistoryGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
 
-<#--错误率按照题目类型-->
-    <div id="studentErrorByKindGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
+        <#--错误率按照题目类型-->
+            <div id="studentErrorByKindGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
 
-<#--正确率按照题目难度-->
-    <div id="studentRecordByDiffGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
-</div>
+        <#--正确率按照题目难度-->
+            <div id="studentRecordByDiffGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
+        </div>
+    </#if>
 
 <style>
     .index-graphics{
@@ -116,6 +118,8 @@
         location.href="/questionSet/list"
     })
 
+
+    <#if Session["loginUserRole"] == "学生">
     //chart1----------------------------------------------------------------------------------------------------
     var chart1 = echarts.init(document.getElementById('studentHistoryGraphics'));
     chart1.showLoading(); //数据加载完之前先显示一段简单的loading动画
@@ -360,6 +364,6 @@
     chart3.on('click', function (params) {
         window.open("/record/doQuestion?diff="+escape(params.name))
     });
-
+    </#if>
 
 </script>

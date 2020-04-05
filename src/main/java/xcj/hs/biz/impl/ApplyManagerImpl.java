@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import sun.java2d.pipe.AlphaPaintPipe;
 import xcj.hs.biz.ApplyManager;
 import xcj.hs.entity.Apply;
 import xcj.hs.service.ApplyService;
+import xcj.hs.service.FriendShipService;
 import xcj.hs.service.RoleService;
 import xcj.hs.service.UserService;
 import xcj.hs.vo.ApplyVo;
@@ -19,8 +19,9 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
 
   @Autowired UserService userService;
 
-  @Autowired
-  RoleService roleService;
+  @Autowired RoleService roleService;
+
+  @Autowired FriendShipService friendShipService;
 
   public void modifyRoleApply(ApplyVo applyVo) {
     applyService.modifyRoleApply(applyVo);
@@ -36,13 +37,33 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
             userService.findByUserAccount(userAccount).getUserId(), status, pageable));
   }
 
+  public void passSupeiorApply(String applyId, String isPass) {
+    Apply apply = applyService.findById(applyId);
 
+    // 自动建立好友关系
+    friendShipService.activeShip(apply.getUserId(), apply.getNewId());
+    friendShipService.activeShip(apply.getNewId(), apply.getUserId());
 
+    if ("true".equals(isPass)) {
+      if ("上级变更".equals(apply.getType())) {
+        // 更新上级
+        userService.updateSuperior(apply.getUserId(), apply.getNewId());
+        apply.setStatus("通过");
+        // 更新申请状态
+        applyService.save(apply);
+        // 发送申请成功通知
+        friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "以通过上级修改请求", null);
 
+      } else {
 
-
-
-
+      }
+    } else {
+      apply.setStatus("拒绝");
+      applyService.save(apply);
+      // 发送申请失败通知
+      friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "以拒绝修改请求", null);
+    }
+  }
 
   @Override
   public ApplyVo po2vo(Apply apply) {
@@ -54,7 +75,7 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
         applyVo.setUserName(userName);
       }
     }
-    if ("上级变更".equals(applyVo.getType())){
+    if ("上级变更".equals(applyVo.getType())) {
       if (StringUtils.isNotBlank(apply.getNewId())) {
         String userName = userService.findById(apply.getNewId()).getUserName();
         if (StringUtils.isNotBlank(userName)) {
@@ -67,15 +88,14 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
           applyVo.setOldName(userName);
         }
       }
-    }
-    else if ("角色变更".equals(applyVo.getType())){
-      if (StringUtils.isNotBlank(apply.getNewId())){
+    } else if ("角色变更".equals(applyVo.getType())) {
+      if (StringUtils.isNotBlank(apply.getNewId())) {
         String roleName = roleService.findRoleByRoleId(apply.getNewId()).getRoleName();
         if (StringUtils.isNotBlank(roleName)) {
           applyVo.setNewName(roleName);
         }
       }
-      if (StringUtils.isNotBlank(apply.getOldId())){
+      if (StringUtils.isNotBlank(apply.getOldId())) {
         String roleName = roleService.findRoleByRoleId(apply.getOldId()).getRoleName();
         if (StringUtils.isNotBlank(roleName)) {
           applyVo.setOldName(roleName);

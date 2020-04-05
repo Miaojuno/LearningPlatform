@@ -74,4 +74,20 @@ public class ApplyController {
     resultMap.put("total", pages.getTotalElements());
     return resultMap;
   }
+
+  /**
+   * pass上级申请
+   *
+   * @param applyId
+   * @param isPass
+   * @return
+   */
+  @PostMapping("/passSuperiorApply")
+  @ResponseBody
+  public Map<String, Object> passSupeiorApply(String applyId,String isPass) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    applyManager.passSupeiorApply(applyId,isPass);
+    map.put("success", true);
+    return map;
+  }
 }

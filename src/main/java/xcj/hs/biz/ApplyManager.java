@@ -11,4 +11,6 @@ public interface ApplyManager {
   void modifySupeiorApply(ApplyVo applyVo);
 
   Page<ApplyVo> superiorApplyPageFind(String userAccount, String status, Pageable pageable);
+
+  void passSupeiorApply(String applyId,String isPass);
 }

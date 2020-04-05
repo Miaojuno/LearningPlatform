@@ -89,8 +89,32 @@
     function actionFormatter(value, row, index) {
         var id = value;
         var result = "";
-        result += "<a href='javascript:;'  class='re-pwd' title='审核'><span>审核</span></a>&nbsp;";
+        result += "<a href='javascript:;'  class='re-pwd' title='pass-apply'><span>同意</span></a>&nbsp;";
+        result += "<a href='javascript:;'  class='re-pwd' title='un-pass-apply'><span>拒绝</span></a>&nbsp;";
 
         return result;
     }
+
+    $(document).on("click", ".pass-apply", function () {
+        var applyId = $(this).parent().parent().attr("data-uniqueid");
+        $.ajax({
+            url: "/user/updateSuperior",
+            data: {
+                "userId": userId
+            },
+            dataType: "json",
+            type: "post",
+            success: function (result) {
+                if (result.success == true) {
+                    layer.msg("用户已删除", {icon: 1, time: 2000});
+                    $("#user-table").bootstrapTable('refresh');
+                } else {
+                    layer.msg(result.msg, {icon: 2});
+                }
+            },
+            error: function (result) {
+            }
+        })
+
+    })
 </script>

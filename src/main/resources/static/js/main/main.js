@@ -113,7 +113,7 @@ $(function () {
                 y: y,
                 xa: xa,
                 ya: ya,
-                max: 6000 //沾附距离
+                max: 4000 //沾附距离
             });
         }
         //重绘
@@ -297,6 +297,7 @@ $(function () {
 
 
     function initSuperiorModifyTable() {
+        console.log(1)
         //表格
         $('#choose-superior-table').bootstrapTable({
             url: '/user/superiorPageList.json',
@@ -435,7 +436,7 @@ $(function () {
                 //当前选中的话，将消息添加至聊天框
                 if ($(".choosed-friend").attr("id").substring(4) == fsData.fsId) {
                     var rocordData = eval(fsData.fsMsgRecord).pop();
-                    if(rocordData.msgType="img"){
+                    if(rocordData.msgType=="img"){
                         $(".content-top").append("<div class='row msg-tab msg-l'>\n" +
                             "                    <div class='col-8'>\n" +
                             "                       <div class='msg msg-pic-div' id='pic-"+rocordData.msgContent+"'>" +

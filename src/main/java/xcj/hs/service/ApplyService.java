@@ -11,4 +11,8 @@ public interface ApplyService {
   void modifySupeiorApply(ApplyVo applyVo);
 
   Page<Apply> superiorApplyPageFind(String userId, String status, Pageable pageable);
+
+  Apply findById(String id);
+
+  void save(Apply apply);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.UserDao;
 import xcj.hs.entity.User;
+import xcj.hs.service.FriendShipService;
 import xcj.hs.service.RoleService;
 import xcj.hs.service.UserService;
 import xcj.hs.vo.UserVo;
@@ -25,6 +26,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
   @Autowired UserDao userDao;
 
   @Autowired RoleService roleService;
+
+  @Autowired
+  FriendShipService friendShipService;
 
   public boolean loginCheck(String account, String pwd) {
     User user = userDao.findByUserAccount(account);
@@ -74,7 +78,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
           "1",
           userVo.getUserName(),
           superiorIds,
-          roleService.findRoleByRoleName(userVo.getRoleName()).getRoleId(),
+          StringUtils.isNotBlank(userVo.getRoleId())?userVo.getRoleId():roleService.findRoleByRoleName(userVo.getRoleName()).getRoleId(),
           pageable);
     }
     // 管理员
@@ -83,6 +87,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
   }
 
   public boolean updateSuperior(String subordinateId, String superiorId) {
+    //自动建立好友关系
+    friendShipService.activeShip(subordinateId,superiorId);
+    friendShipService.activeShip(superiorId,subordinateId);
+    //更新上级
     User user = findById(subordinateId);
     if (user != null) {
       user.setSuperiorId(superiorId);

@@ -44,4 +44,12 @@ public class ApplyServiceImpl extends BaseServiceImpl<Apply> implements ApplySer
     return applyDao.findByTypeContainingAndNewIdContainingAndStatusContaining(
         "上级变更", userId, status, pageable);
   }
+
+  public Apply findById(String id){
+    return applyDao.findById(id).get();
+  }
+
+  public void save(Apply apply){
+    applyDao.save(apply);
+  }
 }

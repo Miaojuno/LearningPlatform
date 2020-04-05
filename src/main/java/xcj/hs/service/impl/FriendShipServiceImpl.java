@@ -24,8 +24,7 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
 
   @Autowired NewMsgService newMsgService;
 
-  @Autowired
-  ImgService imgService;
+  @Autowired ImgService imgService;
 
   public void activeShip(String userId1, String userId2) {
     FriendShip friendShip1 = friendShipDao.findByFsUser1AndFsUser2(userId1, userId2);
@@ -77,17 +76,26 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
         .collect(Collectors.toList());
   }
 
-  public void addMsg(String userId, String id, String msgContent,byte[] imgContent) {
+  public void addMsgTo(String fromId, String toId, String msgContent, byte[] imgContent) {
+    addMsg(
+        fromId,
+        friendShipDao.findByFsUser1AndFsUser2(fromId, toId) == null
+            ? friendShipDao.findByFsUser1AndFsUser2(toId, fromId).getFsId()
+            : friendShipDao.findByFsUser1AndFsUser2(fromId, toId).getFsId(),
+        msgContent,
+        imgContent);
+  }
+
+  public void addMsg(String userId, String id, String msgContent, byte[] imgContent) {
     newMsgService.addNumber(userId, 1);
     FriendShip friendShip = friendShipDao.findById(id).get();
     FriendShipMsg msg = new FriendShipMsg();
     msg.setMsgTime(TimeUtil.getCurrectTimeStr(TimeUtil.TIMESTR));
     msg.setMsgUser(userId);
-    if(StringUtils.isNotBlank(msgContent)){
+    if (StringUtils.isNotBlank(msgContent)) {
       msg.setMsgContent(msgContent);
       msg.setMsgType("text");
-    }
-    else {
+    } else {
       msg.setMsgContent(imgService.save(imgContent));
       msg.setMsgType("img");
     }
@@ -130,5 +138,4 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   public FriendShip findById(String fsId) {
     return friendShipDao.findById(fsId).get();
   }
-
 }

@@ -99,6 +99,8 @@ $(function () {
                             $("#defaultSolution").val("");
                             $("#solutionChoose").val("");
                             $("#solution4choose").val("");
+                            $(".macroPointChoseInput").val("")
+                            $(".macroPointChoseId").val("")
                             $(".file1").val("")
                             $(".file2").val("")
                             $(".fileInput1").val("")
@@ -128,6 +130,8 @@ $(function () {
                                     $("#defaultSolution").val("");
                                     $("#solutionChoose").val("");
                                     $("#solution4choose").val("");
+                                    // $(".macroPointChoseInput").val("")
+                                    // $(".macroPointChoseId").val("")
                                     $(".file1").val("")
                                     $(".file2").val("")
                                     $(".fileInput1").val("")
