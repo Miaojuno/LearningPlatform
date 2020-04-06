@@ -1,8 +1,11 @@
 package xcj.hs.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.FriendShipDao;
 import xcj.hs.entity.FriendShip;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
     implements FriendShipService {
 
@@ -137,5 +141,35 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
 
   public FriendShip findById(String fsId) {
     return friendShipDao.findById(fsId).get();
+  }
+
+  /** 定时清理聊天记录 */
+  @Scheduled(cron = "0 8 23 * * ?")
+//  @Scheduled(fixedDelay = 5000)
+  public void clearMsg() {
+    for (FriendShip friendShip : friendShipDao.findAll()) {
+        if(StringUtils.isNotBlank(friendShip.getFsMsgRecord())){
+            List<FriendShipMsg> msgs=new ArrayList<>();
+            for(FriendShipMsg msg:JSON.parseArray(friendShip.getFsMsgRecord(),FriendShipMsg.class)){
+                //只保留七天内聊天记录
+                if(TimeUtil.timeCompare(TimeUtil.getSpecifiedTimeStr(TimeUtil.TIMESTR,-7),msg.getMsgTime()).equals("0")){
+                    msgs.add(msg);
+                }
+                else {
+                    //若是图片，删除对应图片
+                    if("img".equals(msg.getMsgType())){
+                        imgService.deleteById(msg.getMsgContent());
+                    }
+                }
+            }
+            if(msgs==null){
+                friendShip.setFsMsgRecord("");
+            }
+            else {
+                friendShip.setFsMsgRecord(JSONArray.toJSONString(msgs));
+            }
+            friendShipDao.save(friendShip);
+        }
+    }
   }
 }

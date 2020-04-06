@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/ws/chat")
+@RequestMapping("/wsChat")
 public class WebSocketController {
   @Autowired FriendShipManager friendShipManager;
 

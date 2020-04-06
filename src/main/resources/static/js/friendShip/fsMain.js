@@ -206,7 +206,7 @@ $(function () {
                     $('.content-top')[0].scrollTop = $('.content-top')[0].scrollHeight;
                     //通知对方
                     $.ajax({
-                        url: "/ws/chat/messageRecordUpload",
+                        url: "/wsChat/messageRecordUpload",
                         data: {
                             "fsId": $(".choosed-friend").attr("id").substring(4),
                             "toAccount": $(".choosed-friend .friendAccount").val()
@@ -272,7 +272,7 @@ $(function () {
                     $("#picFile").val("")
                     //通知对方
                     $.ajax({
-                        url: "/ws/chat/messageRecordUpload",
+                        url: "/wsChat/messageRecordUpload",
                         data: {
                             "fsId": $(".choosed-friend").attr("id").substring(4),
                             "toAccount": $(".choosed-friend .friendAccount").val()

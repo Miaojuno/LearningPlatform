@@ -20,4 +20,8 @@ public class ImgServiceImpl extends BaseServiceImpl<Img> implements ImgService {
   public Img findById(String id) {
     return imgDao.findById(id).get();
   }
+
+  public void deleteById(String id){
+      imgDao.deleteById(id);
+  }
 }

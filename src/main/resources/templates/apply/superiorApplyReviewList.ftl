@@ -147,4 +147,8 @@
         })
 
     })
+
+    $("#data-query").on("click",function () {
+        $('#superiorApply-table').bootstrapTable('refresh');
+    })
 </script>

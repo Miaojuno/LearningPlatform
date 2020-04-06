@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.RecordDao;
 import xcj.hs.entity.Record;
@@ -57,4 +59,6 @@ public class RecordServiceImpl extends BaseServiceImpl<Record> implements Record
   public Record findById(String id){
     return recordDao.findById(id).get();
   }
+
+
 }

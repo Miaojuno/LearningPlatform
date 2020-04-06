@@ -413,8 +413,7 @@ $(function () {
     if (typeof (WebSocket) == "undefined") {
         console.log("浏览器不支持WebSocket");
     } else {
-
-        socket = new WebSocket("ws://localhost:8080/webSocket/chatModule?userAccount=" + $("#loginUserAccount").val());
+        socket = new WebSocket("ws://"+window.location.host+"/webSocket/chatModule?userAccount=" + $("#loginUserAccount").val());
         //连接打开事件
         socket.onopen = function () {
             // socket.send($("#loginUserAccount").val() + "已连接");
