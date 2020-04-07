@@ -184,6 +184,13 @@ $(function () {
                     return
                 }
             }
+            else{
+                if($("#random .userSolution").val() == undefined || $("#random .userSolution").val() == null
+                    || $("#random .userSolution").val()==""){
+                    layer.msg("请输入答案", {icon: 2});
+                    return
+                }
+            }
 
             $.ajax({
                 type: "post",

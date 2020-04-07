@@ -35,6 +35,11 @@
     var dt;
 
     $('#submitUpload').on('click', function () {
+        layui.use('layer',function() {
+            if (document.getElementById("file").files[0] == null) {
+                layer.msg("请选择文件", {icon: 2});
+                return
+            }
         $(".progress").css('background-color','#e9ecef');
         dt=setInterval(function () {
             if(n<400){
@@ -45,6 +50,7 @@
 
         },"100");
         UpladFile();
+        })
     });
 
     $('#fileInput').on('click', function () {

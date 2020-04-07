@@ -38,7 +38,7 @@ public class NeoShowController {
       cql = "match (m) where m.pointId IN [\"1\",\"2\",\"3\"] return m";
       // 指定节点作为根节点
     } else {
-      cql = "match (m:Point{pointId: " + id + "}) return m";
+      cql = "match (m) where m.pointId IN [\""+id+"\"] return m";
     }
     Set<Map<String, Object>> nodeList = new HashSet<>();
     neo4jUtil.getList(cql, nodeList);

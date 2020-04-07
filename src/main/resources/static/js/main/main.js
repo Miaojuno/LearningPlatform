@@ -215,27 +215,32 @@ $(function () {
                 content: $('#role-modify-apply-div'),
                 btn: ['确定', '关闭'],
                 yes: function (index) {
-                    $.ajax({
-                        url: "/apply/modifyRoleApply",
-                        data: {
-                            "userAccount": $('#loginUserAccount').val(),
-                            "newId": $("#role-modify-apply-select").val(),
-                            "reason": $("#role-modify-apply-div .reason").val()
-                        },
-                        dataType: "json",
-                        type: "post",
-                        success: function (result) {
-                            if (result.success == true) {
-                                layer.msg("申请成功", {icon: 1});
-                                layer.close(index);
-                            } else {
-                                layer.msg(result.msg, {icon: 2});
+                    if($("#role-modify-apply-select").val()==null || $("#role-modify-apply-select").val()==""){
+                        layer.msg("请选择角色", {icon: 2});
+                    }
+                    else {
+                        $.ajax({
+                            url: "/apply/modifyRoleApply",
+                            data: {
+                                "userAccount": $('#loginUserAccount').val(),
+                                "newId": $("#role-modify-apply-select").val(),
+                                "reason": $("#role-modify-apply-div .reason").val()
+                            },
+                            dataType: "json",
+                            type: "post",
+                            success: function (result) {
+                                if (result.success == true) {
+                                    layer.msg("申请成功", {icon: 1});
+                                    layer.close(index);
+                                } else {
+                                    layer.msg(result.msg, {icon: 2});
+                                }
+                            },
+                            error: function (result) {
+                                layer.msg("ERROR", {icon: 2});
                             }
-                        },
-                        error: function (result) {
-                            layer.msg("ERROR", {icon: 2});
-                        }
-                    })
+                        })
+                    }
 
                 },
                 btn2: function (index) {
@@ -261,27 +266,32 @@ $(function () {
                 content: $('#superior-modify-apply-div'),
                 btn: ['确定', '关闭'],
                 yes: function (index) {
-                    $.ajax({
-                        url: "/apply/modifySuperiorApply",
-                        data: {
-                            "userAccount": $('#loginUserAccount').val(),
-                            "newId": $("#superior-modify-apply-div .newId").val(),
-                            "reason": $("#superior-modify-apply-div .reason").val()
-                        },
-                        dataType: "json",
-                        type: "post",
-                        success: function (result) {
-                            if (result.success == true) {
-                                layer.msg("申请成功", {icon: 1});
-                                layer.close(index);
-                            } else {
-                                layer.msg(result.msg, {icon: 2});
+                    if($("#superior-modify-apply-div .newId").val()==null || $("#superior-modify-apply-div .newId").val()==""){
+                        layer.msg("请选择上级", {icon: 2});
+                    }
+                    else{
+                        $.ajax({
+                            url: "/apply/modifySuperiorApply",
+                            data: {
+                                "userAccount": $('#loginUserAccount').val(),
+                                "newId": $("#superior-modify-apply-div .newId").val(),
+                                "reason": $("#superior-modify-apply-div .reason").val()
+                            },
+                            dataType: "json",
+                            type: "post",
+                            success: function (result) {
+                                if (result.success == true) {
+                                    layer.msg("申请成功", {icon: 1});
+                                    layer.close(index);
+                                } else {
+                                    layer.msg(result.msg, {icon: 2});
+                                }
+                            },
+                            error: function (result) {
+                                layer.msg("ERROR", {icon: 2});
                             }
-                        },
-                        error: function (result) {
-                            layer.msg("ERROR", {icon: 2});
-                        }
-                    })
+                        })
+                    }
 
                 },
                 btn2: function (index) {

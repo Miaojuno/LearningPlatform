@@ -180,7 +180,7 @@
                         <input name="newId" class="form-control newId" autocomplete="off">
                     </div>
                     <div class="col-8">
-                        <input name="newId" class="form-control newName" autocomplete="off">
+                        <input name="newId" class="form-control newName" autocomplete="off" readonly>
                     </div>
                 </div>
                 <div class="row">
@@ -548,8 +548,8 @@ type:single代表单选,multiple代表多选,默认单选-->
 
 
 <#--知识点选择组件，展示知识点内容，隐藏框内容为id-->
-<#macro pointChoose id class name>
-    <input type="text" class="macroPointChoseInput form-control" placeholder="">
+<#macro pointChoose id class name placeholder>
+    <input type="text" class="macroPointChoseInput form-control" placeholder="${placeholder}">
     <input type="text" id="${id}" name="${name}" class="${class} macroPointChoseId form-control" placeholder="" hidden>
 
 <#--选择知识点遮罩层-->

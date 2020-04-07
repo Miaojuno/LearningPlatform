@@ -15,116 +15,128 @@ $(function () {
     $("#pointDetail").hide()
 
 
+
+
     $(document).on("click", "#pointDetail .jumpBtn", function () {
         window.location.href = "/record/doQuestion?nodeId=" + $("#pointDetail .nodeId").text();
     })
 
-
-    layui.use('layer', function () {
-        layer = layui.layer;
-        init();
-        //修改初始缩放
-        network.moveTo({scale: 0.8});
-        //先初始化一个节点
-        $.ajax({
-            url: '/neo4jShow/getTopPoint',
-            type: "post",
-            async: false,
-            success: function (ret) {
-                if (ret) {
-                    //createNetwork({nodes: ret.nodeList});
-                    var newNodes = [];
-                    for (var i = 0; i < ret.nodeList.length; i++) {
-                        var m = {
-                            "nodeId": ret.nodeList[i].nodeId,
-                            // "知识点Id": ret.nodeList[i].pointId,
-                            "知识点": ret.nodeList[0].pointDetail
-                        }
-                        newNodes.push(m)
-                    }
-                    createNetwork({nodes: newNodes});
-                } else {
-                    layer.msg("查询失败");
-                }
-            }
-        });
-        //拖拉节点
-        network.on("dragEnd", function (params) {
-            if (params.nodes && params.nodes.length > 0) {
-                network.clustering.updateClusteredNode(params.nodes[0], {physics: false});
-            }
-        });
-        //点击节点显示详情
-        network.on("click", function (params) {
-            var nodeId = params.nodes[0];
-            if (nodeId != null) {
-                $.ajax({
-                    url: '/neo/findPointById',
-                    type: "post",
-                    data: {
-                        "id": nodeId
-                    },
-                    success: function (ret) {
-                        if (ret) {
-                            $("#pointDetail .textShow .nodeId").text(nodeId);
-                            $("#pointDetail").show()
-                            if (ret.data.pointDetail != "") {
-                                $("#pointDetail .textShow .pointDetail").show()
-                                $("#pointDetail .textShow .pointDetail").text("内容：" + ret.data.pointDetail);
-                            }
-                            else $("#pointDetail .textShow .pointDetail").hide()
-
-                            if (ret.data.chapter != "") {
-                                $("#pointDetail .textShow .chapter").show()
-                                $("#pointDetail .textShow .chapter").text("章节：" + ret.data.chapter);
-                            }
-                            else $("#pointDetail .textShow .chapter").hide()
-
-                            if (ret.data.isbn != "") {
-                                $("#pointDetail .textShow .isbn").show()
-                                $("#pointDetail .textShow .isbn").text("ISBN：" + ret.data.isbn);
-                            }
-                            else $("#pointDetail .textShow .isbn").hide()
-
-                            if (ret.data.grade != "") {
-                                $("#pointDetail .textShow .grade").show()
-                                $("#pointDetail .textShow .isbgraden").text("年级：" + ret.data.grade);
-                            }
-                            else $("#pointDetail .textShow .grade").hide()
-
-                            if (ret.data.distribution != "") {
-                                $("#pointDetail .textShow .distribution").show()
-                                $("#pointDetail .textShow .distribution").text("考试要求分布：" + ret.data.distribution);
-                            }
-                            else $("#pointDetail .textShow .distribution").hide()
-
-                            if (ret.data.frequency != "") {
-                                $("#pointDetail .textShow .frequency").show()
-                                $("#pointDetail .textShow .frequency").text("频次：" + ret.data.frequency);
-                            }
-                            else $("#pointDetail .textShow .frequency").hide()
-                        } else {
-                            layer.msg("查询失败");
-                        }
-                    }
-                });
-            }
-
-        });
-        //双击扩展
-        network.on("doubleClick", function (params) {
-            // 取出当前节点在Vis的节点ID、
-            var nodeId = params.nodes[0];
-            if (nodeId != null && nodeId != "") {
-                if (nodeExtendArr.indexOf(nodeId) != -1) {
-                    layer.msg("该节点已经扩展");
-                } else {
-                    getData(nodeId);
-                }
-            }
-
-        });
+    $(".choose-jump-btn").on("click",function () {
+        initTop($("#hide-pointId").val())
     })
+
+    initTop("")
+
+    function initTop(id) {
+        layui.use('layer', function () {
+            layer = layui.layer;
+            init();
+            //修改初始缩放
+            network.moveTo({scale: 0.8});
+            //先初始化一个节点
+            $.ajax({
+                url: '/neo4jShow/getTopPoint',
+                type: "post",
+                data:{
+                    "id":id
+                },
+                async: false,
+                success: function (ret) {
+                    if (ret) {
+                        //createNetwork({nodes: ret.nodeList});
+                        var newNodes = [];
+                        for (var i = 0; i < ret.nodeList.length; i++) {
+                            var m = {
+                                "nodeId": ret.nodeList[i].nodeId,
+                                // "知识点Id": ret.nodeList[i].pointId,
+                                "知识点": ret.nodeList[0].pointDetail
+                            }
+                            newNodes.push(m)
+                        }
+                        createNetwork({nodes: newNodes});
+                    } else {
+                        layer.msg("查询失败");
+                    }
+                }
+            });
+            //拖拉节点
+            network.on("dragEnd", function (params) {
+                if (params.nodes && params.nodes.length > 0) {
+                    network.clustering.updateClusteredNode(params.nodes[0], {physics: false});
+                }
+            });
+            //点击节点显示详情
+            network.on("click", function (params) {
+                var nodeId = params.nodes[0];
+                if (nodeId != null) {
+                    $.ajax({
+                        url: '/neo/findPointById',
+                        type: "post",
+                        data: {
+                            "id": nodeId
+                        },
+                        success: function (ret) {
+                            if (ret) {
+                                $("#pointDetail .textShow .nodeId").text(nodeId);
+                                $("#pointDetail").show()
+                                if (ret.data.pointDetail != "") {
+                                    $("#pointDetail .textShow .pointDetail").show()
+                                    $("#pointDetail .textShow .pointDetail").text("内容：" + ret.data.pointDetail);
+                                }
+                                else $("#pointDetail .textShow .pointDetail").hide()
+
+                                if (ret.data.chapter != "") {
+                                    $("#pointDetail .textShow .chapter").show()
+                                    $("#pointDetail .textShow .chapter").text("章节：" + ret.data.chapter);
+                                }
+                                else $("#pointDetail .textShow .chapter").hide()
+
+                                if (ret.data.isbn != "") {
+                                    $("#pointDetail .textShow .isbn").show()
+                                    $("#pointDetail .textShow .isbn").text("ISBN：" + ret.data.isbn);
+                                }
+                                else $("#pointDetail .textShow .isbn").hide()
+
+                                if (ret.data.grade != "") {
+                                    $("#pointDetail .textShow .grade").show()
+                                    $("#pointDetail .textShow .isbgraden").text("年级：" + ret.data.grade);
+                                }
+                                else $("#pointDetail .textShow .grade").hide()
+
+                                if (ret.data.distribution != "") {
+                                    $("#pointDetail .textShow .distribution").show()
+                                    $("#pointDetail .textShow .distribution").text("考试要求分布：" + ret.data.distribution);
+                                }
+                                else $("#pointDetail .textShow .distribution").hide()
+
+                                if (ret.data.frequency != "") {
+                                    $("#pointDetail .textShow .frequency").show()
+                                    $("#pointDetail .textShow .frequency").text("频次：" + ret.data.frequency);
+                                }
+                                else $("#pointDetail .textShow .frequency").hide()
+                            } else {
+                                layer.msg("查询失败");
+                            }
+                        }
+                    });
+                }
+
+            });
+            //双击扩展
+            network.on("doubleClick", function (params) {
+                // 取出当前节点在Vis的节点ID、
+                var nodeId = params.nodes[0];
+                if (nodeId != null && nodeId != "") {
+                    if (nodeExtendArr.indexOf(nodeId) != -1) {
+                        layer.msg("该节点已经扩展");
+                    } else {
+                        getData(nodeId);
+                    }
+                }
+
+            });
+        })
+    }
 });
 
 function init() {
