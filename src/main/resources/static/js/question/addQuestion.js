@@ -73,11 +73,39 @@ $(function () {
             data.append("file1", fileObj1);
             data.append("file2", fileObj2);
             if ($("#questionType option:selected").val() == "选择题") {
+                if($("#solutionChoose").val().trim()==""){
+                    layer.msg("答案不得为空", {icon: 2});
+                    return
+                }
+                if($("#solution4choose").val().trim()==""){
+                    layer.msg("答案备选不得为空", {icon: 2});
+                    return
+                }
                 data.append("solution", $("#solutionChoose").val() + "/" + $("#solution4choose").val())
             }
             else {
+                if(fileObj2==null && ($("#defaultSolution").val()==undefined || $("#defaultSolution").val().trim()=="")){
+                    layer.msg("答案不得为空", {icon: 2});
+                    return
+                }
                 data.append("solution", $("#defaultSolution").val())
             }
+
+
+            if(fileObj1==null && ($(".questionDetail").val()==undefined || $(".questionDetail").val().trim()=="")){
+                layer.msg("题目不得为空", {icon: 2});
+                return
+            }
+            if ($(".score").val().trim() == "") {
+                layer.msg("请输入分值", {icon: 2});
+                return
+            }
+            if (!regx.test($(".score").val())) {
+                layer.msg("请输入整数分值", {icon: 2});
+                return
+            }
+
+
 
             $.ajax({
                 url: "/neo/addQuestion",

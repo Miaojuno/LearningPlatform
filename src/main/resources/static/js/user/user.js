@@ -157,7 +157,7 @@ $(function () {
 
                     //验证输入的信息
                     var regx = /(^[A-Za-z0-9]+$)/
-                    if ($("#user-add-form .account").val() == "") {
+                    if ($("#user-add-form .account").val().trim() == "") {
                         layer.msg("账户不能为空", {icon: 2});
                     }
                     else if (!regx.test($("#user-add-form .account").val())) {
@@ -166,10 +166,10 @@ $(function () {
                     else if ($("#user-add-form .account").val().length < 5 || $("#user-add-form .account").val().length > 15) {
                         layer.msg("账户长度应为5-15位", {icon: 2});
                     }
-                    else if ($("#user-add-form .pwd1").val() == "") {
+                    else if ($("#user-add-form .pwd1").val().trim() == "") {
                         layer.msg("密码不能为空", {icon: 2});
                     }
-                    else if ($("#user-add-form .name").val() == "") {
+                    else if ($("#user-add-form .name").val().trim() == "") {
                         layer.msg("姓名不能为空", {icon: 2});
                     }
                     else if (!regx.test($("#user-add-form .pwd1").val())) {
@@ -251,13 +251,16 @@ $(function () {
                 content: $('#user-modify-div'),
                 btn: ['确定', '关闭'],
                 yes: function (index) {
+                    if ($("#user-modify-form .name").val().trim() == "") {
+                        layer.msg("姓名不能为空", {icon: 2});
+                        return
+                    }
                     $.ajax({
                         url: "/user/modify",
                         data: $("#user-modify-form").serialize(),
                         dataType: "json",
                         type: "post",
                         success: function (result) {
-                            console.log(result)
                             if (result.success == true) {
                                 layer.msg("修改成功", {icon: 1});
                                 layer.close(index);

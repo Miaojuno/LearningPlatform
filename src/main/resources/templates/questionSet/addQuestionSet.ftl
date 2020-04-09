@@ -19,12 +19,12 @@
             <label class="control-label col-2 text-right" for="">题集封面*</label>
             <div class="col-10">
                 <input type="file" class="file1" id="file1" hidden>
-                <input type="text" class="fileInput1 form-control" placeholder="题目图片 ，可选 ，jpg/png">
+                <input type="text" class="fileInput1 form-control" placeholder="题目图片 ，可选 ，jpg/png" readonly>
             </div>
         </div>
 
         <div class="row">
-            <label class="control-label col-2 text-right" for="">用户*</label>
+            <label class="control-label col-2 text-right" for="">用户</label>
             <div class="col-10">
                     <@macros.userChoose class="userIds" name="userIds" type="multiple"></@macros.userChoose>
             </div>
@@ -55,30 +55,41 @@
 
 
         $(".goAddQuestion").on("click", function () {
-            var data = new FormData();
-            var fileObj1 = document.getElementById("file1").files[0];
-            data.append("file", fileObj1);
-            data.append("qsName", $(".qsName").val());
-            data.append("userIds", $(".userIds").val());
-            data.append("qsOwner", $("#loginUserAccount").val());
-            $.ajax({
-                url: "/questionSet/addQuestionSet",
-                data: data,
-                dataType: "json",
-                type: "post",
-                processData: false,
-                contentType: false,
-                success: function (result) {
-                    if (result.success == true) {
-                        window.location.href = "/neo/addQuestion?questionSetId=" + result.qsId;
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-                    }
-                },
-                error: function (result) {
+            layui.use('layer', function () {
+                layer = layui.layer;
+                var data = new FormData();
+                var fileObj1 = document.getElementById("file1").files[0];
+                data.append("file", fileObj1);
+                data.append("qsName", $(".qsName").val());
+                data.append("userIds", $(".userIds").val());
+                data.append("qsOwner", $("#loginUserAccount").val());
+                if ($(".qsName").val().trim() == "") {
+                    layer.msg("请输入题集名", {icon: 2});
+                    return
                 }
-            })
+                if (fileObj1 == null) {
+                    layer.msg("请选择封面图片", {icon: 2});
+                    return
+                }
 
+                $.ajax({
+                    url: "/questionSet/addQuestionSet",
+                    data: data,
+                    dataType: "json",
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success == true) {
+                            window.location.href = "/neo/addQuestion?questionSetId=" + result.qsId;
+                        } else {
+                            layer.msg(result.msg, {icon: 2});
+                        }
+                    },
+                    error: function (result) {
+                    }
+                })
+            })
         })
 
     });

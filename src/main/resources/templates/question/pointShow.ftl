@@ -35,7 +35,7 @@
     #pointDetail {
         position: absolute;
         right: 0.5rem;
-        top: 0.5rem;
+        bottom: 0.5rem;
         border-radius: 0.2rem;
         box-shadow: 2px 2px 8px #333333;
         padding: 0.5rem;

@@ -39,6 +39,15 @@
         $('#questionReviewDiv .submitScore').on('click', function () {
             layui.use('layer', function () {
                 layer = layui.layer;
+                var regx = /(^[0-9]+$)/
+                if ($(".score").val().trim() == "") {
+                    layer.msg("请打分", {icon: 2});
+                    return
+                }
+                if (!regx.test($(".score").val())) {
+                    layer.msg("请输入整数分值", {icon: 2});
+                    return
+                }
 
                 $.ajax({
                     type: "post",
@@ -63,10 +72,9 @@
             })
         });
 
-        $("#questionReviewDiv .questionPic").on("click",function () {
-            console.log(123)
-            $("#qrUserShow .userId").val("123");
-        })
+        // $("#questionReviewDiv .questionPic").on("click",function () {
+        //     $("#qrUserShow .userId").val("123");
+        // })
 
         //加载一题待批改题目
         function getOneUnreviewed() {
@@ -160,3 +168,4 @@
     })
 
 </script>
+

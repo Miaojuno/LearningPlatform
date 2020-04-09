@@ -24,7 +24,7 @@
             <textarea rows="5" class="questionDetail" name="questionDetail"
                       placeholder="输入题目。。。"></textarea>
                 <input type="file" class="file1" id="file1" hidden>
-                <input type="text" class="fileInput1 form-control" placeholder="题目图片 ，可选 ，jpg/png">
+                <input type="text" class="fileInput1 form-control" placeholder="题目图片 ，可选 ，jpg/png" readonly>
             </div>
         </div>
 
@@ -35,7 +35,7 @@
             <textarea rows="5" id="defaultSolution" class="solution"
                       placeholder="输入答案。。。"></textarea>
                 <input type="file" class="file2" id="file2" hidden>
-                <input type="text" class="fileInput2 form-control" placeholder="答案图片 ，可选 ，jpg/png">
+                <input type="text" class="fileInput2 form-control" placeholder="答案图片 ，可选 ，jpg/png" readonly>
             </div>
         </div>
 

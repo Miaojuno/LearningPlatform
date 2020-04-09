@@ -90,6 +90,13 @@ $(function () {
                     return
                 }
             }
+            else{
+                if($("#do-qs-question-div .userSolution").val() == undefined || $("#do-qs-question-div .userSolution").val() == null
+                    || $("#random .userSolution").val().trim()==""){
+                    layer.msg("请输入答案", {icon: 2});
+                    return
+                }
+            }
 
             $.ajax({
                 type: "post",

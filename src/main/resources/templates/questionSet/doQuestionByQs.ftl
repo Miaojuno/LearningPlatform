@@ -23,7 +23,7 @@
                 <textarea rows="5" class="userSolution"
                           placeholder="在这里输入你的答案。。。"></textarea>
                 <input type="file" class="file" id="upFile" hidden>
-                <input type="text" class="fileInput form-control" placeholder="上传图片(jpg/png)">
+                <input type="text" class="fileInput form-control" placeholder="上传图片(jpg/png)" readonly>
             </div>
             <div class="col-10 type2">
                 <textarea rows="1" class="form-control userOldSolution " style="margin-bottom: 1rem"

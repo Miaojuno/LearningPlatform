@@ -206,7 +206,7 @@
                     <div class="row">
                         <label class="control-label col-3 text-right" for="">姓名</label>
                         <div class="col-8">
-                            <input type="text" name="userName" class="searchSuperiorName form-control">
+                            <input type="text" name="userName" class="searchSuperiorName form-control" readonly>
                         </div>
                     </div>
                 </form>
@@ -310,9 +310,9 @@ type:single代表单选,multiple代表多选,默认单选-->
 <#macro userChoose id class name type="single">
     <input id="${id}" name="${name}" class="${class} macroUserIds" hidden>
     <#if type=="single">
-        <input type="text" class="form-control userNames" placeholder="">
+        <input type="text" class="form-control userNames" placeholder="" readonly>
     <#elseif type=="multiple">
-        <textarea rows="5" class="userNames" placeholder=""></textarea>
+        <textarea rows="5" class="userNames" placeholder="" readonly></textarea>
     </#if>
 
 <#--用户选择遮罩层-->
@@ -549,7 +549,7 @@ type:single代表单选,multiple代表多选,默认单选-->
 
 <#--知识点选择组件，展示知识点内容，隐藏框内容为id-->
 <#macro pointChoose id class name placeholder>
-    <input type="text" class="macroPointChoseInput form-control" placeholder="${placeholder}">
+    <input type="text" class="macroPointChoseInput form-control" placeholder="${placeholder}" readonly>
     <input type="text" id="${id}" name="${name}" class="${class} macroPointChoseId form-control" placeholder="" hidden>
 
 <#--选择知识点遮罩层-->

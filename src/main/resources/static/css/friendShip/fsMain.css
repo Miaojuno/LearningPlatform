@@ -87,9 +87,19 @@
     height: 2rem;
     width: 3rem;
     margin-top: 0.1rem;
-    margin-left: 1.5rem;
+
+}
+
+#send-icon {
+    height: 2rem;
+    width: 3rem;
+    margin-top: 0.1rem;
 }
 
 .pic-div :hover{
+    cursor:pointer
+}
+
+.sned-div :hover{
     cursor:pointer
 }

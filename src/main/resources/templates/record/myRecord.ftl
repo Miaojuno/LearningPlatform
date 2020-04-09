@@ -149,12 +149,14 @@ $(function () {
                 }
             })
 
-            $(".layui-layer-page").css("width",$(window).width()*0.6)
-            $(".layui-layer-page").css("max-width","60rem")
-            $(".layui-layer-page").css("left",$(window).width()*0.2)
-            $(".layui-layer-page").css("top","1rem")
-            $(".layui-layer-page").css("max-height",$(window).height()*0.7)
-            $(".layui-layer-page").css("overflow","scroll")
+            if (!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //非移动端
+                $(".layui-layer-page").css("width", $(window).width() * 0.6)
+                $(".layui-layer-page").css("max-width", "60rem")
+                $(".layui-layer-page").css("left", $(window).width() * 0.2)
+                $(".layui-layer-page").css("top", "1rem")
+                $(".layui-layer-page").css("max-height", $(window).height() * 0.7)
+                $(".layui-layer-page").css("overflow", "scroll")
+            }
 
             $.ajax({
                 url: "/record/findById",

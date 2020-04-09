@@ -47,6 +47,11 @@ $(function () {
                     $("#tab-" + result.data[i].fsId ).addClass("tab-user-"+friendId)
                     $("#tab-" + result.data[i].fsId + " .friendAccount").val(result.data[i].userVo.userAccount)
                     $("#tab-" + result.data[i].fsId + " .rowData").val(result.data[i].fsMsgRecord)
+                    if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
+                        $(".lastTime").css("display", "none")
+                        $(".unreadNum").css("right", "-1rem")
+                        $(".unreadNum").css("bottom", "1rem")
+                    }
                 }
 
                 var url = location.search;

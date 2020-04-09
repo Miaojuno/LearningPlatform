@@ -8,7 +8,7 @@
         <label class="control-label col-12" for="">导入测试:</label>
         <div class="col-10">
             <input type="file" id="file" hidden >
-            <input type="text" id="fileInput" class="form-control" placeholder="请选择文件">
+            <input type="text" id="fileInput" class="form-control" placeholder="请选择文件" readonly>
         </div>
         <button id="submitUpload" class="btn btn-primary" style="">确定</button>
     </div>
