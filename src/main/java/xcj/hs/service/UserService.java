@@ -8,57 +8,62 @@ import xcj.hs.vo.UserVo;
 import java.util.List;
 
 public interface UserService {
-    /**
-     * 登陆验证
-     * @param account
-     * @param pwd
-     * @return
-     */
-    boolean loginCheck(String account,String pwd);
+  /**
+   * 登陆验证
+   *
+   * @param account
+   * @param pwd
+   * @return
+   */
+  boolean loginCheck(String account, String pwd);
 
-    /**
-     * 新增用户（当前账户名存在时返回false）
-     * @param newUser
-     * @return
-     */
-    boolean create(User newUser);
+  /**
+   * 新增用户（当前账户名存在时返回false）
+   *
+   * @param newUser
+   * @return
+   */
+  boolean create(User newUser);
 
-    void modifyPic(String userAccount, byte[] pic);
+  void modifyPic(String userAccount, byte[] pic);
 
-    void modifyRole(String userAccount,String roleId);
+  void modifyRole(String userAccount, String roleId);
 
-    List<User> findAllActiveUser();
+  void modifyRoleById(String userId, String roleId);
 
-    Page<User> pageFind(UserVo userVo, Pageable pageable);
+  List<User> findAllActiveUser();
 
-    boolean updateSuperior(String subordinateId,String superiorId);
+  Page<User> pageFind(UserVo userVo, Pageable pageable);
 
-    /**
-     * 密码重置为“123456”
-     * @param userId
-     */
-    void rePwd(String userId);
+  boolean updateSuperior(String subordinateId, String superiorId);
 
+  /**
+   * 密码重置为“123456”
+   *
+   * @param userId
+   */
+  void rePwd(String userId);
 
-    /**
-     * 删除用户（isActive置0）
-     * @param userId
-     */
-    void deleteUser(String userId);
+  /**
+   * 删除用户（isActive置0）
+   *
+   * @param userId
+   */
+  void deleteUser(String userId);
 
-    int getActiveUserNumber();
+  int getActiveUserNumber();
 
-    void update(User user);
+  void update(User user);
 
-    User findById(String userId);
+  User findById(String userId);
 
-    User findByUserAccount(String userAccount);
+  User findByUserAccount(String userAccount);
 
-
-    /**
-     * 查找下级
-     * @param account
-     * @return
-     */
-    List<User> findAllSubordinate(String account);
+  /**
+   * 查找下级
+   *
+   * @param account
+   * @return
+   */
+  List<User> findAllSubordinate(String account);
 }

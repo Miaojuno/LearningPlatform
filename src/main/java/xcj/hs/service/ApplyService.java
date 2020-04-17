@@ -12,6 +12,8 @@ public interface ApplyService {
 
   Page<Apply> superiorApplyPageFind(String userId, String status, Pageable pageable);
 
+  Page<Apply> roleApplyPageFind( String status, Pageable pageable);
+
   Apply findById(String id);
 
   void save(Apply apply);

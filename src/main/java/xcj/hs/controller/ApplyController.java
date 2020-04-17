@@ -62,8 +62,6 @@ public class ApplyController {
     return "apply/superiorApplyReviewList";
   }
 
-
-
   @RequestMapping("/superiorApplyPageList.json")
   @ResponseBody
   public Map<String, Object> superiorApplyPageList(
@@ -78,17 +76,41 @@ public class ApplyController {
   }
 
   /**
+   * 角色变更审核界面
+   *
+   * @param model
+   * @return
+   */
+  @GetMapping("/roleApplyReview")
+  public String roleApplyReview(Model model) {
+    return "apply/roleApplyReviewList";
+  }
+
+  @RequestMapping("/roleApplyPageList.json")
+  @ResponseBody
+  public Map<String, Object> roleApplyPageList(
+      String status, Integer pageSize, Integer pageNumber) {
+    Map<String, Object> resultMap = new HashMap();
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    Page<ApplyVo> pages = applyManager.roleApplyPageFind(status, pageable);
+
+    resultMap.put("data", pages.getContent());
+    resultMap.put("total", pages.getTotalElements());
+    return resultMap;
+  }
+
+  /**
    * pass上级申请
    *
    * @param applyId
    * @param isPass
    * @return
    */
-  @PostMapping("/passSuperiorApply")
+  @PostMapping("/passApply")
   @ResponseBody
-  public Map<String, Object> passSupeiorApply(String applyId,String isPass) {
+  public Map<String, Object> passApply(String applyId, String isPass) {
     Map<String, Object> map = new HashMap<String, Object>();
-    applyManager.passSupeiorApply(applyId,isPass);
+    applyManager.passApply(applyId, isPass);
     map.put("success", true);
     return map;
   }

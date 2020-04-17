@@ -15,6 +15,17 @@ $(function () {
         getRandomQuestion()
     })
 
+    //为你推荐
+    $("#btn-foru").on("click", function () {
+        $("#pointId").val("")
+        $("#diff").val("")
+        $("#type").val("")
+        $("#doq-title").text("为你推荐")
+        $(".diff-div").hide()
+        $(".type-div").hide()
+        getRandomQuestion()
+    })
+
     //选择难度
     $("#btn-diff").on("click", function () {
         $(".diff-div").show()

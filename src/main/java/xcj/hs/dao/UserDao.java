@@ -28,6 +28,10 @@ public interface UserDao extends JpaRepository<User, String> {
       @Param("roleId") String roleId, @Param("userAccount") String userAccount);
 
   @Modifying
+  @Query(value = "update user set ROLE_ID = :roleId where USER_ID = :userId", nativeQuery = true)
+  void modifyRoleIdByUserId(@Param("roleId") String roleId, @Param("userId") String userId);
+
+  @Modifying
   @Query(value = "update user set PIC = :pic where USER_ACCOUNT = :userAccount", nativeQuery = true)
   void modifyPicByUserAccount(@Param("userAccount") String userAccount, @Param("pic") byte[] pic);
 
@@ -55,7 +59,7 @@ public interface UserDao extends JpaRepository<User, String> {
 
   List<User> findByIsActiveEquals(String isActive);
 
-  List<User> findBySuperiorIdAndIsActive(String superiorId,String isActive);
+  List<User> findBySuperiorIdAndIsActive(String superiorId, String isActive);
 
   int countByIsActiveEquals(String isActive);
 

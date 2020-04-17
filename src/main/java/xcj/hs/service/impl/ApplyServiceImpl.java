@@ -45,11 +45,16 @@ public class ApplyServiceImpl extends BaseServiceImpl<Apply> implements ApplySer
         "上级变更", userId, status, pageable);
   }
 
-  public Apply findById(String id){
+  public Page<Apply> roleApplyPageFind( String status, Pageable pageable) {
+    return applyDao.findByTypeContainingAndNewIdContainingAndStatusContaining(
+        "角色变更", "", status, pageable);
+  }
+
+  public Apply findById(String id) {
     return applyDao.findById(id).get();
   }
 
-  public void save(Apply apply){
+  public void save(Apply apply) {
     applyDao.save(apply);
   }
 }

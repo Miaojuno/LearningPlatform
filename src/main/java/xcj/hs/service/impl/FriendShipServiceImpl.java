@@ -162,7 +162,7 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
                     }
                 }
             }
-            if(msgs==null){
+            if(msgs==null || msgs.isEmpty() ){
                 friendShip.setFsMsgRecord("");
             }
             else {

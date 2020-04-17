@@ -58,6 +58,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     userDao.modifyRoleIdByUserAccount(roleId, userAccount);
   }
 
+  public void modifyRoleById(String userId, String roleId) {
+    userDao.modifyRoleIdByUserId(roleId, userId);
+  }
+
   public List<User> findAllActiveUser() {
     return userDao.findByIsActiveEquals("1");
   }
@@ -88,9 +92,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
   }
 
   public boolean updateSuperior(String subordinateId, String superiorId) {
-    // 自动建立好友关系
+    // 自动建立好友关系，发送修改成功消息
     friendShipService.activeShip(subordinateId, superiorId);
     friendShipService.activeShip(superiorId, subordinateId);
+    friendShipService.addMsgTo(superiorId, subordinateId, "上级已修改", null);
     // 更新上级
     User user = findById(subordinateId);
     if (user != null) {

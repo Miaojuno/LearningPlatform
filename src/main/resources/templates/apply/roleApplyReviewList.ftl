@@ -22,15 +22,15 @@
     <div class="tablediv m-auto">
 
     <#--内容表格-->
-        <table id="superiorApply-table"></table>
+        <table id="roleApply-table"></table>
     </div>
 
 </div>
 
 <script>
     //表格
-    $('#superiorApply-table').bootstrapTable({
-        url: '/apply/superiorApplyPageList.json',
+    $('#roleApply-table').bootstrapTable({
+        url: '/apply/roleApplyPageList.json',
         pagination: true,           //分页
         sidePagination: "server",   //服务端处理分页
         pageNumber: 1,              //初始化加载第一页，默认第一页
@@ -86,11 +86,11 @@
     function actionFormatter(value, row, index) {
         var id = value;
         var result = "";
-        console.log($(this).closest("tr").find("td").eq(3).text());
-        if ("申请中" == row.status) {
+        if("申请中"==row.status){
             result += "<a href='javascript:;'  class='pass-apply' title='pass-apply'><span>同意</span></a>&nbsp;";
             result += "<a href='javascript:;'  class='un-pass-apply' title='un-pass-apply'><span>拒绝</span></a>&nbsp;";
         }
+
 
         return result;
     }
@@ -110,7 +110,7 @@
                 success: function (result) {
                     if (result.success == true) {
                         layer.msg("已同意", {icon: 1, time: 2000});
-                        $("#superiorApply-table").bootstrapTable('refresh');
+                        $("#roleApply-table").bootstrapTable('refresh');
                     } else {
                         layer.msg(result.msg, {icon: 2});
                     }
@@ -136,7 +136,7 @@
                 success: function (result) {
                     if (result.success == true) {
                         layer.msg("已拒绝", {icon: 1, time: 2000});
-                        $("#superiorApply-table").bootstrapTable('refresh');
+                        $("#roleApply-table").bootstrapTable('refresh');
                     } else {
                         layer.msg(result.msg, {icon: 2});
                     }
@@ -148,7 +148,7 @@
 
     })
 
-    $("#data-query").on("click", function () {
-        $('#superiorApply-table').bootstrapTable('refresh');
+    $("#data-query").on("click",function () {
+        $('#roleApply-table').bootstrapTable('refresh');
     })
 </script>

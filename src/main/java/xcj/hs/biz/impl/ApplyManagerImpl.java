@@ -37,7 +37,11 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
             userService.findByUserAccount(userAccount).getUserId(), status, pageable));
   }
 
-  public void passSupeiorApply(String applyId, String isPass) {
+  public Page<ApplyVo> roleApplyPageFind(String status, Pageable pageable) {
+    return po2vo(applyService.roleApplyPageFind(status, pageable));
+  }
+
+  public void passApply(String applyId, String isPass) {
     Apply apply = applyService.findById(applyId);
 
     // 自动建立好友关系
@@ -52,16 +56,19 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
         // 更新申请状态
         applyService.save(apply);
         // 发送申请成功通知
-        friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "以通过上级修改请求", null);
+        friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "已通过上级修改请求", null);
 
       } else {
-
+        userService.modifyRoleById(apply.getUserId(), apply.getNewId());
+        apply.setStatus("通过");
+        // 更新申请状态
+        applyService.save(apply);
       }
     } else {
       apply.setStatus("拒绝");
       applyService.save(apply);
       // 发送申请失败通知
-      friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "以拒绝修改请求", null);
+      friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "已拒绝修改请求", null);
     }
   }
 

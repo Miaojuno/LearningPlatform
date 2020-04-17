@@ -12,5 +12,7 @@ public interface ApplyManager {
 
   Page<ApplyVo> superiorApplyPageFind(String userAccount, String status, Pageable pageable);
 
-  void passSupeiorApply(String applyId,String isPass);
+  Page<ApplyVo> roleApplyPageFind(String status, Pageable pageable);
+
+  void passApply(String applyId, String isPass);
 }

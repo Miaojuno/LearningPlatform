@@ -129,8 +129,9 @@
         $("#studentRecordByDiffGraphics").css("height", $(window).width() * 0.6)
         // $(".main-contain").css("width","90%")
     }
-    $(".main-contain").css("min-height", $(window).height() * 1.5)
-
+    <#if Session["loginUserRole"] == "学生">
+    $(".main-contain").css("min-height", $(window).height() * 1.6)
+    </#if>
 
     $.ajax({
         type: "post",

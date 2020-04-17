@@ -59,13 +59,18 @@
 
 
                 <#--教师、领导-->
-                    <#if Session["loginUserRole"] != "管理员" && Session["loginUserRole"] != "学生">
+                    <#if  Session["loginUserRole"] != "学生">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             审核
                         </a>
                         <div class="dropdown-menu">
+                            <#if  Session["loginUserRole"] == "教师">
                             <a class="dropdown-item" target="_blank" href="/apply/superiorApplyReview">上级变更审核</a>
+                            </#if>
+                            <#if  Session["loginUserRole"] == "管理员">
+                            <a class="dropdown-item" target="_blank" href="/apply/roleApplyReview">角色变更审核</a>
+                            </#if>
                         </div>
                     </li>
                     </#if>
