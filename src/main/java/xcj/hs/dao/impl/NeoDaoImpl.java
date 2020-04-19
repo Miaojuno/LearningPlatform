@@ -50,14 +50,18 @@ public class NeoDaoImpl implements NeoDao {
       questionNumber = Integer.valueOf(record.get("count").toString());
       log.info("数据库中题目数:" + record.get("count").toString());
     }
-    questionNumber =
-        Integer.valueOf(
-            session
-                .run("match (a:Question ) return max(a.questionId)")
-                .next()
-                .get("max(a.questionId)")
-                .toString()
-                .replaceAll("\"", ""));
+    try {
+      questionNumber =
+          Integer.valueOf(
+              session
+                  .run("match (a:Question ) return max(a.questionId)")
+                  .next()
+                  .get("max(a.questionId)")
+                  .toString()
+                  .replaceAll("\"", ""));
+    } catch (Exception e) {
+      questionNumber = 0;
+    }
   }
 
   public String addQuestion(Question question) {
