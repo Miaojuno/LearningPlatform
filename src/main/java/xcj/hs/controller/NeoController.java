@@ -118,8 +118,10 @@ public class NeoController {
 
   /**
    * getRandomQuestion
-   *
    * @param request
+   * @param pointId
+   * @param diff
+   * @param type
    * @return
    */
   @PostMapping("/getRandomQuestion")

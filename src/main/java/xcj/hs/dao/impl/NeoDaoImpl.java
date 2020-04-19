@@ -60,7 +60,7 @@ public class NeoDaoImpl implements NeoDao {
                   .toString()
                   .replaceAll("\"", ""));
     } catch (Exception e) {
-      questionNumber = 0;
+      log.info("最大题号获取出错");
     }
   }
 
