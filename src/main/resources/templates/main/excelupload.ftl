@@ -5,7 +5,7 @@
 
 <div class="main-contain" style="margin-top: 2rem">
     <div class="row">
-        <label class="control-label col-12" for="">导入测试:</label>
+        <label class="control-label col-12" for="">数据导入:</label>
         <div class="col-10">
             <input type="file" id="file" hidden >
             <input type="text" id="fileInput" class="form-control" placeholder="请选择文件" readonly>

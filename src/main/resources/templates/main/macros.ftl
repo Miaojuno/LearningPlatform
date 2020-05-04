@@ -102,6 +102,7 @@
                             题目题集
                         </a>
                         <div class="dropdown-menu">
+                            <a class="dropdown-item" target="_blank" href="/questionSet/list2">我的题集</a>
                             <a class="dropdown-item" target="_blank" href="/neo/addQuestion">添加题目</a>
                             <a class="dropdown-item" target="_blank" href="/questionSet/addQuestionSet">添加题集</a>
                         </div>

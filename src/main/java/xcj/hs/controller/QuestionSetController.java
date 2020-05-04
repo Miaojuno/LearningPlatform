@@ -113,6 +113,17 @@ public class QuestionSetController {
     return "questionSet/list";
   }
 
+    /**
+     * 教师查看自己的题集
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/list2")
+    public String list2(Model model) {
+        return "questionSet/list2";
+    }
+
   /**
    * 通过账号获取指定用户的题集
    *
@@ -125,6 +136,21 @@ public class QuestionSetController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("success", true);
     map.put("data", questionSetManager.findByUserAccount(userAccount));
+    return map;
+  }
+
+  /**
+   * 教师查找本人所有题集
+   *
+   * @param userAccount
+   * @return
+   */
+  @PostMapping("/findByOwner")
+  @ResponseBody
+  public Map<String, Object> findByOwner(String userAccount) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("success", true);
+    map.put("data", questionSetManager.findByOwner(userAccount));
     return map;
   }
 

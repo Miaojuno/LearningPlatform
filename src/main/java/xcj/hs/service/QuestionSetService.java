@@ -32,6 +32,8 @@ public interface QuestionSetService {
    */
   List<QuestionSet> findByUserId(String userId);
 
+  List<QuestionSet> findByOwner(String owner);
+
   List<QuestionSet> findAll();
 
   boolean addUser(String userId, String qsId);

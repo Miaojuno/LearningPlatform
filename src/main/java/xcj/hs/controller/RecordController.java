@@ -131,6 +131,26 @@ public class RecordController {
     return map;
   }
 
+
+    /**
+     * 获取前四个错误的知识点
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/getErrorPorint")
+    @ResponseBody
+    public Map<String, Object> getErrorPorint(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put(
+                "data",
+                recordManager.getErrorPorint(
+                        (String) request.getSession().getAttribute("loginUserAccount")));
+        map.put("success", true);
+        return map;
+    }
+
   @PostMapping("/updateScore")
   @ResponseBody
   public Map<String, Object> updateScore(String recordId, String score) {

@@ -5,6 +5,7 @@
 
 <div class="main-contain" style="margin-top: 1rem">
 <#--轮播-->
+<#if Session["loginUserRole"] == "学生">
     <div class="row my-title-div">
         <div class="col-6 my-title">
             <h3>
@@ -35,7 +36,7 @@
         </a>
     </div>
 
-<#if Session["loginUserRole"] == "学生">
+
         <div class="row my-title-div">
             <div class="col-6 my-title">
                 <h3>
@@ -52,7 +53,20 @@
 
 <#--正确率按照题目难度-->
             <div id="studentRecordByDiffGraphics" class="index-graphics" style="width: 30rem;height:20rem;"></div>
-        </div>
+
+<#--错误知识点-->
+            <div id="errorPorintGraphics" class="index-graphics" style="width: 30rem;height:20rem;">
+                <div class="row my-title-div">
+                    <h5 style="color: #898989;font-weight: bold;margin:auto;font-size: 1.1rem;">
+                        我的错误知识点
+                    </h5>
+                </div>
+                    <div id="my-error-porint" >
+                        <ul class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
 </#if>
 
     <#if Session["loginUserRole"] == "教师">
@@ -65,16 +79,6 @@
         </div>
         <div id="my-student-situation"  style="width: 50%">
             <ul class="list-group">
-                <#--<li class="list-group-item">-->
-                    <#--<div class="row">-->
-                        <#--<div class="col-3 text-right" style="font-size: 1.5rem;padding: 0;">-->
-                            <#--<img class="img-fluid rounded" style="height: 2.2rem;width: 2.2rem;">-->
-                            <#--用户1-->
-                        <#--</div>-->
-                        <#--<div class="col-2 text-right" style="font-size: 0.1rem;padding: 1rem 0 0 0;">做题数:</div>-->
-                        <#--<div class="col-2" style="font-size: 1.5rem;color: red;padding: 0;">20</div>-->
-                    <#--</div>-->
-                <#--</li>-->
             </ul>
         </div>
     </#if>
@@ -167,6 +171,49 @@
 
 
     <#if Session["loginUserRole"] == "学生">
+
+// 知识点
+    $.ajax({
+        type: "post",
+        async: true,
+        url: "record/getErrorPorint",
+        dataType: "json",
+        success: function (result) {
+            if (result.success == true) {
+                var list = result.data.sort(function (a, b) {
+                    if (a.count > b.count) {
+                        return -1;
+                    } else if (a.count < b.count) {
+                        return 1
+                    } else {
+                        return 0;
+                    }
+                });
+                var it;
+                for(it in list){
+                    $("#my-error-porint ul").append(" <li class=\"list-group-item\" style=\"height: 4.5rem\" id=\""+list[it].point.pointId+"\">\n" +
+                            "                    <div class=\"row\">\n" +
+                            "                        <div class=\"col-10\" style=\"font-size: 0.1rem;padding: 1rem 0 0 0;\">"+list[it].point.pointDetail+"</div>\n" +
+                            "                        <div class=\"col-2\" style=\"font-size: 1.5rem;color: red;padding: 0 0 0 1rem;\">"+list[it].count+"</div>\n" +
+                            "                    </div>\n" +
+                            "                </li>")
+                }
+            } else {
+                alert("后台数据获取失败!");
+            }
+        },
+        error: function (errorMsg) {
+            //请求失败时执行该函数
+            alert("请求数据失败!");
+
+        }
+    })
+
+        $(document).on("click","#my-error-porint .list-group-item",function () {
+            window.open("/neo4jShow/pointShow?pointId=" + $(this).attr("id"))
+        })
+
+
     //chart1----------------------------------------------------------------------------------------------------
     var chart1 = echarts.init(document.getElementById('studentHistoryGraphics'));
     chart1.showLoading(); //数据加载完之前先显示一段简单的loading动画
@@ -455,7 +502,7 @@
             }
         })
 
-    $(document).on("click",".list-group-item",function () {
+    $(document).on("click","#my-student-situation .list-group-item",function () {
         window.open("/friendShip/main?userId=" + $(this).attr("id"))
     })
     </#if>

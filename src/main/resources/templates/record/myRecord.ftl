@@ -61,6 +61,12 @@
     </div>
 </div>
 
+<style>
+    #record-table tbody tr :hover{
+        cursor: pointer;
+    }
+</style>
+
 <script>
 $(function () {
 

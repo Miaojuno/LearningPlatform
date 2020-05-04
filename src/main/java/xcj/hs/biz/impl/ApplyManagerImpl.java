@@ -45,8 +45,10 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
     Apply apply = applyService.findById(applyId);
 
     // 自动建立好友关系
-    friendShipService.activeShip(apply.getUserId(), apply.getNewId());
-    friendShipService.activeShip(apply.getNewId(), apply.getUserId());
+    if ("上级变更".equals(apply.getType())) {
+      friendShipService.activeShip(apply.getUserId(), apply.getNewId());
+      friendShipService.activeShip(apply.getNewId(), apply.getUserId());
+    }
 
     if ("true".equals(isPass)) {
       if ("上级变更".equals(apply.getType())) {
@@ -68,7 +70,9 @@ public class ApplyManagerImpl extends BaseManagerImpl<ApplyVo, Apply> implements
       apply.setStatus("拒绝");
       applyService.save(apply);
       // 发送申请失败通知
-      friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "已拒绝修改请求", null);
+      if ("上级变更".equals(apply.getType())) {
+        friendShipService.addMsgTo(apply.getNewId(), apply.getUserId(), "已拒绝修改请求", null);
+      }
     }
   }
 

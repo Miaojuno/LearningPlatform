@@ -3,13 +3,15 @@ package xcj.hs.biz.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import xcj.hs.biz.RecordManager;
 import xcj.hs.biz.UserManager;
+import xcj.hs.entity.Point;
 import xcj.hs.entity.Record;
 import xcj.hs.entity.User;
 import xcj.hs.service.NeoService;
@@ -82,6 +84,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return null;
   }
 
+  @Cacheable(value = "get15daysRecordData")
   public Map<String, Object> get15daysRecordData(String userAccount) {
     Map<String, Object> map = new HashMap<>();
     List<RecordVo> recordVos =
@@ -118,6 +121,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return map;
   }
 
+  @Cacheable(value = "getErrorCountGroupByKind")
   public List<NameValueVo> getErrorCountGroupByKind(String userAccount) {
     List<NameValueVo> result = new ArrayList<>();
     List<RecordVo> recordVos =
@@ -154,6 +158,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return result;
   }
 
+  @Cacheable(value = "getSubordinateSituation")
   public List<Object> getSubordinateSituation(String userAccount) {
     List<Object> result = new ArrayList<>();
     for (UserVo user : userManager.findAllSubordinate(userAccount)) {
@@ -212,6 +217,41 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     return map;
   }
 
+  @Cacheable(value = "getErrorPorint")
+  public List<Map<String, Object>> getErrorPorint(String userAccount) {
+    List<Map<String, Object>> listMap = new ArrayList<>();
+    List<Record> records =
+        recordService.get15daysRecords(userService.findByUserAccount(userAccount).getUserId());
+    Map<Point, List<Record>> pointmap =
+        records.stream()
+            .collect(
+                Collectors.groupingBy(
+                    o -> neoService.findPointByQuestionId(o.getQuestionId()).get(0)));
+    for (Map.Entry<Point, List<Record>> entry : pointmap.entrySet()) {
+      Map<String, Object> mapItem = new HashMap<>();
+      mapItem.put(
+          "count",
+          String.valueOf(entry.getValue().stream().filter(o -> "0".equals(o.getScore())).count()));
+      mapItem.put("point", entry.getKey());
+      listMap.add(mapItem);
+    }
+
+    Map<String, Object> mapItem = new HashMap<>();
+    mapItem.put("count", "0");
+    mapItem.put("point", neoService.findPointByPointId("1"));
+    listMap.add(mapItem);
+    Map<String, Object> mapItem2 = new HashMap<>();
+    mapItem2.put("count", "0");
+    mapItem2.put("point", neoService.findPointByPointId("2"));
+    listMap.add(mapItem2);
+    Map<String, Object> mapItem3 = new HashMap<>();
+    mapItem3.put("count", "0");
+    mapItem3.put("point", neoService.findPointByPointId("3"));
+    listMap.add(mapItem3);
+
+    return listMap;
+  }
+
   //  难度名转换
   private String diffConversion(String diff) {
     if (StringUtils.isBlank(diff)) return "diff1";
@@ -232,4 +272,11 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
   public RecordVo findById(String id) {
     return po2vo(recordService.findById(id));
   }
+
+  //缓存清理
+  @Scheduled(cron = "0 0 3 * * ?")
+  @CacheEvict(
+      value = {"get15daysRecordData", "getErrorCountGroupByKind","getSubordinateSituation","getErrorPorint"},
+      allEntries = true)
+  public void clearCache() {}
 }

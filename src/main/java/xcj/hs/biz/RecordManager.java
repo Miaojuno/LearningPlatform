@@ -41,4 +41,6 @@ public interface RecordManager {
   Page<RecordVo> pageFind(String userAccount, Pageable pageable);
 
   RecordVo findById(String id);
+
+  List<Map<String, Object>>  getErrorPorint(String userAccount);
 }

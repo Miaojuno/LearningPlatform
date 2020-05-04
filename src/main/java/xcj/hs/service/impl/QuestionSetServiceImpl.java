@@ -50,6 +50,10 @@ public class QuestionSetServiceImpl extends BaseServiceImpl<QuestionSet>
     return questionSetDao.findByUserIdsContaining(userId);
   }
 
+  public List<QuestionSet> findByOwner(String owner){
+    return questionSetDao.findByQsOwnerContaining(owner);
+  }
+
   public List<QuestionSet> findAll() {
     return questionSetDao.findAll();
   }

@@ -3,6 +3,7 @@ package xcj.hs.biz;
 import xcj.hs.vo.QuestionSetVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QuestionSetManager {
   /**
@@ -31,6 +32,8 @@ public interface QuestionSetManager {
    * @return
    */
   List<QuestionSetVo> findByUserAccount(String userAccount);
+
+  List<Map<String,Object>> findByOwner(String userAccount);
 
   List<QuestionSetVo> findAll();
 

@@ -37,8 +37,8 @@ public class NeoDaoImpl implements NeoDao {
   String neo4jPwd;
 
   private Session session;
-  private int questionNumber;
-  private int randomNumber = 0;
+  private static int questionNumber;
+  private static int randomNumber = 0;
 
   @PostConstruct
   public void test() {
@@ -54,9 +54,9 @@ public class NeoDaoImpl implements NeoDao {
       questionNumber =
           Integer.valueOf(
               session
-                  .run("match (a:Question ) return max(a.questionId)")
+                  .run("match (a:Question ) return max(toInt(a.questionId))")
                   .next()
-                  .get("max(a.questionId)")
+                  .get("max(toInt(a.questionId))")
                   .toString()
                   .replaceAll("\"", ""));
     } catch (Exception e) {
@@ -66,6 +66,7 @@ public class NeoDaoImpl implements NeoDao {
 
   public String addQuestion(Question question) {
     String idStr = String.valueOf(questionNumber + 1);
+    questionNumber+=1;
     StatementResult result =
         session.run(
             "CREATE (a:Question {"
@@ -158,8 +159,23 @@ public class NeoDaoImpl implements NeoDao {
         record.get("a").get("distribution").asString(),
         record.get("a").get("frequency").asString());
   }
+    public Point findPointByPointId(String id) {
+        StatementResult result =
+                session.run(
+                        "MATCH (a:Point) WHERE a.pointId=\""+id+"\" return a");
+        Record record = result.next();
+        return new Point(
+                record.get("a").get("pointId").asString(),
+                record.get("a").get("pointDetail").asString(),
+                record.get("a").get("chapter").asString(),
+                record.get("a").get("isbn").asString(),
+                record.get("a").get("grade").asString(),
+                record.get("a").get("distribution").asString(),
+                record.get("a").get("frequency").asString());
+    }
 
-  public List<Point> findPointByDetail(String pointDetail) {
+
+    public List<Point> findPointByDetail(String pointDetail) {
     List<Record> list =
         session
             .run("Match (a:Point) where a.pointDetail CONTAINS \"" + pointDetail + "\"  return a")
@@ -173,6 +189,39 @@ public class NeoDaoImpl implements NeoDao {
     }
     return resultList;
   }
+
+//    public List<Point> findPointByQuestionIds(List<String> questionIds) {
+//        List<Record> list =
+//                session
+//                        .run("match (a:Question)-[属于]->(b:Point) where a.questionId in ['4','5'] return b")
+//                        .list();
+//        List<Point> resultList = new ArrayList<>();
+//        for (Record record : list) {
+//            resultList.add(
+//                    new Point(
+//                            record.get("a").get("pointId").asString(),
+//                            record.get("a").get("pointDetail").asString()));
+//        }
+//        return resultList;
+//    }
+
+    public List<Point> findPointByQuestionId(String questionId) {
+    List<Record> list =
+        session
+            .run(
+                "match (a:Question)-[属于]->(b:Point) where a.questionId =\""
+                    + questionId
+                    + "\" return b")
+            .list();
+        List<Point> resultList = new ArrayList<>();
+        for (Record record : list) {
+            resultList.add(
+                    new Point(
+                            record.get("a").get("pointId").asString(),
+                            record.get("a").get("pointDetail").asString()));
+        }
+        return resultList;
+    }
 
   public Question findQuestionByPointIdAndIndex(String pointId, int index) {
     List<Record> list = null;

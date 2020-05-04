@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuestionSetDao extends JpaRepository<QuestionSet, String> {
   List<QuestionSet> findByUserIdsContaining(String userId);
+
+  List<QuestionSet> findByQsOwnerContaining(String owner);
 }

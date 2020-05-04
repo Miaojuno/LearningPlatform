@@ -55,6 +55,14 @@ body{
     box-shadow: 2px 2px 8px #333333;
 }
 
+.layui-layer{
+    border-radius: 0.3rem !important;
+}
+
+.layui-layer-title{
+    border-radius: 0.3rem !important;
+}
+
 .form-group {
     min-width: 25rem;
 }

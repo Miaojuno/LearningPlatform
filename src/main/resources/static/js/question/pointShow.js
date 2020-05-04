@@ -25,7 +25,16 @@ $(function () {
         initTop($("#hide-pointId").val())
     })
 
-    initTop("")
+    var url = location.search;
+    var oPointId;
+    if (url.indexOf("?") != -1 && url.split("=")[0]=="?pointId") {
+        $(".choose-div").hide()
+        oPointId = url.split("=")[1];
+        initTop(oPointId)
+    }
+    else {
+        initTop("")
+    }
 
     function initTop(id) {
         layui.use('layer', function () {
@@ -49,7 +58,7 @@ $(function () {
                             var m = {
                                 "nodeId": ret.nodeList[i].nodeId,
                                 // "知识点Id": ret.nodeList[i].pointId,
-                                "知识点": ret.nodeList[0].pointDetail
+                                "知识点": ret.nodeList[i].pointDetail
                             }
                             newNodes.push(m)
                         }
@@ -228,7 +237,7 @@ function createNetwork(param) {
         layer = layui.layer;
         //可以试试注释掉去重的方法看看效果
         if (param.nodes && param.nodes.length > 0) {
-            //去除已存在的节点  以“id”属性为例删除重复节点，根据具体的属性自行修改
+            //去除已存在的节点  以“id”属性为例删除重复节点
             for (var i in network.body.data.nodes._data) {
                 var nodeTemp = network.body.data.nodes._data[i];
                 param.nodes = deleteValueFromArr(param.nodes, "nodeId", nodeTemp.id);
@@ -238,13 +247,13 @@ function createNetwork(param) {
                 for (var i = 0; i < param.nodes.length; i++) {
                     var node = param.nodes[i];
                     //控制背景色 不同类型的节点颜色不同
-                    var background = "#97C2FC";
-                    if (node.name && node.name != "") {
-                        background = "#FFD86E";
-                    }
-                    else if (node.title && node.title != "") {
-                        background = "#6DCE9E";
-                    }
+                    var background = "#3476b6";
+                    // if (node.name && node.name != "") {
+                    //     background = "#FFD86E";
+                    // }
+                    // else if (node.title && node.title != "") {
+                    //     background = "#6DCE9E";
+                    // }
                     //拼接返回的结果显示在图上
                     var label = "";
                     for (var n in node) {

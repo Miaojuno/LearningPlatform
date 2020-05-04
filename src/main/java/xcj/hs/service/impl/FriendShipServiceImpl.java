@@ -144,7 +144,7 @@ public class FriendShipServiceImpl extends BaseServiceImpl<FriendShip>
   }
 
   /** 定时清理聊天记录 */
-  @Scheduled(cron = "0 8 23 * * ?")
+  @Scheduled(cron = "0 0 3 * * ?")
 //  @Scheduled(fixedDelay = 5000)
   public void clearMsg() {
     for (FriendShip friendShip : friendShipDao.findAll()) {

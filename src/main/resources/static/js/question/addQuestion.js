@@ -100,6 +100,7 @@ $(function () {
                 layer.msg("请输入分值", {icon: 2});
                 return
             }
+            var regx = /(^[0-9]+$)/
             if (!regx.test($(".score").val())) {
                 layer.msg("请输入整数分值", {icon: 2});
                 return
@@ -122,7 +123,7 @@ $(function () {
                             $(".questionDetail").val("");
                             $(".typeDistribution").val("");
                             $(".difficultyDistribution").val("");
-                            $(".pointId").val("");
+                            // $(".pointId").val("");
                             $(".score").val("");
                             $("#defaultSolution").val("");
                             $("#solutionChoose").val("");
@@ -153,7 +154,7 @@ $(function () {
                                     $(".questionDetail").val("");
                                     $(".typeDistribution").val("");
                                     $(".difficultyDistribution").val("");
-                                    $(".pointId").val("");
+                                    // $(".pointId").val("");
                                     $(".score").val("");
                                     $("#defaultSolution").val("");
                                     $("#solutionChoose").val("");
