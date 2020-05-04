@@ -1,6 +1,7 @@
 package xcj.hs.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import xcj.hs.dao.ImgDao;
 import xcj.hs.entity.Img;
@@ -17,6 +18,7 @@ public class ImgServiceImpl extends BaseServiceImpl<Img> implements ImgService {
     return imgDao.saveAndFlush(img).getImgId();
   }
 
+  @Cacheable(value = "imgFind")
   public Img findById(String id) {
     return imgDao.findById(id).get();
   }
