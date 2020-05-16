@@ -26,7 +26,7 @@ public interface NeoService {
    * @param question
    * @return
    */
-  String addQuestion(Question question);
+  String addQuestion(Question question,String pointId);
 
   List<Point> findPointByQuestionId(String questionId);
 

@@ -133,7 +133,7 @@ public class RecordController {
 
 
     /**
-     * 获取前四个错误的知识点
+     * 获取前四个错误的知识点(最近十五天)
      *
      * @param request
      * @return

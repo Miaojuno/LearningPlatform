@@ -58,7 +58,7 @@
             <div id="errorPorintGraphics" class="index-graphics" style="width: 30rem;height:20rem;">
                 <div class="row my-title-div">
                     <h5 style="color: #898989;font-weight: bold;margin:auto;font-size: 1.1rem;">
-                        我的错误知识点
+                        最近错误知识点
                     </h5>
                 </div>
                     <div id="my-error-porint" >
@@ -197,6 +197,7 @@
                             "                        <div class=\"col-2\" style=\"font-size: 1.5rem;color: red;padding: 0 0 0 1rem;\">"+list[it].count+"</div>\n" +
                             "                    </div>\n" +
                             "                </li>")
+                    if(it==3) return
                 }
             } else {
                 alert("后台数据获取失败!");

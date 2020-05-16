@@ -37,7 +37,7 @@ public class NeoController {
 
   @PostMapping("/excelupload")
   @ResponseBody
-  public Map<String, Object> excelupload(@RequestParam("file") MultipartFile file, Model model)
+  public Map<String, Object> excelupload(@RequestParam("file") MultipartFile file)
       throws Exception {
     Map<String, Object> resultMap = new HashMap();
     String msg = neoService.excelUpload(file);
@@ -79,7 +79,7 @@ public class NeoController {
   @PostMapping("/addQuestion")
   @ResponseBody
   public Map<String, Object> addQuestion(
-      MultipartFile file1, MultipartFile file2, Question question) {
+      MultipartFile file1, MultipartFile file2, Question question,String pointId) {
     Map<String, Object> resultMap = new HashMap();
     try {
       if (file1 != null) {
@@ -92,7 +92,7 @@ public class NeoController {
       resultMap.put("success", false);
       resultMap.put("msg", e.getMessage());
     }
-    String questionId = neoService.addQuestion(question);
+    String questionId = neoService.addQuestion(question,pointId);
     resultMap.put("success", true);
     resultMap.put("questionId", questionId);
     return resultMap;

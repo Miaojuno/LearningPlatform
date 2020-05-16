@@ -64,7 +64,7 @@ public class NeoDaoImpl implements NeoDao {
     }
   }
 
-  public String addQuestion(Question question) {
+  public String addQuestion(Question question,String pointId) {
     String idStr = String.valueOf(questionNumber + 1);
     questionNumber+=1;
     StatementResult result =
@@ -101,6 +101,12 @@ public class NeoDaoImpl implements NeoDao {
                     : question.getDifficultyDistribution(),
                 "type",
                 question.getType() == null ? "" : question.getType()));
+      session.run(
+              "MATCH (a:Question),(b:Point)"
+                      + "WHERE a.questionId = {questionId} AND b.pointId = {pointId}"
+                      + "CREATE (a)-[r:属于] -> (b)",
+              parameters(
+                      "questionId", idStr, "pointId", pointId));
     return idStr;
   }
 
@@ -217,28 +223,41 @@ public class NeoDaoImpl implements NeoDao {
         for (Record record : list) {
             resultList.add(
                     new Point(
-                            record.get("a").get("pointId").asString(),
-                            record.get("a").get("pointDetail").asString()));
+                            record.get("b").get("pointId").asString(),
+                            record.get("b").get("pointDetail").asString()));
         }
         return resultList;
     }
 
-  public Question findQuestionByPointIdAndIndex(String pointId, int index) {
+  public Question findQuestionByPointIdAndIndex(List<String> questionIds,String pointId, int index) {
     List<Record> list = null;
+    StringBuffer stringBuffer=new StringBuffer();
+    if(questionIds!=null){
+      for(String questionId:questionIds){
+        if(StringUtils.isBlank(stringBuffer)){
+          stringBuffer.append(" where a.questionId <> \""+questionId+"\" ");
+        }
+        else {
+          stringBuffer.append(" and a.questionId <> \""+questionId+"\" ");
+        }
+      }
+    }
     if (StringUtils.isNotBlank(pointId)) {
       list =
           session
               .run( // ==============当前知识点的直属题目=================
                   "Match (start:Point{pointId:\""
                       + pointId
-                      + "\"})-[:属于*1..1]-(a:Question)  return a skip "
+                      + "\"})-[:属于*1..1]-(a:Question) "+stringBuffer+" return a skip "
                       + index
                       + " limit 1")
               .list();
     } else {
       list =
           session
-              .run("MATCH (a:Question)  return a skip {index} limit 1", parameters("index", index))
+              .run(
+                  "MATCH (a:Question) "+stringBuffer+" return a skip {index} limit 1",
+                  parameters("index", index))
               .list();
     }
     if (list.size() == 0) {
@@ -265,15 +284,22 @@ public class NeoDaoImpl implements NeoDao {
             : record.get("a").get("solutionPic").asByteArray());
   }
 
-  public Question findQuestionByDiffOrType(String diff, String type, int index) {
+  public Question findQuestionByDiffOrType(List<String> questionIds,String diff, String type, int index) {
     List<Record> list = null;
+    StringBuffer stringBuffer=new StringBuffer();
+    if(questionIds !=null){
+      for(String questionId:questionIds){
+        stringBuffer.append(" and a.questionId <> \""+questionId+"\" ");
+      }
+    }
     if (StringUtils.isNotBlank(diff)) {
       list =
           session
               .run(
                   "Match (a:Question) where a.difficultyDistribution ='"
                       + diff
-                      + "'  return a skip "
+                      + "' "
+                      +stringBuffer+" return a skip "
                       + index
                       + " limit 1")
               .list();
@@ -283,7 +309,8 @@ public class NeoDaoImpl implements NeoDao {
               .run(
                   "MATCH (a:Question) where a.type ='"
                       + type
-                      + "'  return a skip "
+                      + "' "
+                      +stringBuffer+" return a skip "
                       + index
                       + " limit 1")
               .list();
@@ -312,16 +339,16 @@ public class NeoDaoImpl implements NeoDao {
             : record.get("a").get("solutionPic").asByteArray());
   }
 
-  public Question getRandomQuestion(String pointId, String diff, String type) {
+  public Question getRandomQuestion(List<String> questionIds,String pointId, String diff, String type) {
     //    String randomId = String.valueOf((int) (1 + Math.random() * (questionNumber)));
     //    return findByQuestionId(randomId);
     if (StringUtils.isBlank(diff) && StringUtils.isBlank(type)) {
-      Question question = findQuestionByPointIdAndIndex(pointId, randomNumber);
-      if (question == null) question = findQuestionByPointIdAndIndex(pointId, randomNumber);
+      Question question = findQuestionByPointIdAndIndex(questionIds,pointId, randomNumber);
+      if (question == null) question = findQuestionByPointIdAndIndex(questionIds,pointId, randomNumber);
       return question;
     } else {
-      Question question = findQuestionByDiffOrType(diff, type, randomNumber);
-      if (question == null) question = findQuestionByDiffOrType(diff, type, randomNumber);
+      Question question = findQuestionByDiffOrType(questionIds,diff, type, randomNumber);
+      if (question == null) question = findQuestionByDiffOrType(questionIds,diff, type, randomNumber);
       return question;
     }
   }

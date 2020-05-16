@@ -104,7 +104,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
         nums.add(dayRecords.size());
         rates.add(
             (double)
-                (dayRecords.stream().filter(o -> "0".equals(o.getScore())).count()
+                (dayRecords.stream().filter(o -> !"0".equals(o.getScore())).count()
                     / dayRecords.size()));
       } else {
         nums.add(0);

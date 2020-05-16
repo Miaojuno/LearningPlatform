@@ -213,13 +213,13 @@ function getData(id) {
                 if (ret) {
                     // createNetwork({nodes: ret.nodeList, edges: ret.edgeList});
                     var newNodes = [];
-                    for (var i = 0; i < ret.nodeList.length; i++) {
-                        var m = {
-                            "nodeId": ret.nodeList[i].nodeId,
-                            // "知识点Id": ret.nodeList[i].pointId,
-                            "知识点": ret.nodeList[0].pointDetail
-                        }
-                        newNodes.push(m)
+                        for (var i = 0; i < ret.nodeList.length; i++) {
+                            var m = {
+                                "nodeId": ret.nodeList[i].nodeId,
+                                // "知识点Id": ret.nodeList[i].pointId,
+                                "知识点": ret.nodeList[i].pointDetail
+                            }
+                            newNodes.push(m)
                     }
 
                     createNetwork({nodes: newNodes, edges: ret.edgeList});
