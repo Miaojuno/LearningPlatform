@@ -210,7 +210,7 @@ $(function () {
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    layer.msg("ok", {icon: 1});
+                    // layer.msg("成功", {icon: 1});
                     $("#random .file").val("");
                     $("#random .fileInput").val("");
                     $("#random .userSolution").val("");

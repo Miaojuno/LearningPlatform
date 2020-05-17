@@ -70,10 +70,12 @@ public class QuestionSetManagerImpl extends BaseManagerImpl<QuestionSetVo, Quest
       if (StringUtils.isNotBlank(questionSetVo.getUserIds())) { // 循环题集对应用户
         for (String userId : questionSetVo.getUserIds().split("、")) {
           int finishedNumber = 0;
-          for (String questionId : questionSetVo.getQuestionIds().split("、")) { // 循环题集下题目数
-            if (recordService.findByUserIdAndQuestionId(userId, questionId) != null) {
-              finishedNumber++;
-            }
+          if(StringUtils.isNotBlank(questionSetVo.getQuestionIds())){
+              for (String questionId : questionSetVo.getQuestionIds().split("、")) { // 循环题集下题目数
+                  if (recordService.findByUserIdAndQuestionId(userId, questionId) != null) {
+                      finishedNumber++;
+                  }
+              }
           }
           Map<String, Object> userNumMap = new HashMap<>();
           userNumMap.put("userVo", userManager.findById(userId));

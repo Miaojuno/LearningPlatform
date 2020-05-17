@@ -223,7 +223,7 @@ public class RecordManagerImpl extends BaseManagerImpl<RecordVo, Record> impleme
     List<Record> records =
         recordService.get15daysRecords(userService.findByUserAccount(userAccount).getUserId());
     Map<Point, List<Record>> pointmap =
-        records.stream()
+        records.stream().filter(o -> neoService.findPointByQuestionId(o.getQuestionId()).size()>0)
             .collect(
                 Collectors.groupingBy(
                     o -> neoService.findPointByQuestionId(o.getQuestionId()).get(0)));
